@@ -13,8 +13,10 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.IFillFormatter
+import com.github.mikephil.charting.utils.ColorTemplate
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import kotlin.collections.ArrayList
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity() {
         // if disabled, scaling can be done on x- and y-axis separately
         chart.setPinchZoom(false)
 
+
 //        chart.setDrawGridBackground(false)
 //        chart.maxHighlightDistance = 300f
 
@@ -65,22 +68,28 @@ class MainActivity : AppCompatActivity() {
         x.textColor = android.graphics.Color.WHITE
         x.setDrawGridLines(false)
         x.axisLineColor = ContextCompat.getColor(this, R.color.lineColor)
-
+        x.setDrawAxisLine(false)
         chart.axisRight.isEnabled = false
 
         chart.legend.isEnabled = false
 
 //        x.setAxisMinimum(5f);
 //        x.setAxisMaximum(10f);
-        chart.getXAxis().setSpaceMin(0.18f)
-        chart.getXAxis().spaceMax=0.18f
-        chart.getAxisRight().setDrawAxisLine(false);
-        chart.getAxisLeft().setDrawAxisLine(false);
+        chart.xAxis.spaceMin = 0.18f
+        chart.xAxis.spaceMax = 0.18f
+        chart.axisRight.setDrawAxisLine(false);
+        chart.axisLeft.setDrawAxisLine(false);
 //        chart.animateXY(2000, 2000)
 
+        val leftAxis = chart.axisLeft
+        leftAxis.textColor = ColorTemplate.getHoloBlue()
+        leftAxis.axisMaximum = 30f //todo переделать в зависимости от входных данных
+        leftAxis.axisMinimum = 20f //todo переделать в зависимости от входных данных
+        leftAxis.setDrawGridLines(true)
+        leftAxis.isGranularityEnabled = true
         // don't forget to refresh the drawing
         // don't forget to refresh the drawing
-        setData(30, 3f)
+        setData()
 
         val sets = chart.data.dataSets
 
@@ -94,12 +103,13 @@ class MainActivity : AppCompatActivity() {
         llXAxis.enableDashedLine(10f, 10f, 0f)
         llXAxis.labelPosition = LimitLabelPosition.RIGHT_BOTTOM
         llXAxis.textSize = 10f
+
 //        chart.xAxis.addLimitLine(llXAxis)
 //        chart.xAxis.setDrawLimitLinesBehindData(true)
         chart.invalidate()
     }
 
-    private fun setData(count: Int, range: Float) {
+    private fun setData() {
         val values = ArrayList<Entry>()
         values.add(Entry(0f, 23f))
         values.add(Entry(1f, 24f))
