@@ -3,7 +3,7 @@
     <color name="colorPrimary">#6200EE</color>
     <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
-    <color name="lineColor">#B3FFFFFF</color>
+    <color name="lineColor">#99FFFFFF</color>
     <color name="white">#ffffff</color>
     <color name="white_30">#4DFFFFFF</color>
 </resources>

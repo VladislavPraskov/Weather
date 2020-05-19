@@ -4,6 +4,7 @@
     android:id="@+id/marker"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingBottom="6dp"
+    android:paddingBottom="8dp"
+    android:paddingStart="3dp"
     android:textColor="@color/white"
     tools:text="25"/>
