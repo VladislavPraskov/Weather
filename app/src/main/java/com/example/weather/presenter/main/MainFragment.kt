@@ -1,33 +1,60 @@
-package com.example.weather
+package com.example.weather.presenter.main
 
 import android.graphics.Color
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
+import com.devpraskov.android_ext.getColor
+import com.example.weather.R
 import com.example.weather.utils.ChartDataView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.IFillFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_main.*
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
-class MainActivity : AppCompatActivity() {
+class MainFragment : Fragment(R.layout.fragment_main) {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+    private val viewModel: MainViewModel by viewModel()
 
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initObservers()
+        initViews()
+        initListeners()
+        initChart()
+    }
+
+    private fun initViews() {
+
+    }
+
+    private fun initObservers() {
+        viewModel.firsAction = MainAction.SomeAction()
+        viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
+
+        })
+    }
+
+    private fun initListeners() {
+
+    }
+
+
+    private fun initChart() {
         val x: XAxis = chart.xAxis
         x.position = XAxis.XAxisPosition.BOTTOM
         x.textSize = 14f
         x.textColor = Color.WHITE
         x.setDrawGridLines(false)
-        x.axisLineColor = ContextCompat.getColor(this, R.color.lineColor)
+        x.axisLineColor = getColor(R.color.lineColor)
         x.setDrawAxisLine(false) //граница графика сверху
         x.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
@@ -83,7 +110,7 @@ class MainActivity : AppCompatActivity() {
             val set2 = LineDataSet(mutableListOf(values[0].copy()), "DataSet 2")
             set2.setDrawCircles(true)
             set2.circleRadius = 6f
-            set2.setCircleColor(ContextCompat.getColor(this, R.color.white_30))
+            set2.setCircleColor(getColor(R.color.white_30))
 
             // create a dataset and give it a type
             set1 = LineDataSet(values, "DataSet 1")
@@ -95,13 +122,12 @@ class MainActivity : AppCompatActivity() {
             set1.enableDashedLine(10f, 10f, 0f)
             set1.circleRadius = 2.5f
             set1.setCircleColor(Color.WHITE)
-            set1.color = ContextCompat.getColor(this, R.color.lineColor)
-
+            set1.color = getColor(R.color.lineColor)
 
 //            data.setValueTypeface(tfLight)
 
             // create marker to display box when values are selected
-            val mv = ChartDataView(this, R.layout.chart_data_text_view)
+            val mv = ChartDataView(requireContext(), R.layout.chart_data_text_view)
             // Set the marker to the chart
             mv.chartView = chart
             chart.marker = mv
@@ -130,7 +156,7 @@ class MainActivity : AppCompatActivity() {
             data.setDrawValues(false)
             set1.setDrawHorizontalHighlightIndicator(false) //отключает вертикальную линию highlight
             set1.setDrawVerticalHighlightIndicator(false) //отключает вертикальную линию highlight
-            data.setValueTextColor(ContextCompat.getColor(this, R.color.white))
+            data.setValueTextColor(getColor(R.color.white))
             data.setValueFormatter(object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     return "%.0f".format(value) + getString(R.string.celsius)
@@ -141,5 +167,4 @@ class MainActivity : AppCompatActivity() {
             chart.data = data
         }
     }
-
 }

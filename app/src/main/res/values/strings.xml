@@ -2,4 +2,10 @@
     <string name="app_name">Weather</string>
     <string name="celsius">°</string>
 
+
+    <!--Retrofit-->
+    <string name="error_connection">Проверьте своё интернет соединение</string>
+    <string name="backend_connection_error">Ошибка соединения с сервером</string>
+    <string name="unknown_error">Неизвестная ошибка</string>
+
 </resources>
