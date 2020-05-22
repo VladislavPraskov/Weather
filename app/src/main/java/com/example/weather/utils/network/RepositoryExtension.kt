@@ -53,15 +53,16 @@ private fun convertErrorBody(throwable: HttpException): String? {
 
 suspend fun <T> safeCacheCall(
     cacheCall: (suspend () -> T?)?,
-    onSuccess: (suspend () -> T?)? = null,
-    onError: (suspend () -> T?)? = null
+    onSuccess: (suspend (T?) -> Unit?)? = null,
+    onError: (suspend () -> Unit?)? = null
 ): T? {
     return try {
         val result = cacheCall?.invoke()
-        onSuccess?.invoke()
+        onSuccess?.invoke(result)
         result
     } catch (throwable: Throwable) {
         onError?.invoke() //todo crashlytics
+        null
     }
 }
 

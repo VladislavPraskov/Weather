@@ -9,15 +9,15 @@
 
 
     <TextView
-        android:id="@+id/degree"
+        android:id="@+id/currentTemperature"
         style="@style/main_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
-        android:text="15"
-        android:textSize="150sp"
         android:includeFontPadding="false"
         android:lineSpacingExtra="0dp"
+        android:text="15"
+        android:textSize="150sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,31 +30,31 @@
         android:layout_marginBottom="60dp"
         android:text="@string/celsius"
         android:textSize="90sp"
-        app:layout_constraintBottom_toBottomOf="@+id/degree"
-        app:layout_constraintStart_toEndOf="@+id/degree"
-        app:layout_constraintTop_toTopOf="@+id/degree"
+        app:layout_constraintBottom_toBottomOf="@+id/currentTemperature"
+        app:layout_constraintStart_toEndOf="@+id/currentTemperature"
+        app:layout_constraintTop_toTopOf="@+id/currentTemperature"
         app:layout_constraintVertical_bias="0.26" />
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iconState"
         android:layout_width="32dp"
         android:layout_height="32dp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView2"
-        app:layout_constraintEnd_toStartOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/degree"
-        app:layout_constraintTop_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toBottomOf="@+id/currentState"
+        app:layout_constraintEnd_toStartOf="@+id/currentState"
+        app:layout_constraintStart_toStartOf="@+id/currentTemperature"
+        app:layout_constraintTop_toTopOf="@+id/currentState"
         app:srcCompat="@drawable/sun_icon" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/currentState"
         style="@style/main_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Clear"
         android:textSize="40sp"
-        app:layout_constraintBottom_toTopOf="@+id/degree"
-        app:layout_constraintEnd_toEndOf="@+id/degree"
-        app:layout_constraintStart_toStartOf="@+id/degree" />
+        app:layout_constraintBottom_toTopOf="@+id/currentTemperature"
+        app:layout_constraintEnd_toEndOf="@+id/currentTemperature"
+        app:layout_constraintStart_toStartOf="@+id/currentTemperature" />
 
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/chart"
@@ -69,7 +69,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/maxTemperature"
         style="@style/main_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -77,17 +77,17 @@
         android:text="35°С"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/divider"
-        app:layout_constraintStart_toStartOf="@+id/textView3" />
+        app:layout_constraintStart_toStartOf="@+id/minTemperature" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/minTemperature"
         style="@style/main_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="50dp"
         android:text="24°С"
         android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/degree"
+        app:layout_constraintBottom_toBottomOf="@+id/currentTemperature"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textView4" />
 
@@ -97,7 +97,54 @@
         android:layout_height="1dp"
         android:layout_marginBottom="6dp"
         android:background="@color/white_30"
-        app:layout_constraintBottom_toTopOf="@+id/textView3"
-        app:layout_constraintEnd_toEndOf="@+id/textView3"
-        app:layout_constraintStart_toStartOf="@+id/textView3" />
+        app:layout_constraintBottom_toTopOf="@+id/minTemperature"
+        app:layout_constraintEnd_toEndOf="@+id/minTemperature"
+        app:layout_constraintStart_toStartOf="@+id/minTemperature" />
+
+    <ImageView
+        android:id="@+id/addCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:padding="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/add_city" />
+
+    <TextView
+        android:id="@+id/city"
+        style="@style/main_text_style"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:gravity="center"
+        android:text="Moscow"
+        android:textSize="36sp"
+        app:layout_constraintEnd_toStartOf="@+id/addCity"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="24dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/menu_icon" />
+
+    <TextView
+        android:id="@+id/date"
+        style="@style/main_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="Mon, 8:24"
+        app:layout_constraintEnd_toEndOf="@+id/city"
+        app:layout_constraintStart_toStartOf="@+id/city"
+        app:layout_constraintTop_toBottomOf="@+id/city" />
 </androidx.constraintlayout.widget.ConstraintLayout>

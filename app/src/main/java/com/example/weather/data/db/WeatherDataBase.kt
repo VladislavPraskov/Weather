@@ -4,10 +4,17 @@ import android.app.Application
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.weather.data.db.city.City
+import com.example.weather.data.db.city.CityDao
+import com.example.weather.data.db.weather.WeatherDao
+import com.example.weather.data.db.weather.WeatherEntity
 
 
-@Database(entities = [Weather::class], version = 1)
+@Database(entities = [WeatherEntity::class, City::class], version = 1)
 abstract class WeatherDataBase : RoomDatabase() {
+
+    abstract val cityDao: CityDao
+    abstract val weatherDao: WeatherDao
 
     companion object {
         fun create(app: Application): WeatherDataBase {

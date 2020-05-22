@@ -1,5 +1,9 @@
 package com.example.weather.presenter.main
 
+import android.Manifest
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -7,7 +11,11 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.devpraskov.android_ext.getColor
+import com.devpraskov.android_ext.onClick
 import com.example.weather.R
+import com.example.weather.presenter.main.AddCityDialog.Companion.ADD_CITY_REQUEST_CODE
+import com.example.weather.presenter.main.AddCityDialog.Companion.CITY_EXTRA_KEY
+import com.example.weather.presenter.main.mvi.MainAction
 import com.example.weather.utils.ChartDataView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -20,6 +28,10 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class MainFragment : Fragment(R.layout.fragment_main) {
+
+    companion object {
+        val PERMISSION_REQUEST_CODE = 456
+    }
 
     private val viewModel: MainViewModel by viewModel()
 
@@ -37,16 +49,77 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun initObservers() {
-        viewModel.firsAction = MainAction.SomeAction()
+        checkPermishion()
+        viewModel.firsAction = MainAction.LoadCurrentCity
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
 
         })
     }
 
     private fun initListeners() {
-
+        addCity?.onClick {
+            val dialog = AddCityDialog()
+            dialog.setTargetFragment(this, ADD_CITY_REQUEST_CODE)
+            dialog.show(parentFragmentManager, "Dialog")
+        }
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if (requestCode == ADD_CITY_REQUEST_CODE && resultCode == RESULT_OK) {
+            val city = data?.getStringExtra(CITY_EXTRA_KEY) ?: ""
+            if (city.isNotEmpty()) {
+                viewModel.setNextAction(MainAction.LoadCurrentCity)
+            }
+        }
+    }
+
+    fun checkPermishion() {
+        when (PackageManager.PERMISSION_GRANTED) {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) -> {
+
+            }
+            else -> {
+                requestPermissions(
+                    arrayOf("android.permission.ACCESS_COARSE_LOCATION"),
+                    PERMISSION_REQUEST_CODE
+                )
+
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>, grantResults: IntArray
+    ) {
+        when (requestCode) {
+            PERMISSION_REQUEST_CODE -> {
+                // If request is cancelled, the result arrays are empty.
+                if ((grantResults.isNotEmpty() &&
+                            grantResults[0] == PackageManager.PERMISSION_GRANTED)
+                ) {
+                    // Permission is granted. Continue the action or workflow
+                    // in your app.
+                } else {
+                    // Explain to the user that the feature is unavailable because
+                    // the features requires a permission that the user has denied.
+                    // At the same time, respect the user's decision. Don't link to
+                    // system settings in an effort to convince the user to change
+                    // their decision.
+                }
+                return
+            }
+
+            // Add other 'when' lines to check for other
+            // permissions this app might request.
+            else -> {
+                // Ignore all other requests.
+            }
+        }
+    }
 
     private fun initChart() {
         val x: XAxis = chart.xAxis
@@ -95,7 +168,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 //        for (set in chart.data.dataSets) set.setDrawValues(false) // включает/отключает рисовку значений
     }
 
-    private fun setData(values: ArrayList<Entry>) {
+    private fun setData(
+        values: ArrayList<Entry>
+    ) {
 
 
         val set1: LineDataSet
