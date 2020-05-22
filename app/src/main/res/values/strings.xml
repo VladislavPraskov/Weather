@@ -8,4 +8,5 @@
     <string name="backend_connection_error">Ошибка соединения с сервером</string>
     <string name="unknown_error">Неизвестная ошибка</string>
 
+
 </resources>

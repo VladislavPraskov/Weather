@@ -9,6 +9,9 @@ interface CityDao {
     @Query("SELECT * FROM city WHERE isCurrentSelected = 1 LIMIT 1")
     fun getCurrentCity(): City?
 
+    @Query("SELECT name FROM city WHERE isCurrentSelected = 1 LIMIT 1")
+    fun getCurrentCityName(): String?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun saveCity(city: City): Long
 

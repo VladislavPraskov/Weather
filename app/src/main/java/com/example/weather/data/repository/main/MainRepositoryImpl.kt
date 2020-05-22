@@ -18,17 +18,12 @@ import kotlinx.coroutines.Dispatchers
 class MainRepositoryImpl(
     val api: ApiService,
     val db: WeatherDataBase,
-    val locator: Locator,
-    val pref: SharedPreferences
+    val locator: Locator
 ) : MainRepository {
 
-    companion object {
-        const val CURRENT_CITY_KEY = "current_city_key"
-    }
-
     override fun getCurrentCity(): LiveData<MainResultAction> {
-        return object : NetworkBoundResource<HourlyWeather, WeatherEntity, MainResultAction>() {
-
+        return object :
+            NetworkBoundResource<HourlyWeather, List<WeatherEntity>?, MainResultAction>() {
             override suspend fun networkRequest(): HourlyWeather? {
                 val cityEntity = safeCacheCall({ db.cityDao.getCurrentCity() })
                 if (cityEntity != null)
@@ -47,21 +42,20 @@ class MainRepositoryImpl(
                 )
             }
 
-            override suspend fun retrieveCache(): WeatherEntity? {
-                val city = db.cityDao.getCurrentCity()
-                city ?: return null
-//                db.weatherDao.getTodayHourlyForecast()
-                return null
+            override suspend fun retrieveCache(): List<WeatherEntity>? {
+                val cityName = db.cityDao.getCurrentCityName()
+                cityName ?: return null
+                return db.weatherDao.getCurrentHourlyForecast(cityName = cityName)
             }
 
             override suspend fun saveCache(networkObject: HourlyWeather) {
-                db.cityDao
+                val cityName = db.cityDao.getCurrentCityName()
                 networkObject.hourly?.mapNotNull {
-                    WeatherEntity.createHourlyWeather(it)
+                    WeatherEntity.createHourlyWeather(it, cityName)
                 }?.let { hourlyList -> db.weatherDao.saveListWeather(hourlyList) }
             }
 
-            override fun mapToResultAction(cache: WeatherEntity?): MainResultAction {
+            override fun mapToResultAction(cache: List<WeatherEntity>?): MainResultAction {
                 return MainResultAction.Loading
             }
 
