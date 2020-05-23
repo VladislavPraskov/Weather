@@ -294,7 +294,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             })
             data.setDrawValues(false)
-            chart.setExtraOffsets(20f, 20f, 20f, 16f)
+            chart.extraLeftOffset = 20f
+            chart.extraRightOffset = 20f
+//            chart.extraBottomOffset = 20f
             // set data
             chart.data = data
         }
