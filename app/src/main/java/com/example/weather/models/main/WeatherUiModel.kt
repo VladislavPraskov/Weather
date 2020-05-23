@@ -1,7 +1,9 @@
 package com.example.weather.models.main
 
 import com.devpraskov.android_ext.currentDayAndDate
+import com.devpraskov.android_ext.getHour
 import com.example.weather.data.db.weather.WeatherEntity
+import java.util.*
 import kotlin.math.roundToInt
 
 data class WeatherUiModel(
@@ -11,7 +13,7 @@ data class WeatherUiModel(
     val minTemp: String,
     val mainIcon: Int? = null,
     val condition: String = "",
-    val hourlyForecast: List<Pair<Float, Int>> //temp, icon_res
+    val hourlyForecast: List<HourlyData> //temp, icon_res
 ) {
     companion object {
         fun create(resultObj: List<WeatherEntity>): WeatherUiModel {
@@ -25,9 +27,15 @@ data class WeatherUiModel(
                 mainIcon = first?.iconId,
                 hourlyForecast = resultObj.mapIndexedNotNull { index, weather ->
                     if (index == 0) null
-                    else Pair(weather.temp, weather.iconId)
+                    else HourlyData(
+                        weather.temp,
+                        getHour(Date(weather.time * 1000)),
+                        weather.iconId
+                    )
                 }
             )
         }
     }
 }
+
+data class HourlyData(var temp: Float = 0f, var hour: Float = 0f, val iconRes: Int)

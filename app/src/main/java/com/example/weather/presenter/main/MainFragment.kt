@@ -9,13 +9,13 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.devpraskov.android_ext.getColor
 import com.devpraskov.android_ext.onClick
 import com.devpraskov.android_ext.statusBarColor
 import com.example.weather.R
+import com.example.weather.models.main.HourlyData
 import com.example.weather.presenter.main.AddCityDialog.Companion.ADD_CITY_REQUEST_CODE
 import com.example.weather.presenter.main.AddCityDialog.Companion.CITY_EXTRA_KEY
 import com.example.weather.presenter.main.mvi.MainAction
@@ -31,7 +31,7 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import java.util.Calendar.SECOND
 import kotlin.collections.ArrayList
-import kotlin.math.roundToInt
+import kotlin.math.absoluteValue
 
 
 class MainFragment : Fragment(R.layout.fragment_main) {
@@ -82,39 +82,38 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun initObservers() {
-        checkPermishion()
+        checkPermission()
         viewModel.firsAction = MainAction.LoadCurrentCity
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             swipeRefreshLayout?.isRefreshing = state.isLoading
-            date?.text = "Mon, 6:44 AM"
-//            date?.text = state.time
+//            date?.text = "Mon, 6:44 AM"
+            date?.text = state.time
             val data = state.data.getIfNotBeenHandled()
             data ?: return@Observer
-            city?.text = "Marseille"
-//            city?.text = data.city
+//            city?.text = "Marseille"
+            city?.text = data.city
             data.mainIcon?.let { iconState?.setImageResource(it) }
-            currentState?.text = "Fog"
-//            currentState?.text = data.condition
-            currentTemperature?.text = "18"
-//            currentTemperature?.text = data.temp
-            maxTemperature?.text = ("24" + getString(R.string.celsius) + "C")
-            minTemperature?.text = ("12" + getString(R.string.celsius) + "C")
-//            maxTemperature?.text = (data.maxTemp+ getString(R.string.celsius) + "C")
-//            minTemperature?.text = (data.minTemp+ getString(R.string.celsius) + "C")
-            initChart(
-                listOf(
-                    Pair(18f, R.drawable.cloud_icon),
-                    Pair(18f, R.drawable.cloud_icon),
-                    Pair(19f, R.drawable.cloud_icon),
-                    Pair(21f, R.drawable.cloud_icon),
-                    Pair(19f, R.drawable.cloud_icon),
-                    Pair(18f, R.drawable.cloud_icon)
-                )
-            )
-//            initChart(data.hourlyForecast)
+//            currentState?.text = "Fog"
+            currentState?.text = data.condition
+//            currentTemperature?.text = "18"
+            currentTemperature?.text = data.temp
+//            maxTemperature?.text = ("24" + getString(R.string.celsius) + "C")
+//            minTemperature?.text = ("12" + getString(R.string.celsius) + "C")
+            maxTemperature?.text = (data.maxTemp + getString(R.string.celsius) + "C")
+            minTemperature?.text = (data.minTemp + getString(R.string.celsius) + "C")
+//            initChart(
+//                listOf(
+//                    Pair(18f, R.drawable.cloud_icon),
+//                    Pair(18f, R.drawable.cloud_icon),
+//                    Pair(19f, R.drawable.cloud_icon),
+//                    Pair(21f, R.drawable.cloud_icon),
+//                    Pair(19f, R.drawable.cloud_icon),
+//                    Pair(18f, R.drawable.cloud_icon)
+//                )
+//            )
+            initChart(data.hourlyForecast)
         })
     }
-
 
     private fun initListeners() {
         addCity?.onClick {
@@ -134,20 +133,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     }
 
-    private fun checkPermishion() {
+    private fun checkPermission() {
         when (PackageManager.PERMISSION_GRANTED) {
             ContextCompat.checkSelfPermission(
                 requireContext(),
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) -> {
-
             }
             else -> {
                 requestPermissions(
                     arrayOf("android.permission.ACCESS_COARSE_LOCATION"),
                     PERMISSION_REQUEST_CODE
                 )
-
             }
         }
     }
@@ -183,7 +180,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     }
 
-    private fun initChart(hourlyForecast: List<Pair<Float, Int>>?) {
+    private fun initChart(hourlyForecast: List<HourlyData>?) {
         val x: XAxis = chart.xAxis
         x.position = XAxis.XAxisPosition.BOTTOM
         x.textSize = 16f
@@ -193,7 +190,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         x.setDrawAxisLine(false) //граница графика сверху
         x.valueFormatter = object : ValueFormatter() {
             override fun getFormattedValue(value: Float): String {
-                return if (value == 0f) "NOW" else "%.0f".format(value) + " pm"
+                //формат оси Ох
+                return if (value == 0f) "NOW"
+                else {
+                    var h = (hourlyForecast?.getOrNull(value.toInt())?.hour ?: 0f) - 12
+                    val postfix = if (h < 0) "am" else "pm"
+                    h = if (h < 0 && h != -12f) h + 12 else h
+                    "%.0f".format(h.absoluteValue) + postfix
+                }
             }
         }
 
@@ -205,8 +209,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         chart.setTouchEnabled(false)
 //        chart.animateXY(500, 500)
 
-        val values = hourlyForecast?.mapIndexed { index, pair ->
-            Entry(index.toFloat(), pair.first, pair.second)
+        val values = hourlyForecast?.mapIndexed { index, h ->
+            Entry(index.toFloat(), h.temp, h.iconRes)
         }
 
         chart.xAxis.setLabelCount(6, true)
@@ -224,11 +228,20 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 //        for (set in chart.data.dataSets) set.setDrawValues(false) // включает/отключает рисовку значений
     }
 
+    private fun checkEndOfDay(hourlyForecast: List<HourlyData>?) {
+        // Если часы идут 22, 23, 0, 1, 2, 3 на графике будет фигня, т.к. это шкала x
+        hourlyForecast?.find { it.hour == 0f } ?: return
+        var h = hourlyForecast.getOrNull(0)?.hour ?: return
+        if (h == 0f) return // если 0 на первом месте всё ок
+        hourlyForecast.forEach {
+            it.hour = h
+            h++
+        }
+    }
+
     private fun setData(
         values: List<Entry>?
     ) {
-
-
         val set1: LineDataSet
         chart ?: return
         if (chart.data != null && chart.data.dataSetCount > 0) {
@@ -267,12 +280,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             data.addDataSet(set2)
             //Выделяет все точки
             val highlightList = ArrayList<Highlight>()
-            values?.forEach {
+            values?.forEachIndexed { index, it ->
                 highlightList.add(Highlight(it.x, it.y, 0))
                 val set = LineDataSet(mutableListOf(), "set")
                 set.mode = LineDataSet.Mode.LINEAR
                 set.setDrawFilled(false)
-                set.lineWidth = 0.8f
+                set.lineWidth = if (index == 0 || index == 5) 0.8f * 2.5f else 0.8f
 //                set2.color = ContextCompat.getColor(this, R.color.white_30)
                 set.setColor(Color.WHITE, 50)
                 set.setDrawCircles(false)
@@ -294,10 +307,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             })
             data.setDrawValues(false)
-            chart.extraLeftOffset = 20f
-            chart.extraRightOffset = 20f
-//            chart.extraBottomOffset = 20f
-            // set data
+            chart.extraLeftOffset = 25f
+            chart.extraRightOffset = 25f
             chart.data = data
         }
     }
