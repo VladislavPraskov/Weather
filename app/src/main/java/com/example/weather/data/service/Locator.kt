@@ -5,7 +5,7 @@ import android.location.Address
 import android.location.Geocoder
 import android.location.Location
 import android.location.LocationManager
-import com.example.weather.data.db.city.City
+import com.example.weather.data.db.city.CityEntity
 import com.google.android.gms.location.LocationCallback
 import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
@@ -62,7 +62,6 @@ class Locator(context: Context) {
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 count.countDown()
                 currentLocation = it
-
             }
         } catch (security: SecurityException) {
             return ResultLocation(securityError = true)
@@ -76,7 +75,7 @@ class Locator(context: Context) {
                 gsd.getFromLocation(currentLocation?.latitude ?: 0.0, currentLocation?.longitude ?: 0.0, 1)
             if (addresses.isNotEmpty()) println(addresses[0].locality)
             ResultLocation(
-                city = City(
+                city = CityEntity(
                     lat = currentLocation?.latitude ?: 0.0,
                     lon = currentLocation?.longitude ?: 0.0,
                     name = addresses.getOrNull(0)?.locality
@@ -88,6 +87,6 @@ class Locator(context: Context) {
     data class ResultLocation(
         val securityError: Boolean = false,
         val locationIsNotAvailableNow: Boolean = false,
-        val city: City?= null
+        val city: CityEntity?= null
     )
 }

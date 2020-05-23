@@ -20,7 +20,7 @@ import retrofit2.Retrofit
 val mainModule = module {
     viewModel { MainViewModel(get(), get()) }
     factory<MainInteractor> { MainInteractorImpl(get()) }
-    factory<MainRepository> { MainRepositoryImpl(get(),get(),get(),get()) }
+    factory<MainRepository> { MainRepositoryImpl(get(),get(),get()) }
     factory { getApi(get(), get()) }
     factory { getRetrofitBuilder(get()) }
     factory { getClient() }

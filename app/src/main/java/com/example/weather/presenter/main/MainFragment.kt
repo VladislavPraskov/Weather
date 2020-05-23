@@ -6,12 +6,15 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import androidx.core.content.ContextCompat
+import androidx.core.os.postDelayed
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.devpraskov.android_ext.getColor
 import com.devpraskov.android_ext.onClick
+import com.devpraskov.android_ext.statusBarColor
 import com.example.weather.R
 import com.example.weather.presenter.main.AddCityDialog.Companion.ADD_CITY_REQUEST_CODE
 import com.example.weather.presenter.main.AddCityDialog.Companion.CITY_EXTRA_KEY
@@ -25,36 +28,93 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
+import java.util.*
+import java.util.Calendar.SECOND
+import kotlin.collections.ArrayList
+import kotlin.math.roundToInt
 
 
 class MainFragment : Fragment(R.layout.fragment_main) {
 
     companion object {
-        val PERMISSION_REQUEST_CODE = 456
+        const val PERMISSION_REQUEST_CODE = 456
     }
 
     private val viewModel: MainViewModel by viewModel()
+    lateinit var handler: Handler
+    private lateinit var runnable: Runnable
+    private val currentSeconds: Long
+        get() = Calendar.getInstance(TimeZone.getTimeZone("UTC")).get(SECOND).toLong()
+    private val remainingSecondsInMinute: Long
+        get() = (60 - currentSeconds) * 1000L
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initObservers()
         initViews()
+        initObservers()
         initListeners()
-        initChart()
     }
 
     private fun initViews() {
+        statusBarColor(Color.parseColor("#BC8DB8"))
+        updateTimeEveryMinutes()
+    }
 
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacks(runnable)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        handler.postDelayed(runnable, remainingSecondsInMinute)
+    }
+
+    private fun updateTimeEveryMinutes() {
+        handler = Handler()
+        runnable = object : Runnable {
+            override fun run() {
+                viewModel.setNextAction(MainAction.UpdateTime)
+                handler.postDelayed(this, remainingSecondsInMinute)
+            }
+        }
     }
 
     private fun initObservers() {
         checkPermishion()
         viewModel.firsAction = MainAction.LoadCurrentCity
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
-
+            swipeRefreshLayout?.isRefreshing = state.isLoading
+            date?.text = "Mon, 6:44 AM"
+//            date?.text = state.time
+            val data = state.data.getIfNotBeenHandled()
+            data ?: return@Observer
+            city?.text = "Marseille"
+//            city?.text = data.city
+            data.mainIcon?.let { iconState?.setImageResource(it) }
+            currentState?.text = "Fog"
+//            currentState?.text = data.condition
+            currentTemperature?.text = "18"
+//            currentTemperature?.text = data.temp
+            maxTemperature?.text = ("24" + getString(R.string.celsius) + "C")
+            minTemperature?.text = ("12" + getString(R.string.celsius) + "C")
+//            maxTemperature?.text = (data.maxTemp+ getString(R.string.celsius) + "C")
+//            minTemperature?.text = (data.minTemp+ getString(R.string.celsius) + "C")
+            initChart(
+                listOf(
+                    Pair(18f, R.drawable.cloud_icon),
+                    Pair(18f, R.drawable.cloud_icon),
+                    Pair(19f, R.drawable.cloud_icon),
+                    Pair(21f, R.drawable.cloud_icon),
+                    Pair(19f, R.drawable.cloud_icon),
+                    Pair(18f, R.drawable.cloud_icon)
+                )
+            )
+//            initChart(data.hourlyForecast)
         })
     }
+
 
     private fun initListeners() {
         addCity?.onClick {
@@ -62,6 +122,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             dialog.setTargetFragment(this, ADD_CITY_REQUEST_CODE)
             dialog.show(parentFragmentManager, "Dialog")
         }
+        swipeRefreshLayout?.setOnRefreshListener { viewModel.setNextAction(MainAction.LoadCurrentCity) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -73,7 +134,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     }
 
-    fun checkPermishion() {
+    private fun checkPermishion() {
         when (PackageManager.PERMISSION_GRANTED) {
             ContextCompat.checkSelfPermission(
                 requireContext(),
@@ -101,6 +162,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 if ((grantResults.isNotEmpty() &&
                             grantResults[0] == PackageManager.PERMISSION_GRANTED)
                 ) {
+                    //todo
                     // Permission is granted. Continue the action or workflow
                     // in your app.
                 } else {
@@ -121,10 +183,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     }
 
-    private fun initChart() {
+    private fun initChart(hourlyForecast: List<Pair<Float, Int>>?) {
         val x: XAxis = chart.xAxis
         x.position = XAxis.XAxisPosition.BOTTOM
-        x.textSize = 14f
+        x.textSize = 16f
         x.textColor = Color.WHITE
         x.setDrawGridLines(false)
         x.axisLineColor = getColor(R.color.lineColor)
@@ -141,26 +203,20 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         chart.description.isEnabled = false
         chart.extraBottomOffset = 8f
         chart.setTouchEnabled(false)
-//        chart.animateXY(2000, 2000)
+//        chart.animateXY(500, 500)
 
-        val values = ArrayList<Entry>()
-        values.add(Entry(0f, 23f))
-        values.add(Entry(1f, 24f))
-        values.add(Entry(2f, 25f))
-        values.add(Entry(3f, 24f))
-        values.add(Entry(4f, 22f))
-        values.add(Entry(5f, 23f))
+        val values = hourlyForecast?.mapIndexed { index, pair ->
+            Entry(index.toFloat(), pair.first, pair.second)
+        }
 
         chart.xAxis.setLabelCount(6, true)
         chart.xAxis.axisMinimum = 0f
         chart.xAxis.axisMaximum = 5.001f
         val leftAxis = chart.axisLeft
-        val minY = (values.minBy { it.y }?.y ?: 0f) - 1f
-        val maxY = (values.maxBy { it.y }?.y ?: 0f) + 3f
+        val minY = (values?.minBy { it.y }?.y ?: 0f) - 2f
+        val maxY = (values?.maxBy { it.y }?.y ?: 0f) + 3f
         leftAxis.axisMaximum = maxY
         leftAxis.axisMinimum = minY
-        chart.xAxis.spaceMin = 0.18f
-        chart.xAxis.spaceMax = 0.18f
 
         setData(values)
         chart.invalidate()
@@ -169,7 +225,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun setData(
-        values: ArrayList<Entry>
+        values: List<Entry>?
     ) {
 
 
@@ -182,9 +238,9 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             chart.notifyDataSetChanged()
         } else {
 
-            val set2 = LineDataSet(mutableListOf(values[0].copy()), "DataSet 2")
+            val set2 = LineDataSet(mutableListOf(values?.getOrNull(0)?.copy()), "DataSet 2")
             set2.setDrawCircles(true)
-            set2.circleRadius = 6f
+            set2.circleRadius = 7f
             set2.setCircleColor(getColor(R.color.white_30))
 
             // create a dataset and give it a type
@@ -211,7 +267,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             data.addDataSet(set2)
             //Выделяет все точки
             val highlightList = ArrayList<Highlight>()
-            values.forEach {
+            values?.forEach {
                 highlightList.add(Highlight(it.x, it.y, 0))
                 val set = LineDataSet(mutableListOf(), "set")
                 set.mode = LineDataSet.Mode.LINEAR
@@ -238,6 +294,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 }
             })
             data.setDrawValues(false)
+            chart.setExtraOffsets(20f, 20f, 20f, 16f)
             // set data
             chart.data = data
         }

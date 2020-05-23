@@ -1,9 +1,8 @@
 package com.example.weather.data.repository.main
 
-import android.content.SharedPreferences
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import com.example.weather.data.db.city.City
+import com.example.weather.data.db.city.CityEntity
 import com.example.weather.data.db.weather.WeatherEntity
 import com.example.weather.data.db.WeatherDataBase
 import com.example.weather.data.network.ApiService
@@ -35,7 +34,7 @@ class MainRepositoryImpl(
                 val location = locator.blockingGetLocation()
                 if (location.securityError) return null
                 if (location.locationIsNotAvailableNow) return null
-                safeCacheCall({ location.city?.let { db.cityDao.saveCurrentCity(city = it) } })
+                safeCacheCall({ location.city?.let { db.cityDao.saveCurrentCity(cityEntity = it) } })
                 return api.getWeatherCityByLocationHourlyForecast(
                     location.city?.lat,
                     location.city?.lon
@@ -45,22 +44,32 @@ class MainRepositoryImpl(
             override suspend fun retrieveCache(): List<WeatherEntity>? {
                 val cityName = db.cityDao.getCurrentCityName()
                 cityName ?: return null
-                return db.weatherDao.getCurrentHourlyForecast(cityName = cityName)
+                return db.weatherDao.getCurrentDayAndHourlyForecast(cityName = cityName)
             }
 
             override suspend fun saveCache(networkObject: HourlyWeather) {
                 val cityName = db.cityDao.getCurrentCityName()
-                networkObject.hourly?.mapNotNull {
+
+                //hourly forecast
+                val hourlyList = networkObject.hourly?.mapNotNull {
                     WeatherEntity.createHourlyWeather(it, cityName)
-                }?.let { hourlyList -> db.weatherDao.saveListWeather(hourlyList) }
+                }
+                //daily forecast
+                val dailyList = networkObject.daily?.mapNotNull {
+                    WeatherEntity.createDailyWeather(it, cityName)
+                }
+                val list = mutableListOf<WeatherEntity>()
+                dailyList?.let { list.addAll(it) }
+                hourlyList?.let { list.addAll(it) }
+                db.weatherDao.saveListWeather(list)
             }
 
             override fun mapToResultAction(cache: List<WeatherEntity>?): MainResultAction {
-                return MainResultAction.Loading
+                return MainResultAction.getSuccessOrEmpty(cache)
             }
 
             override fun mapErrorToResultAction(error: ApiResult.NetworkError?): MainResultAction {
-                return MainResultAction.SomeAction()
+                return MainResultAction.Error(error)
             }
 
         }.result.asLiveData(Dispatchers.IO)
@@ -71,7 +80,7 @@ class MainRepositoryImpl(
 
             override suspend fun networkRequest(): HourlyWeather? {
                 val response = api.getWeatherCity(city) // лишний запрос чтобы достать данные city
-                val cityEntity = City.create(response.city)
+                val cityEntity = CityEntity.create(response.city)
                 db.cityDao.saveCity(cityEntity)
                 return api.getWeatherCityByLocationHourlyForecast(cityEntity.lon, cityEntity.lat)
             }
@@ -84,11 +93,11 @@ class MainRepositoryImpl(
             }
 
             override fun mapToResultAction(cache: Any?): MainResultAction {
-                return MainResultAction.Loading
+                return MainResultAction.Nothing
             }
 
             override fun mapErrorToResultAction(error: ApiResult.NetworkError?): MainResultAction {
-                return MainResultAction.SomeAction()
+                return MainResultAction.Nothing
             }
 
         }.result.asLiveData(Dispatchers.IO)
