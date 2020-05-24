@@ -1,0 +1,14 @@
+<resources>
+    <attr name="icon" format="reference" />
+    <declare-styleable name="DayForecastView">
+        <attr name="dayText" format="string" />
+        <attr name="maxText" format="string" />
+        <attr name="minText" format="string" />
+        <attr name="icon" />
+    </declare-styleable>
+    <declare-styleable name="DetailsView">
+        <attr name="titleText" format="string" />
+        <attr name="dataText" format="string" />
+        <attr name="icon" />
+    </declare-styleable>
+</resources>

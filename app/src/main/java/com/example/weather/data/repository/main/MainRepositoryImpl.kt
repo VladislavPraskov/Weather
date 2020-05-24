@@ -52,11 +52,11 @@ class MainRepositoryImpl(
 
                 //hourly forecast
                 val hourlyList = networkObject.hourly?.mapNotNull {
-                    WeatherEntity.createHourlyWeather(it, cityName, networkObject.timezoneOffset)
+                    WeatherEntity.createHourlyWeather(it, cityName)
                 }
                 //daily forecast
                 val dailyList = networkObject.daily?.mapNotNull {
-                    WeatherEntity.createDailyWeather(it, cityName, networkObject.timezoneOffset)
+                    WeatherEntity.createDailyWeather(it, cityName)
                 }
                 val list = mutableListOf<WeatherEntity>()
                 dailyList?.let { list.addAll(it) }

@@ -56,7 +56,7 @@ dependencies {
     debugImplementation 'com.facebook.soloader:soloader:0.9.0'
     implementation "androidx.preference:preference:1.1.1"
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.0.0'
-
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
 
     //Utils
     implementation project(":android-ext")

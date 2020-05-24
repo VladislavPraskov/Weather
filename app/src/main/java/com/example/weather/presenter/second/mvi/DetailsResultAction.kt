@@ -1,4 +1,4 @@
-package com.example.weather.presenter.second
+package com.example.weather.presenter.second.mvi
 
 sealed class DetailsResultAction {
     object Loading : DetailsResultAction()

@@ -11,18 +11,13 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 import kotlinx.android.synthetic.main.fragment_details.*
 
 
-class DetailsFragment : Fragment() {
+class DetailsFragment : Fragment(R.layout.fragment_details) {
 
+    companion object {
+        val TAG = DetailsFragment::class.java.name
+    }
 
     private val viewModel: DetailsViewModel by viewModel()
-
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_details, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)

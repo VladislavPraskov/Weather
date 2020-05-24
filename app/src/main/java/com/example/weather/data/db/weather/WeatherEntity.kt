@@ -17,8 +17,8 @@ data class WeatherEntity(
     val city: String,
     val time: Long,
     val temp: Float = 0f,
-    val maxTemp: Float = 0f,
-    val minTemp: Float = 0f,
+    var maxTemp: Float = 0f,
+    var minTemp: Float = 0f,
     val feelsLike: Float? = null,
     val humidity: Long? = null,
     val windSpeed: Int? = null,
@@ -33,14 +33,14 @@ data class WeatherEntity(
     companion object {
         fun createHourlyWeather(
             hourly: HourlyWeather.Hourly?,
-            cityName: String?,
-            timezoneOffset: Long?
+            cityName: String?
         ): WeatherEntity? {
             hourly ?: return null
             return WeatherEntity(
                 city = cityName ?: "-",
                 temp = hourly.temp?.toFloat() ?: 0f,
                 type = HOURLY,
+                condition = hourly.weather?.getOrNull(0)?.main,
                 iconId = getIconRes(hourly.weather?.getOrNull(0)?.icon),
                 time = hourly.dt ?: 0
             )
@@ -48,8 +48,7 @@ data class WeatherEntity(
 
         fun createDailyWeather(
             daily: HourlyWeather.Daily?,
-            cityName: String?,
-            timezoneOffset: Long?
+            cityName: String?
         ): WeatherEntity? {
             daily ?: return null
             return WeatherEntity(

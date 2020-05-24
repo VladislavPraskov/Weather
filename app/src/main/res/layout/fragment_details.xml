@@ -1,6 +1,260 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/dark_shape">
+
+    <com.example.weather.presenter.second.DayForecastView
+        android:id="@+id/day_1"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="24dp"
+        app:dayText="Fri"
+        app:layout_constraintEnd_toStartOf="@+id/day_2"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailsTitle3" />
+
+
+    <com.example.weather.presenter.second.DayForecastView
+        android:id="@+id/day_2"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:dayText="Fri"
+        app:layout_constraintBottom_toBottomOf="@+id/day_1"
+        app:layout_constraintEnd_toStartOf="@+id/day_3"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/day_1"
+        app:layout_constraintTop_toTopOf="@+id/day_1"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <com.example.weather.presenter.second.DayForecastView
+        android:id="@+id/day_3"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:dayText="Fri"
+        app:layout_constraintBottom_toBottomOf="@+id/day_1"
+        app:layout_constraintEnd_toStartOf="@+id/day_4"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/day_2"
+        app:layout_constraintTop_toTopOf="@+id/day_1"
+
+        tools:layout_editor_absoluteY="558dp" />
+
+    <com.example.weather.presenter.second.DayForecastView
+        android:id="@+id/day_4"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:dayText="Fri"
+        app:layout_constraintBottom_toBottomOf="@+id/day_1"
+        app:layout_constraintEnd_toStartOf="@+id/day_5"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/day_3"
+        app:layout_constraintTop_toTopOf="@+id/day_1"
+        tools:layout_editor_absoluteY="558dp" />
+
+    <com.example.weather.presenter.second.DayForecastView
+        android:id="@+id/day_5"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:dayText="Fri"
+        app:layout_constraintBottom_toBottomOf="@+id/day_1"
+        app:layout_constraintEnd_toStartOf="@+id/day_6"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/day_4"
+        app:layout_constraintTop_toTopOf="@+id/day_1"
+        tools:layout_editor_absoluteY="558dp" />
+
+    <com.example.weather.presenter.second.DayForecastView
+        android:id="@+id/day_6"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:dayText="Wen"
+        app:layout_constraintBottom_toBottomOf="@+id/day_1"
+        app:layout_constraintEnd_toStartOf="@+id/day_7"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/day_5"
+        app:layout_constraintTop_toTopOf="@+id/day_1"
+        tools:layout_editor_absoluteY="558dp" />
+
+    <com.example.weather.presenter.second.DayForecastView
+        android:id="@+id/day_7"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginEnd="12dp"
+        app:dayText="Thu"
+        app:layout_constraintBottom_toBottomOf="@+id/day_1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/day_6"
+        app:layout_constraintTop_toTopOf="@+id/day_1"
+        tools:layout_editor_absoluteY="558dp" />
+
+    <TextView
+        android:id="@+id/detailsTitle3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="150dp"
+        android:fontFamily="sans-serif"
+        android:text="NEXT 7 DAYS"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailsTitle2" />
+
+    <View
+        android:id="@+id/divider_details3"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="36dp"
+        android:background="#33FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/detailsTitle3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/detailsTitle3"
+        app:layout_constraintTop_toTopOf="@+id/detailsTitle3"
+        app:layout_constraintVertical_bias="0.49" />
+
+    <TextView
+        android:id="@+id/detailsTitle2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif"
+        android:text="DETAILS"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailsPressure" />
+
+    <View
+        android:id="@+id/divider_details2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="36dp"
+        android:background="#33FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/detailsTitle2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/detailsTitle"
+        app:layout_constraintTop_toTopOf="@+id/detailsTitle2" />
+
+    <com.example.weather.presenter.second.DetailsView
+        android:id="@+id/detailsTemp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/detailsWind"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailsTitle"
+        app:titleText="Feels like" />
+
+    <com.example.weather.presenter.second.DetailsView
+        android:id="@+id/detailsWind"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detailsTemp"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/detailsHumidity"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/detailsTemp"
+        app:layout_constraintTop_toTopOf="@+id/detailsTemp"
+        app:titleText="Wind" />
+
+    <com.example.weather.presenter.second.DetailsView
+        android:id="@+id/detailsHumidity"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detailsTemp"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/detailsWind"
+        app:layout_constraintTop_toTopOf="@+id/detailsTemp"
+        app:titleText="Humidity" />
+
+
+    <com.example.weather.presenter.second.DetailsView
+        android:id="@+id/detailsPressure"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/detailsVisibility"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detailsTemp"
+        app:titleText="Pressure" />
+
+    <com.example.weather.presenter.second.DetailsView
+        android:id="@+id/detailsVisibility"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detailsPressure"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/detailsDewPoint"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/detailsPressure"
+        app:layout_constraintTop_toTopOf="@+id/detailsPressure"
+        app:titleText="Visibility" />
+
+    <com.example.weather.presenter.second.DetailsView
+        android:id="@+id/detailsDewPoint"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="32dp"
+        app:layout_constraintBottom_toBottomOf="@+id/detailsPressure"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/detailsVisibility"
+        app:layout_constraintTop_toTopOf="@+id/detailsPressure"
+        app:titleText="Dew Point" />
+
+    <TextView
+        android:id="@+id/detailsTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="34dp"
+        android:layout_marginTop="32dp"
+        android:fontFamily="sans-serif"
+        android:text="DETAILS"
+        android:textColor="@color/white"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/divider_details"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="36dp"
+        android:background="#33FFFFFF"
+        app:layout_constraintBottom_toBottomOf="@+id/detailsTitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/detailsTitle"
+        app:layout_constraintTop_toTopOf="@+id/detailsTitle" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

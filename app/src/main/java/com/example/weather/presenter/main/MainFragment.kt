@@ -10,6 +10,7 @@ import android.os.Handler
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import com.devpraskov.android_ext.getColor
 import com.devpraskov.android_ext.onClick
@@ -19,6 +20,7 @@ import com.example.weather.models.main.HourlyData
 import com.example.weather.presenter.main.AddCityDialog.Companion.ADD_CITY_REQUEST_CODE
 import com.example.weather.presenter.main.AddCityDialog.Companion.CITY_EXTRA_KEY
 import com.example.weather.presenter.main.mvi.MainAction
+import com.example.weather.presenter.second.DetailsFragment
 import com.example.weather.utils.ChartDataView
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -38,6 +40,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     companion object {
         const val PERMISSION_REQUEST_CODE = 456
+        val TAG = MainFragment::class.java.name
     }
 
     private val viewModel: MainViewModel by viewModel()
@@ -122,6 +125,18 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             dialog.show(parentFragmentManager, "Dialog")
         }
         swipeRefreshLayout?.setOnRefreshListener { viewModel.setNextAction(MainAction.LoadCurrentCity) }
+        menu?.onClick {
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
+                .replace(R.id.fragment_container, DetailsFragment())
+                .addToBackStack(DetailsFragment.TAG)
+                .commit()
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -251,65 +266,65 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 //            chart.notifyDataSetChanged()
 //        } else {
 
-            val set2 = LineDataSet(mutableListOf(values?.getOrNull(0)?.copy()), "DataSet 2")
-            set2.setDrawCircles(true)
-            set2.circleRadius = 7f
-            set2.setCircleColor(getColor(R.color.white_30))
+        val set2 = LineDataSet(mutableListOf(values?.getOrNull(0)?.copy()), "DataSet 2")
+        set2.setDrawCircles(true)
+        set2.circleRadius = 7f
+        set2.setCircleColor(getColor(R.color.white_30))
 
-            // create a dataset and give it a type
-            set1 = LineDataSet(values, "DataSet 1")
-            set1.mode = LineDataSet.Mode.CUBIC_BEZIER
-            set1.cubicIntensity = 0.2f
-            set1.setDrawFilled(false)
-            set1.setDrawCircles(true)
-            set1.lineWidth = 1.3f
-            set1.enableDashedLine(10f, 10f, 0f)
-            set1.circleRadius = 2.5f
-            set1.setCircleColor(Color.WHITE)
-            set1.color = getColor(R.color.lineColor)
+        // create a dataset and give it a type
+        set1 = LineDataSet(values, "DataSet 1")
+        set1.mode = LineDataSet.Mode.CUBIC_BEZIER
+        set1.cubicIntensity = 0.2f
+        set1.setDrawFilled(false)
+        set1.setDrawCircles(true)
+        set1.lineWidth = 1.3f
+        set1.enableDashedLine(10f, 10f, 0f)
+        set1.circleRadius = 2.5f
+        set1.setCircleColor(Color.WHITE)
+        set1.color = getColor(R.color.lineColor)
 
 //            data.setValueTypeface(tfLight)
 
-            // create marker to display box when values are selected
-            val mv = ChartDataView(requireContext(), R.layout.chart_data_text_view)
-            // Set the marker to the chart
-            mv.chartView = chart
-            chart.marker = mv
-            val data = LineData()
-            data.addDataSet(set1)
-            data.addDataSet(set2)
-            //Выделяет все точки
-            val highlightList = ArrayList<Highlight>()
-            values?.forEachIndexed { index, it ->
-                highlightList.add(Highlight(it.x, it.y, 0))
-                val set = LineDataSet(mutableListOf(), "set")
-                set.mode = LineDataSet.Mode.LINEAR
-                set.setDrawFilled(false)
-                set.lineWidth = if (index == 0 || index == 5) 0.8f * 2.5f else 0.8f
+        // create marker to display box when values are selected
+        val mv = ChartDataView(requireContext(), R.layout.chart_data_text_view)
+        // Set the marker to the chart
+        mv.chartView = chart
+        chart.marker = mv
+        val data = LineData()
+        data.addDataSet(set1)
+        data.addDataSet(set2)
+        //Выделяет все точки
+        val highlightList = ArrayList<Highlight>()
+        values?.forEachIndexed { index, it ->
+            highlightList.add(Highlight(it.x, it.y, 0))
+            val set = LineDataSet(mutableListOf(), "set")
+            set.mode = LineDataSet.Mode.LINEAR
+            set.setDrawFilled(false)
+            set.lineWidth = if (index == 0 || index == 5) 0.8f * 2.5f else 0.8f
 //                set2.color = ContextCompat.getColor(this, R.color.white_30)
-                set.setColor(Color.WHITE, 50)
-                set.setDrawCircles(false)
-                set.addColor(Color.WHITE)
-                set.clear()
-                set.addEntry(Entry(it.x, chart.yChartMin))
-                set.addEntry(Entry(it.x, it.y))
-                data.addDataSet(set)
+            set.setColor(Color.WHITE, 50)
+            set.setDrawCircles(false)
+            set.addColor(Color.WHITE)
+            set.clear()
+            set.addEntry(Entry(it.x, chart.yChartMin))
+            set.addEntry(Entry(it.x, it.y))
+            data.addDataSet(set)
+        }
+        chart.highlightValues(highlightList.toTypedArray())
+        data.setValueTextSize(12f)
+        data.setDrawValues(false)
+        set1.setDrawHorizontalHighlightIndicator(false) //отключает вертикальную линию highlight
+        set1.setDrawVerticalHighlightIndicator(false) //отключает вертикальную линию highlight
+        data.setValueTextColor(getColor(R.color.white))
+        data.setValueFormatter(object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                return "%.0f".format(value) + getString(R.string.celsius)
             }
-            chart.highlightValues(highlightList.toTypedArray())
-            data.setValueTextSize(12f)
-            data.setDrawValues(false)
-            set1.setDrawHorizontalHighlightIndicator(false) //отключает вертикальную линию highlight
-            set1.setDrawVerticalHighlightIndicator(false) //отключает вертикальную линию highlight
-            data.setValueTextColor(getColor(R.color.white))
-            data.setValueFormatter(object : ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    return "%.0f".format(value) + getString(R.string.celsius)
-                }
-            })
-            data.setDrawValues(false)
-            chart.extraLeftOffset = 25f
-            chart.extraRightOffset = 25f
-            chart.data = data
+        })
+        data.setDrawValues(false)
+        chart.extraLeftOffset = 25f
+        chart.extraRightOffset = 25f
+        chart.data = data
 //        }
     }
 }

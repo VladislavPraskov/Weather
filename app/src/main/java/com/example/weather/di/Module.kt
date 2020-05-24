@@ -13,12 +13,14 @@ import com.example.weather.data.service.Locator
 import com.example.weather.domain.main.MainInteractor
 import com.example.weather.domain.main.MainInteractorImpl
 import com.example.weather.presenter.main.MainViewModel
+import com.example.weather.presenter.second.DetailsViewModel
 import org.koin.androidx.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import retrofit2.Retrofit
 
 val mainModule = module {
     viewModel { MainViewModel(get(), get()) }
+    viewModel { DetailsViewModel(get(), get()) }
     factory<MainInteractor> { MainInteractorImpl(get()) }
     factory<MainRepository> { MainRepositoryImpl(get(),get(),get()) }
     factory { getApi(get(), get()) }

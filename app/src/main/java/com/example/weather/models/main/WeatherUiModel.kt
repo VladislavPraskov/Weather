@@ -18,13 +18,14 @@ data class WeatherUiModel(
     companion object {
         fun create(resultObj: List<WeatherEntity>): WeatherUiModel {
             val first = resultObj.getOrNull(0)
+            val second = resultObj.getOrNull(1)
             return WeatherUiModel(
                 city = first?.city ?: "-",
-                temp = first?.temp?.roundToInt()?.toString() ?: "",
+                temp = second?.temp?.roundToInt()?.toString() ?: "",
                 maxTemp = first?.maxTemp?.roundToInt()?.toString() ?: "",
                 minTemp = first?.minTemp?.roundToInt()?.toString() ?: "",
-                condition = first?.condition ?: "",
-                mainIcon = first?.iconId,
+                condition = second?.condition ?: "",
+                mainIcon = second?.iconId,
                 hourlyForecast = resultObj.mapIndexedNotNull { index, weather ->
                     if (index == 0) null
                     else HourlyData(
