@@ -13,7 +13,7 @@ interface ApiService {
     suspend fun getWeatherCityByLocationHourlyForecast(
         @Query("lat") lan: Double?,
         @Query("lon") lot: Double?,
-        @Query("exclude ") type: String? = "hourly",
+        @Query("exclude ") type: String? = "hourly,daily",
         @Query("units") unit: String? = "metric"
     ): HourlyWeather
 //

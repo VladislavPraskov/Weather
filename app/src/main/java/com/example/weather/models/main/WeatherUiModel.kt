@@ -29,7 +29,7 @@ data class WeatherUiModel(
                     if (index == 0) null
                     else HourlyData(
                         weather.temp,
-                        getHour(Date(weather.time * 1000)),
+                        getHour(Date(weather.time * 1000)).toFloat(),
                         weather.iconId
                     )
                 }

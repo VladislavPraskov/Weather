@@ -4,6 +4,7 @@ import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.weather.models.main.*
+import java.util.*
 import kotlin.math.roundToInt
 
 @Entity(
@@ -30,18 +31,26 @@ data class WeatherEntity(
     val type: Int
 ) {
     companion object {
-        fun createHourlyWeather(hourly: HourlyWeather.Hourly?, cityName: String?): WeatherEntity? {
+        fun createHourlyWeather(
+            hourly: HourlyWeather.Hourly?,
+            cityName: String?,
+            timezoneOffset: Long?
+        ): WeatherEntity? {
             hourly ?: return null
             return WeatherEntity(
                 city = cityName ?: "-",
                 temp = hourly.temp?.toFloat() ?: 0f,
                 type = HOURLY,
                 iconId = getIconRes(hourly.weather?.getOrNull(0)?.icon),
-                time = hourly.dt ?: System.currentTimeMillis() / 1000
+                time = hourly.dt ?: 0
             )
         }
 
-        fun createDailyWeather(daily: HourlyWeather.Daily?, cityName: String?): WeatherEntity? {
+        fun createDailyWeather(
+            daily: HourlyWeather.Daily?,
+            cityName: String?,
+            timezoneOffset: Long?
+        ): WeatherEntity? {
             daily ?: return null
             return WeatherEntity(
                 city = cityName ?: "-",
@@ -56,7 +65,7 @@ data class WeatherEntity(
                 dewPoint = daily.dewPoLong,
                 condition = daily.weather?.getOrNull(0)?.main,
                 iconId = getIconRes(daily.weather?.getOrNull(0)?.icon),
-                time = daily.dt ?: System.currentTimeMillis() / 1000
+                time = daily.dt ?: 0
             )
         }
     }

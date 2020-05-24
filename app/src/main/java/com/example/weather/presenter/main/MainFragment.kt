@@ -195,7 +195,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 else {
                     var h = (hourlyForecast?.getOrNull(value.toInt())?.hour ?: 0f) - 12
                     val postfix = if (h < 0) "am" else "pm"
-                    h = if (h < 0 && h != -12f) h + 12 else h
+                    h = if (h <= 0 && h != -12f) h + 12 else h
                     "%.0f".format(h.absoluteValue) + postfix
                 }
             }
@@ -244,12 +244,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     ) {
         val set1: LineDataSet
         chart ?: return
-        if (chart.data != null && chart.data.dataSetCount > 0) {
-            set1 = chart.data.getDataSetByIndex(0) as LineDataSet
-            set1.values = values
-            chart.data.notifyDataChanged()
-            chart.notifyDataSetChanged()
-        } else {
+//        if (chart.data != null && chart.data.dataSetCount > 0) {
+//            set1 = chart.data.getDataSetByIndex(0) as LineDataSet
+//            set1.values = values
+//            chart.data.notifyDataChanged()
+//            chart.notifyDataSetChanged()
+//        } else {
 
             val set2 = LineDataSet(mutableListOf(values?.getOrNull(0)?.copy()), "DataSet 2")
             set2.setDrawCircles(true)
@@ -310,6 +310,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             chart.extraLeftOffset = 25f
             chart.extraRightOffset = 25f
             chart.data = data
-        }
+//        }
     }
 }

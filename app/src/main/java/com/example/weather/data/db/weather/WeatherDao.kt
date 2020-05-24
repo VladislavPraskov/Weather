@@ -17,16 +17,16 @@ interface WeatherDao {
     @Query("SELECT * FROM weather_entity WHERE city = :cityName AND time > :dateFrom AND time <= :dateTo AND type = :type ORDER BY time LIMIT 6")
     fun getHourlyForecast(
         cityName: String,
-        dateFrom: Long = beginOfHour(),
-        dateTo: Long = beginOfHour() + 6 * 3600, // берём 5 часов
+        dateFrom: Long = beginOfHour() - 1,
+        dateTo: Long = beginOfHour() + 6 * 3600 + 1, // берём 6 часов
         @ForecastType type: Int = HOURLY
     ): List<WeatherEntity>
 
     @Query("SELECT * FROM weather_entity WHERE city = :cityName AND time > :dateFrom AND time <= :dateTo AND type = :type  ORDER BY time LIMIT 1")
     fun getCurrentDay(
         cityName: String,
-        dateFrom: Long = beginOfDay(),
-        dateTo: Long = endOfDay(),
+        dateFrom: Long = beginOfDay() - 1,
+        dateTo: Long = endOfDay(withUTCOffset = false) + 1,
         @ForecastType type: Int = DAILY
     ): WeatherEntity
 
