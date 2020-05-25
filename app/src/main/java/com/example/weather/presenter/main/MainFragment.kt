@@ -11,29 +11,18 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.devpraskov.android_ext.getColor
 import com.devpraskov.android_ext.onClick
 import com.devpraskov.android_ext.statusBarColor
 import com.example.weather.R
-import com.example.weather.models.main.HourlyData
 import com.example.weather.presenter.main.AddCityDialog.Companion.ADD_CITY_REQUEST_CODE
 import com.example.weather.presenter.main.AddCityDialog.Companion.CITY_EXTRA_KEY
 import com.example.weather.presenter.main.mvi.MainAction
 import com.example.weather.presenter.second.DetailsFragment
-import com.example.weather.utils.ChartDataView
-import com.example.weather.utils.view.ChartCreator
-import com.github.mikephil.charting.components.XAxis
-import com.github.mikephil.charting.data.Entry
-import com.github.mikephil.charting.data.LineData
-import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
-import com.github.mikephil.charting.highlight.Highlight
+import com.example.weather.utils.view.ForecastChartCreator
 import kotlinx.android.synthetic.main.fragment_main.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import java.util.Calendar.SECOND
-import kotlin.collections.ArrayList
-import kotlin.math.absoluteValue
 
 
 class MainFragment : Fragment(R.layout.fragment_main) {
@@ -98,7 +87,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             currentTemperature?.text = data.temp
             maxTemperature?.text = (data.maxTemp + getString(R.string.celsius) + "C")
             minTemperature?.text = (data.minTemp + getString(R.string.celsius) + "C")
-            ChartCreator(this).initHourlyForecastChart(chart, data.hourlyForecast)
+            ForecastChartCreator(this, chart).initHourlyForecastChart(data.hourlyForecast)
         })
     }
 
