@@ -8,7 +8,7 @@ class LiveDataDelegate<ViewState>(private val firstAction: () -> Unit) : LiveDat
 
     private lateinit var viewState: LiveData<ViewState>
     /**
-     * Переменная становится false после того как на viewState подпишутся первый раз.
+     * Переменная становится false после того как на viewState подпишутся первый раз после создания ViewModel
      */
     private var isFirstSubscription = true
 

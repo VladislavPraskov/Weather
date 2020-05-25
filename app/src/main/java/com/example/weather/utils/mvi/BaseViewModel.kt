@@ -14,7 +14,7 @@ abstract class BaseViewModel<Action, ViewState, ResultAction>(
 
     val context = getApplication<App>()
     /**
-     * Переопределить, чтобы установить первое действие для инициализации данных
+     * Установить первое действие для инициализации данных. Срабатывает один раз после создания viewModel
      */
     open var firsAction: Action? = null
 

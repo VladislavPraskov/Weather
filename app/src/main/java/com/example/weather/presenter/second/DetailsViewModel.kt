@@ -14,7 +14,7 @@ class DetailsViewModel(app: Application, val interactor: MainInteractor) :
         DetailsViewState()
     ) {
 
-    override fun handleNewAction(action: DetailsAction) = liveData<DetailsResultAction> {
+    override fun handleNewAction(action: DetailsAction) = liveData {
         when (action) {
             is DetailsAction.SomeAction -> {
                 emit(DetailsResultAction.Loading)
