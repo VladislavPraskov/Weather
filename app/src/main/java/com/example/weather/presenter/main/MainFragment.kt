@@ -76,7 +76,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun updateTimeEveryMinutes() {
         handler = Handler()
-        runnable = object : Runnable {
+        runnable = object : Runnable { //todo обновление каждый час
             override fun run() {
                 viewModel.setNextAction(MainAction.UpdateTime)
                 handler.postDelayed(this, remainingSecondsInMinute)
@@ -257,22 +257,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     private fun setData(
         values: List<Entry>?
     ) {
-        val set1: LineDataSet
         chart ?: return
-//        if (chart.data != null && chart.data.dataSetCount > 0) {
-//            set1 = chart.data.getDataSetByIndex(0) as LineDataSet
-//            set1.values = values
-//            chart.data.notifyDataChanged()
-//            chart.notifyDataSetChanged()
-//        } else {
-
-        val set2 = LineDataSet(mutableListOf(values?.getOrNull(0)?.copy()), "DataSet 2")
-        set2.setDrawCircles(true)
-        set2.circleRadius = 7f
-        set2.setCircleColor(getColor(R.color.white_30))
 
         // create a dataset and give it a type
-        set1 = LineDataSet(values, "DataSet 1")
+        val set1 = LineDataSet(values, "DataSet 1")
         set1.mode = LineDataSet.Mode.CUBIC_BEZIER
         set1.cubicIntensity = 0.2f
         set1.setDrawFilled(false)
@@ -284,7 +272,10 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         set1.color = getColor(R.color.lineColor)
 
 //            data.setValueTypeface(tfLight)
-
+        val set2 = LineDataSet(mutableListOf(values?.getOrNull(0)?.copy()), "DataSet 2")
+        set2.setDrawCircles(true)
+        set2.circleRadius = 7f
+        set2.setCircleColor(getColor(R.color.white_30))
         // create marker to display box when values are selected
         val mv = ChartDataView(requireContext(), R.layout.chart_data_text_view)
         // Set the marker to the chart
@@ -324,6 +315,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         data.setDrawValues(false)
         chart.extraLeftOffset = 25f
         chart.extraRightOffset = 25f
+        chart.extraTopOffset = 35f
         chart.data = data
 //        }
     }

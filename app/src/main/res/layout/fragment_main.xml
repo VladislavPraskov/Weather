@@ -23,10 +23,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="32dp"
+            android:layout_marginBottom="56dp"
             android:includeFontPadding="false"
             android:lineSpacingExtra="0dp"
             android:text="18"
-            android:textSize="176sp"
+            android:textSize="158sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -46,9 +47,9 @@
 
         <ImageView
             android:id="@+id/iconState"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="18dp"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginStart="20dp"
             app:layout_constraintBottom_toBottomOf="@+id/currentState"
             app:layout_constraintStart_toStartOf="@+id/currentTemperature"
             app:layout_constraintTop_toTopOf="@+id/currentState"
@@ -60,29 +61,29 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="12dp"
+            android:layout_marginBottom="180dp"
             android:fontFamily="sans-serif-light"
             android:text="Fog"
             android:textAllCaps="false"
-            android:textSize="46sp"
+            android:textSize="38sp"
             android:typeface="monospace"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/iconState"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.32999998" />
+            app:layout_constraintBottom_toBottomOf="@+id/currentTemperature"
+            app:layout_constraintStart_toEndOf="@+id/iconState" />
 
         <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/chart"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="72dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginTop="70dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginBottom="16dp"
-            android:minHeight="150dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_max="200dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/currentTemperature" />
+            app:layout_constraintTop_toBottomOf="@+id/currentTemperature"
+            app:layout_constraintVertical_bias="1.0" />
 
         <TextView
             android:id="@+id/maxTemperature"
@@ -92,7 +93,7 @@
             android:layout_marginBottom="8dp"
             android:fontFamily="sans-serif-light"
             android:text="24°С"
-            android:textSize="26sp"
+            android:textSize="19sp"
             app:layout_constraintBottom_toTopOf="@+id/divider"
             app:layout_constraintEnd_toEndOf="@+id/minTemperature"
             app:layout_constraintStart_toStartOf="@+id/minTemperature" />
@@ -102,11 +103,11 @@
             style="@style/main_text_style"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="52dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginEnd="48dp"
+            android:layout_marginBottom="38dp"
             android:fontFamily="sans-serif-light"
             android:text="12°С"
-            android:textSize="26sp"
+            android:textSize="19sp"
             app:layout_constraintBottom_toBottomOf="@+id/currentTemperature"
             app:layout_constraintEnd_toEndOf="parent" />
 
@@ -124,11 +125,11 @@
             android:id="@+id/addCity"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:padding="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/menu"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/menu"
             app:srcCompat="@drawable/add_city" />
 
         <TextView
@@ -137,11 +138,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="7dp"
             android:layout_marginEnd="16dp"
-            android:paddingLeft="8dp"
             android:fontFamily="sans-serif-light"
             android:gravity="center"
+            android:paddingLeft="8dp"
             android:text="Marseille"
             android:textSize="34sp"
             app:layout_constraintEnd_toStartOf="@+id/addCity"
@@ -152,8 +153,8 @@
             android:id="@+id/menu"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
             android:padding="8dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -171,5 +172,12 @@
             app:layout_constraintEnd_toEndOf="@+id/city"
             app:layout_constraintStart_toStartOf="@+id/city"
             app:layout_constraintTop_toBottomOf="@+id/city" />
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_begin="19dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

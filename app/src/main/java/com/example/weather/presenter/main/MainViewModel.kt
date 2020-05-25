@@ -39,8 +39,8 @@ class MainViewModel(app: Application, private val interactor: MainInteractor) :
     ): MainViewState {
         return when (result) {
             is MainResultAction.Loading -> currentViewState.copy(isLoading = true)
-            MainResultAction.SuccessEmpty -> currentViewState.copy(isLoading = false)
-            MainResultAction.Nothing -> currentViewState
+            is MainResultAction.SuccessEmpty -> currentViewState.copy(isLoading = false)
+            is MainResultAction.Nothing -> currentViewState
             is MainResultAction.Error -> currentViewState.copy(
                 isLoading = false,
                 error = ErrorMVI.create(context, error = result.networkError)
