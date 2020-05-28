@@ -26,7 +26,7 @@ interface WeatherDao {
     fun getCurrentDay(
         cityName: String,
         dateFrom: Long = beginOfDay() - 1,
-        dateTo: Long = endOfDay(withUTCOffset = false) - 1,
+        dateTo: Long = endOfDay() - 1,
         @ForecastType type: Int = DAILY
     ): WeatherEntity
 
@@ -35,7 +35,7 @@ interface WeatherDao {
     fun getMinTempOfDay(
         cityName: String,
         dateFrom: Long = beginOfDay() - 1,
-        dateTo: Long = endOfDay(withUTCOffset = false) - 1,
+        dateTo: Long = endOfDay() - 1,
         @ForecastType type: Int = HOURLY
     ): Float
 
@@ -44,7 +44,7 @@ interface WeatherDao {
     fun getMaxTempOfDay(
         cityName: String,
         dateFrom: Long = beginOfDay() - 1,
-        dateTo: Long = endOfDay(withUTCOffset = false) - 1,
+        dateTo: Long = endOfDay() - 1,
         @ForecastType type: Int = HOURLY
     ): Float
 

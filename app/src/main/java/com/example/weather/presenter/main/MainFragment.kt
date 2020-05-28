@@ -65,7 +65,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun updateTimeEveryMinutes() {
         handler = Handler()
-        runnable = object : Runnable { //todo обновление каждый час
+        runnable = object : Runnable { //todo обновление погоды каждый час
             override fun run() {
                 viewModel.setNextAction(MainAction.UpdateTime)
                 handler.postDelayed(this, remainingSecondsInMinute)
@@ -81,13 +81,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             date?.text = state.time
             val data = state.data.getIfNotBeenHandled()
             data ?: return@Observer
-            city?.text = data.city
-            data.mainIcon?.let { iconState?.setImageResource(it) }
-            currentState?.text = data.condition
-            currentTemperature?.text = data.temp
-            maxTemperature?.text = (data.maxTemp + getString(R.string.celsius) + "C")
-            minTemperature?.text = (data.minTemp + getString(R.string.celsius) + "C")
-            ForecastChartCreator(this, chart).initHourlyForecastChart(data.hourlyForecast)
+            city?.text = data.current.city
+            data.current.iconId.let { iconState?.setImageResource(it) }
+            currentState?.text = data.current.condition
+            currentTemperature?.text = data.current.temp
+            maxTemperature?.text = data.current.maxTemp
+            minTemperature?.text = data.current.minTemp
+            ForecastChartCreator(this, chart).initHourlyForecastChart(data.hours)
         })
     }
 

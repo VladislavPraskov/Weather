@@ -4,7 +4,7 @@ import android.graphics.Color
 import androidx.fragment.app.Fragment
 import com.devpraskov.android_ext.getColor
 import com.example.weather.R
-import com.example.weather.models.main.HourlyData
+import com.example.weather.models.main.HourUI
 import com.example.weather.utils.ChartDataView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
@@ -17,11 +17,11 @@ import kotlin.math.absoluteValue
 
 class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
 
-    fun initHourlyForecastChart(hourlyForecast: List<HourlyData>) {
-        initChart(hourlyForecast)
+    fun initHourlyForecastChart(hours: List<HourUI>) {
+        initChart(hours)
     }
 
-    private fun initChart(hourlyForecast: List<HourlyData>?) {
+    private fun initChart(hours: List<HourUI>) {
         chart.apply {
             axisLeft.isEnabled = false
             axisRight.isEnabled = false
@@ -34,10 +34,10 @@ class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
             extraTopOffset = 35f
         }
 //        chart.animateXY(500, 500)
-        val values = hourlyForecast?.mapIndexed { index, h ->
-            Entry(index.toFloat(), h.temp, h.iconRes)
+        val values = hours.mapIndexed { index, h ->
+            Entry(index.toFloat(), h.temp, h.iconId)
         }
-        initXAxis(hourlyForecast)
+        initXAxis(hours)
         initYAxis(values)
         chart.data = getData(values)
         chart.invalidate()
@@ -51,7 +51,7 @@ class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
         leftAxis.axisMinimum = minY
     }
 
-    private fun initXAxis(hourlyForecast: List<HourlyData>?) {
+    private fun initXAxis(hours: List<HourUI>) {
         chart.xAxis.apply {
             position = XAxis.XAxisPosition.BOTTOM
             textSize = 15f
@@ -61,7 +61,7 @@ class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
             setDrawAxisLine(false) //граница графика сверху
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
-                    val current = hourlyForecast?.getOrNull(value.toInt())?.hour ?: 0f
+                    val current = hours.getOrNull(value.toInt())?.time ?: 0f
                     return formatXAxis(value, current)
                 }
             }

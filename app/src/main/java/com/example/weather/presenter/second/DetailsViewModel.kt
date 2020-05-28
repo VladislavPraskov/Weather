@@ -10,17 +10,18 @@ import com.example.weather.utils.mvi.BaseViewModel
 
 
 class DetailsViewModel(app: Application, val interactor: MainInteractor) :
-    BaseViewModel<DetailsAction, DetailsViewState, DetailsResultAction>(app,
+    BaseViewModel<DetailsAction, DetailsViewState, DetailsResultAction>(
+        app,
         DetailsViewState()
     ) {
 
-    override fun handleNewAction(action: DetailsAction) = liveData {
+    override fun handleNewAction(action: DetailsAction) = liveData<DetailsResultAction> {
         when (action) {
-            is DetailsAction.SomeAction -> {
-                emit(DetailsResultAction.Loading)
+            is DetailsAction.CurrentAndDailyForecast -> {
+//                emit(interactor.getCurrentCity())
             }
             is DetailsAction.SomeAction2 -> {
-                emit(DetailsResultAction.SomeAction())
+                emit(DetailsResultAction.CurrentAndDailyForecast)
             }
         }
     }
@@ -30,8 +31,7 @@ class DetailsViewModel(app: Application, val interactor: MainInteractor) :
         result: DetailsResultAction
     ): DetailsViewState {
         return when (result) {
-            is DetailsResultAction.SomeAction -> currentViewState.copy(isLoading = true)
-            is DetailsResultAction.Loading -> currentViewState.copy(isLoading = true)
+            is DetailsResultAction.CurrentAndDailyForecast -> currentViewState.copy(isLoading = true)
         }
     }
 }

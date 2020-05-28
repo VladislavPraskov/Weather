@@ -4,6 +4,7 @@ import com.example.weather.utils.network.ApiResult.NetworkError
 import com.example.weather.R
 import retrofit2.HttpException
 import java.io.IOException
+import java.lang.IllegalStateException
 
 
 /**
@@ -11,6 +12,7 @@ import java.io.IOException
  */
 
 const val NETWORK_ERROR_CODE = 503
+
 suspend fun <T> safeApiCall(
     apiCall: suspend () -> T?
 ): ApiResult<T?> {
@@ -20,8 +22,10 @@ suspend fun <T> safeApiCall(
         throwable.printStackTrace() //todo crashlytics
         when (throwable) {
             is IOException -> {
-                NetworkError(code = NETWORK_ERROR_CODE,
-                    errorRes = R.string.error_connection)
+                NetworkError(
+                    code = NETWORK_ERROR_CODE,
+                    errorRes = R.string.error_connection
+                )
             }
             is HttpException -> {
                 val code = throwable.code()
@@ -60,9 +64,13 @@ suspend fun <T> safeCacheCall(
         val result = cacheCall?.invoke()
         onSuccess?.invoke(result)
         result
-    } catch (throwable: Throwable) {
-        onError?.invoke() //todo crashlytics
-        null
+    } catch (t: Throwable) {
+        if (t is IllegalStateException && t.message?.contains("Room cannot verify the data integrity") == true)
+            throw t
+        else {
+            onError?.invoke() //todo crashlytics
+            null
+        }
     }
 }
 

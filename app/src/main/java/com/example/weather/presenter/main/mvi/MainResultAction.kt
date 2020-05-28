@@ -1,7 +1,6 @@
 package com.example.weather.presenter.main.mvi
 
-import com.example.weather.data.db.weather.WeatherEntity
-import com.example.weather.models.main.WeatherUiModel
+import com.example.weather.models.WeatherUI
 import com.example.weather.utils.network.ApiResult
 
 sealed class MainResultAction {
@@ -9,13 +8,13 @@ sealed class MainResultAction {
     object SuccessEmpty : MainResultAction()
     object Nothing : MainResultAction()
     data class Error(val networkError: ApiResult.NetworkError?) : MainResultAction()
-    data class Success(val data: WeatherUiModel) : MainResultAction()
+    data class Success(val data: WeatherUI?) : MainResultAction()
     object UpdateTime : MainResultAction()
 
     companion object {
-        fun getSuccessOrEmpty(resultObj: List<WeatherEntity>?): MainResultAction {
-            return if (resultObj.isNullOrEmpty()) SuccessEmpty
-            else Success(WeatherUiModel.create(resultObj))
+        fun getSuccessOrEmpty(weather: WeatherUI?): MainResultAction {
+            return if (weather == null) SuccessEmpty
+            else Success(weather)
         }
     }
 }

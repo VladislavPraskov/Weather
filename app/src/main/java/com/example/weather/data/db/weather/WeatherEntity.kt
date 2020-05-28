@@ -1,9 +1,11 @@
 package com.example.weather.data.db.weather
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.Index
 import androidx.room.PrimaryKey
 import com.example.weather.models.main.*
+import kotlinx.android.parcel.Parcelize
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -11,6 +13,7 @@ import kotlin.math.roundToInt
     tableName = "weather_entity",
     indices = [Index(value = ["city", "time", "type"], unique = true)]
 )
+@Parcelize
 data class WeatherEntity(
     @PrimaryKey(autoGenerate = true)
     var id: Int = 0,
@@ -29,7 +32,7 @@ data class WeatherEntity(
     val dewPoint: Double? = null,
     @ForecastType
     val type: Int
-) {
+) : Parcelable {
     companion object {
         fun createHourlyWeather(
             hourly: HourlyWeather.Hourly?,

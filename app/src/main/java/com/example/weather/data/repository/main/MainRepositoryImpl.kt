@@ -3,12 +3,15 @@ package com.example.weather.data.repository.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.example.weather.data.db.city.CityEntity
-import com.example.weather.data.db.weather.WeatherEntity
 import com.example.weather.data.db.WeatherDataBase
 import com.example.weather.data.network.ApiService
 import com.example.weather.data.service.Locator
+import com.example.weather.models.WeatherUI
 import com.example.weather.models.main.HourlyWeather
 import com.example.weather.presenter.main.mvi.MainResultAction
+import com.example.weather.utils.mapToCurrentEntity
+import com.example.weather.utils.mapToDayEntity
+import com.example.weather.utils.mapToHourEntity
 import com.example.weather.utils.network.ApiResult
 import com.example.weather.utils.network.NetworkBoundResource
 import com.example.weather.utils.network.safeCacheCall
@@ -22,7 +25,7 @@ class MainRepositoryImpl(
 
     override fun getCurrentCity(): LiveData<MainResultAction> {
         return object :
-            NetworkBoundResource<HourlyWeather, List<WeatherEntity>?, MainResultAction>() {
+            NetworkBoundResource<HourlyWeather, WeatherUI?, MainResultAction>() {
             override suspend fun networkRequest(): HourlyWeather? {
                 val cityEntity = safeCacheCall({ db.cityDao.getCurrentCity() })
                 if (cityEntity != null)
@@ -41,31 +44,40 @@ class MainRepositoryImpl(
                 )
             }
 
-            override suspend fun retrieveCache(): List<WeatherEntity>? {
-                val cityName = db.cityDao.getCurrentCityName()
-                cityName ?: return null
-                return db.weatherDao.getCurrentDayAndHourlyForecast(cityName = cityName)
+            override suspend fun retrieveCache(): WeatherUI? {
+                return db.sharedDao.getWeather()
             }
 
             override suspend fun saveCache(networkObject: HourlyWeather) {
                 val cityName = db.cityDao.getCurrentCityName()
 
-                //hourly forecast
-                val hourlyList = networkObject.hourly?.mapNotNull {
-                    WeatherEntity.createHourlyWeather(it, cityName)
-                }
-                //daily forecast
-                val dailyList = networkObject.daily?.mapNotNull {
-                    WeatherEntity.createDailyWeather(it, cityName)
-                }
-                val list = mutableListOf<WeatherEntity>()
-                dailyList?.let { list.addAll(it) }
-                hourlyList?.let { list.addAll(it) }
-                db.weatherDao.saveListWeather(list)
+                networkObject.hourly
+                    ?.mapNotNull { mapToHourEntity(it, cityName) }
+                    ?.let { db.sharedDao.saveHourlyWeather(it) }
+
+                networkObject.daily
+                    ?.mapNotNull { mapToDayEntity(it, cityName) }
+                    ?.let { db.sharedDao.saveDailyWeather(it) }
+
+                mapToCurrentEntity(networkObject.current, networkObject.hourly, cityName)
+                    ?.let { db.sharedDao.saveCurrentWeather(it) }
+//
+//                //hourly forecast
+//                val hourlyList = networkObject.hourly?.mapNotNull {
+//                    WeatherEntity.createHourlyWeather(it, cityName)
+//                }
+//                //daily forecast
+//                val dailyList = networkObject.daily?.mapNotNull {
+//                    WeatherEntity.createDailyWeather(it, cityName)
+//                }
+//                val list = mutableListOf<WeatherEntity>()
+//                dailyList?.let { list.addAll(it) }
+//                hourlyList?.let { list.addAll(it) }
+//                db.weatherDao.saveListWeather(list)
             }
 
-            override fun mapToResultAction(cache: List<WeatherEntity>?): MainResultAction {
-                return MainResultAction.getSuccessOrEmpty(cache)
+            override fun mapToResultAction(weahter: WeatherUI?): MainResultAction {
+                return MainResultAction.getSuccessOrEmpty(weahter)
             }
 
             override fun mapErrorToResultAction(error: ApiResult.NetworkError?): MainResultAction {
