@@ -1,0 +1,44 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="512dp"
+    android:height="512dp"
+    android:viewportWidth="496"
+    android:viewportHeight="496">
+  <path
+      android:pathData="M248,0C133.304,0 40,93.304 40,208c0,92.368 60.536,170.824 144,197.88V464h16v32h16v-32h64v32h16v-32h16v-58.12C395.464,378.824 456,300.368 456,208C456,93.304 362.696,0 248,0zM296,448h-96v-37.656c15.416,3.664 31.48,5.656 48,5.656s32.584,-1.992 48,-5.656V448zM248,400c-105.864,0 -192,-86.136 -192,-192S142.136,16 248,16s192,86.136 192,192S353.864,400 248,400z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M240,32h16v32h-16z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M166.923,51.572l16,27.711l-13.856,8l-16,-27.711z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M99.571,113.052l27.711,16l-8,13.856l-27.711,-16z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M72,200h32v16h-32z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M91.563,289.072l27.711,-16l8,13.856l-27.711,16z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M396.412,302.929l-27.711,-16l8,-13.856l27.711,16z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M392,200h32v16h-32z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M396.43,113.092l7.998,13.858l-27.715,15.997l-7.998,-13.858z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M329.064,51.604l13.858,7.998l-15.997,27.715l-13.858,-7.998z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M121.936,247.752l98.096,-24.52C225.472,233.168 235.896,240 248,240c17.648,0 32,-14.352 32,-32s-14.352,-32 -32,-32c-17.56,0 -31.84,14.224 -31.976,31.752l-97.96,24.488L121.936,247.752zM248,192c8.824,0 16,7.176 16,16c0,8.824 -7.176,16 -16,16c-8.824,0 -16,-7.176 -16,-16C232,199.176 239.176,192 248,192z"
+      android:fillColor="#FFFFFF"/>
+  <path
+      android:pathData="M248,368c-43.304,0 -83.888,-17.096 -114.28,-48.128l-11.44,11.184C155.712,365.2 200.352,384 248,384s92.288,-18.8 125.72,-52.936l-11.44,-11.184C331.888,350.904 291.304,368 248,368z"
+      android:fillColor="#FFFFFF"/>
+</vector>
+
+<!--https://www.flaticon.com/free-icon/gauge_656211?term=atmosphere%20pressure&page=1&position=9#-->

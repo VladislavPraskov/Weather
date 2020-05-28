@@ -5,9 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class DayUI(
-    val time: Long,
-    var maxTemp: Float = 0f,
-    var minTemp: Float = 0f,
+    var maxTemp: String = "",
+    var minTemp: String = "",
     val dayOfWeek: String,
     val iconId: Int
 ): Parcelable

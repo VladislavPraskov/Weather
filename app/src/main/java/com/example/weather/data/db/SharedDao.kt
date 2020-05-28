@@ -2,6 +2,7 @@ package com.example.weather.data.db
 
 import androidx.room.*
 import com.devpraskov.android_ext.beginOfDay
+import com.devpraskov.android_ext.beginOfHour
 import com.devpraskov.android_ext.endOfDay
 import com.example.weather.data.db.current_weather.CurrentWeatherEntity
 import com.example.weather.data.db.day.DayEntity
@@ -27,17 +28,16 @@ abstract class SharedDao(val db: WeatherDataBase) {
         cityName: String
     ): CurrentWeatherEntity
 
-    @Query("SELECT * FROM hour_entity WHERE city = :cityName AND time > :dateFrom AND time <= :dateTo LIMIT 6")
+    @Query("SELECT * FROM hour_entity WHERE city = :cityName AND time > :dateFrom LIMIT 6")
     abstract fun getHourlyWeatherForecast(
         cityName: String,
-        dateFrom: Long = beginOfDay() - 1,
-        dateTo: Long = endOfDay() + 1
+        dateFrom: Long = beginOfHour() - 1
     ): List<HourEntity>
 
     @Query("SELECT * FROM day_entity WHERE city = :cityName AND time > :dateFrom LIMIT 7")
     abstract fun getDailyWeatherForecast(
         cityName: String,
-        dateFrom: Long = beginOfDay() + 24 * 3600
+        dateFrom: Long = endOfDay() + 1
     ): List<DayEntity>
 
     @Transaction

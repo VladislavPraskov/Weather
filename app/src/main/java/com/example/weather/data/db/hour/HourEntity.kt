@@ -11,5 +11,6 @@ data class HourEntity (
     val city: String,
     val time: Long,
     val temp: Float = 0f,
+    val timeDebug: String,
     val iconId: Int
 )

@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import androidx.constraintlayout.widget.ConstraintLayout
+import com.devpraskov.android_ext.hide
 import com.example.weather.R
 import kotlinx.android.synthetic.main.day_forecast_view.view.*
 import kotlinx.android.synthetic.main.day_forecast_view.view.icon
@@ -46,6 +47,7 @@ class DayForecastView @JvmOverloads constructor(
             val icon = a.getResourceId(R.styleable.DetailsView_icon, 0)
             iconRes = if (icon != 0) icon else null
         }
+        hide()
         a.recycle()
     }
 }

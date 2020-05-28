@@ -3,6 +3,9 @@ package com.example.weather.presenter.second
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import com.devpraskov.android_ext.children
+import com.devpraskov.android_ext.gone
+import com.devpraskov.android_ext.show
 import com.example.weather.R
 import com.example.weather.data.db.weather.WeatherEntity
 import com.example.weather.models.WeatherUI
@@ -35,8 +38,20 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             detailsPressure.dataText = pressure
             detailsVisibility.dataText = visibility
             detailsDewPoint.dataText = dewPoint
-
         }
+        weather?.days?.let { dayUI ->
+            daysContainer?.children?.forEachIndexed { index, dayView ->
+                dayView as DayForecastView
+                dayUI.getOrNull(index)?.apply {
+                    dayView.dayText = dayOfWeek
+                    dayView.max = maxTemp
+                    dayView.min = minTemp
+                    dayView.iconRes = iconId
+                    dayView.show()
+                } ?: dayView.gone()
+            }
+        }
+
     }
 
 

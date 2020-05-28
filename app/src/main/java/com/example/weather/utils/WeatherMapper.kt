@@ -1,9 +1,6 @@
 package com.example.weather.utils
 
-import com.devpraskov.android_ext.beginOfDay
-import com.devpraskov.android_ext.dayOfWeek
-import com.devpraskov.android_ext.endOfDay
-import com.devpraskov.android_ext.getHour
+import com.devpraskov.android_ext.*
 import com.example.weather.data.db.current_weather.CurrentWeatherEntity
 import com.example.weather.data.db.day.DayEntity
 import com.example.weather.data.db.hour.HourEntity
@@ -21,7 +18,8 @@ fun mapToHourEntity(hourWeather: Hourly?, city: String?): HourEntity? {
         city = city ?: "-",
         temp = hourWeather.temp?.toFloat() ?: 0f,
         iconId = getIconRes(hourWeather.weather?.getOrNull(0)?.icon),
-        time = hourWeather.dt ?: 0
+        time = hourWeather.dt ?: 0,
+        timeDebug = currentDateAndTime(Date((hourWeather.dt ?: 0) * 1000))
     )
 }
 
@@ -29,11 +27,12 @@ fun mapToDayEntity(daily: Daily?, city: String?): DayEntity? {
     daily ?: return null
     return DayEntity(
         city = city ?: "-",
-        dayOfWeek = dayOfWeek(),
+        dayOfWeek = dayOfWeek(Date((daily.dt ?: 0) * 1000)),
         minTemp = daily.temp?.min?.toFloat() ?: 0f,
         maxTemp = daily.temp?.max?.toFloat() ?: 0f,
         iconId = getIconRes(daily.weather?.getOrNull(0)?.icon),
-        time = daily.dt ?: 0
+        time = daily.dt ?: 0,
+        timeDebug = currentDateAndTime(Date((daily.dt ?: 0) * 1000))
     )
 }
 
@@ -73,9 +72,8 @@ fun mapToCurrentEntity(
 
 fun mapToDayUI(day: DayEntity): DayUI {
     return DayUI(
-        time = day.time,
-        maxTemp = day.maxTemp,
-        minTemp = day.minTemp,
+        maxTemp = day.maxTemp.roundToInt().toString(),
+        minTemp = day.minTemp.roundToInt().toString(),
         dayOfWeek = day.dayOfWeek,
         iconId = day.iconId
     )
@@ -98,7 +96,7 @@ fun mapToCurrentUI(current: CurrentWeatherEntity): CurrentUI {
         sunrise = current.sunrise,
         sunset = current.sunset,
         feelsLike = current.feelsLike?.roundToInt().toString() + "°",
-        humidity = current.humidity?.toString() ?: "",
+        humidity = current.humidity?.toString() + "%" ?: "",
         windSpeed = current.windSpeed?.toString() ?: "",
         pressure = current.pressure?.toString() ?: "",
         visibility = current.visibility?.toString() ?: "",
