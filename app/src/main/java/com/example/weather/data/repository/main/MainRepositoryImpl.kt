@@ -49,31 +49,7 @@ class MainRepositoryImpl(
             }
 
             override suspend fun saveCache(networkObject: HourlyWeather) {
-                val cityName = db.cityDao.getCurrentCityName()
-
-                networkObject.hourly
-                    ?.mapNotNull { mapToHourEntity(it, cityName) }
-                    ?.let { db.sharedDao.saveHourlyWeather(it) }
-
-                networkObject.daily
-                    ?.mapNotNull { mapToDayEntity(it, cityName) }
-                    ?.let { db.sharedDao.saveDailyWeather(it) }
-
-                mapToCurrentEntity(networkObject.current, networkObject.hourly, cityName)
-                    ?.let { db.sharedDao.saveCurrentWeather(it) }
-//
-//                //hourly forecast
-//                val hourlyList = networkObject.hourly?.mapNotNull {
-//                    WeatherEntity.createHourlyWeather(it, cityName)
-//                }
-//                //daily forecast
-//                val dailyList = networkObject.daily?.mapNotNull {
-//                    WeatherEntity.createDailyWeather(it, cityName)
-//                }
-//                val list = mutableListOf<WeatherEntity>()
-//                dailyList?.let { list.addAll(it) }
-//                hourlyList?.let { list.addAll(it) }
-//                db.weatherDao.saveListWeather(list)
+                db.sharedDao.saveWeather(networkObject)
             }
 
             override fun mapToResultAction(weahter: WeatherUI?): MainResultAction {

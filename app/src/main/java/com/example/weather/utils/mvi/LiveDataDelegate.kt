@@ -12,6 +12,10 @@ class LiveDataDelegate<ViewState>(private val firstAction: () -> Unit) : LiveDat
      */
     private var isFirstSubscription = true
 
+    override fun getValue(): ViewState? {
+        return viewState.value
+    }
+
     fun initSource(liveData: LiveData<ViewState>) {
         viewState = liveData
     }

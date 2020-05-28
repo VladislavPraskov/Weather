@@ -7,6 +7,7 @@ import com.example.weather.data.db.current_weather.CurrentWeatherEntity
 import com.example.weather.data.db.day.DayEntity
 import com.example.weather.data.db.hour.HourEntity
 import com.example.weather.models.WeatherUI
+import com.example.weather.models.main.HourlyWeather
 import com.example.weather.utils.*
 
 @Dao
@@ -47,6 +48,21 @@ abstract class SharedDao(val db: WeatherDataBase) {
             hours = getHourlyWeatherForecast(city).map { mapToHourUI(it) },
             days = getDailyWeatherForecast(city).map { mapToDayUI(it) }
         )
+    }
+
+    @Transaction
+    open fun saveWeather(networkObject: HourlyWeather) {
+        val cityName = db.cityDao.getCurrentCityName()
+
+        networkObject.apply {
+
+            hourly?.mapNotNull { mapToHourEntity(it, cityName) }?.let { saveHourlyWeather(it) }
+
+            daily?.mapNotNull { mapToDayEntity(it, cityName) }?.let { saveDailyWeather(it) }
+
+            mapToCurrentEntity(current, hourly, cityName)?.let { saveCurrentWeather(it) }
+        }
+
     }
 
 }

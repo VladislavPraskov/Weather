@@ -99,6 +99,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
         swipeRefreshLayout?.setOnRefreshListener { viewModel.setNextAction(MainAction.LoadCurrentCity) }
         menu?.onClick {
+            val weather = viewModel.viewState.value?.data?.getAnyway() ?: return@onClick
             parentFragmentManager.beginTransaction()
                 .setCustomAnimations(
                     R.anim.enter_from_right,
@@ -106,7 +107,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                     R.anim.enter_from_left,
                     R.anim.exit_to_right
                 )
-                .replace(R.id.fragment_container, DetailsFragment())
+                .replace(R.id.fragment_container, DetailsFragment.create(weather))
                 .addToBackStack(DetailsFragment.TAG)
                 .commit()
         }

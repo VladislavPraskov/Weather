@@ -1,11 +1,9 @@
 package com.example.weather.utils
 
-import android.content.Context
 import com.devpraskov.android_ext.beginOfDay
 import com.devpraskov.android_ext.dayOfWeek
 import com.devpraskov.android_ext.endOfDay
 import com.devpraskov.android_ext.getHour
-import com.example.weather.R
 import com.example.weather.data.db.current_weather.CurrentWeatherEntity
 import com.example.weather.data.db.day.DayEntity
 import com.example.weather.data.db.hour.HourEntity
@@ -64,7 +62,7 @@ fun mapToCurrentEntity(
         humidity = current.humidity,
         windSpeed = current.windSpeed,
         pressure = current.pressure,
-        dewPoint = current.dewPoLong,
+        dewPoint = current.dewPoint,
         condition = current.weather?.getOrNull(0)?.main,
         iconId = getIconRes(current.weather?.getOrNull(0)?.icon),
         sunrise = current.sunrise ?: 0,
@@ -99,13 +97,13 @@ fun mapToCurrentUI(current: CurrentWeatherEntity): CurrentUI {
         minTemp = current.minTemp.roundToInt().toString() + "°" + "C",
         sunrise = current.sunrise,
         sunset = current.sunset,
-        feelsLike = current.feelsLike,
-        humidity = current.humidity,
-        windSpeed = current.windSpeed,
-        pressure = current.pressure,
-        visibility = current.visibility,
+        feelsLike = current.feelsLike?.roundToInt().toString() + "°",
+        humidity = current.humidity?.toString() ?: "",
+        windSpeed = current.windSpeed?.toString() ?: "",
+        pressure = current.pressure?.toString() ?: "",
+        visibility = current.visibility?.toString() ?: "",
         condition = current.condition,
         iconId = current.iconId,
-        dewPoint = current.dewPoint
+        dewPoint = current.dewPoint?.toString() ?: ""
     )
 }

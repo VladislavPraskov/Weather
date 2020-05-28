@@ -22,8 +22,8 @@ data class HourlyWeather(
         val feelsLike: Double? = null,
         val pressure: Long? = null,
         val humidity: Long? = null,
-        @SerializedName("dew_poLong")
-        val dewPoLong: Double? = null,
+        @SerializedName("dew_point")
+        val dewPoint: Double? = null,
         val uvi: Double? = null,
         val clouds: Long? = null,
         val visibility: Long? = null,
