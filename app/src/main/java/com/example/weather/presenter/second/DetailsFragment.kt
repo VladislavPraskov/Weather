@@ -7,8 +7,8 @@ import com.devpraskov.android_ext.children
 import com.devpraskov.android_ext.gone
 import com.devpraskov.android_ext.show
 import com.example.weather.R
-import com.example.weather.data.db.weather.WeatherEntity
 import com.example.weather.models.WeatherUI
+import com.example.weather.utils.view.SunChartCreator
 import kotlinx.android.synthetic.main.fragment_details.*
 
 
@@ -39,6 +39,16 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             detailsVisibility.dataText = visibility
             detailsDewPoint.dataText = dewPoint
         }
+//        SunChartCreator(this@DetailsFragment, chart).initChart(
+//            weather?.current?.sunrise ?: 0f,
+//            weather?.current?.sunset ?: 0f,
+//            weather?.current?.time ?: 0f
+//        )
+        SunChartCreator(this@DetailsFragment, chart).initChart(
+            0f,
+            8f,
+            6f
+        )
         weather?.days?.let { dayUI ->
             daysContainer?.children?.forEachIndexed { index, dayView ->
                 dayView as DayForecastView

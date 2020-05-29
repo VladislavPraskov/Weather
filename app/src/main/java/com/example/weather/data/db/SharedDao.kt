@@ -55,11 +55,8 @@ abstract class SharedDao(val db: WeatherDataBase) {
         val cityName = db.cityDao.getCurrentCityName()
 
         networkObject.apply {
-
             hourly?.mapNotNull { mapToHourEntity(it, cityName) }?.let { saveHourlyWeather(it) }
-
             daily?.mapNotNull { mapToDayEntity(it, cityName) }?.let { saveDailyWeather(it) }
-
             mapToCurrentEntity(current, hourly, cityName)?.let { saveCurrentWeather(it) }
         }
 

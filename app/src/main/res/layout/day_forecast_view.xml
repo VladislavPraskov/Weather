@@ -16,7 +16,7 @@
         android:fontFamily="sans-serif"
         android:text="Fri"
         android:textColor="@color/white"
-        android:textSize="12sp"
+        android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,7 +25,7 @@
         android:id="@+id/icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="@+id/day"
         app:layout_constraintStart_toStartOf="@+id/day"
         app:layout_constraintTop_toBottomOf="@+id/day"
@@ -35,18 +35,20 @@
         android:id="@+id/maxTemp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:fontFamily="sans-serif"
-        tools:text="22"
         android:textColor="@color/white"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/day"
         app:layout_constraintStart_toStartOf="@+id/day"
-        app:layout_constraintTop_toBottomOf="@+id/icon" />
+        app:layout_constraintTop_toBottomOf="@+id/icon"
+        tools:text="22" />
 
     <View
         android:id="@+id/divider2"
-        android:layout_width="0dp"
+        android:layout_width="20dp"
         android:layout_height="1dp"
+        android:layout_marginTop="2dp"
         android:background="#99FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/maxTemp"
         app:layout_constraintStart_toStartOf="@+id/maxTemp"
@@ -58,11 +60,12 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:fontFamily="sans-serif"
-        tools:text="8"
         android:textColor="#99FFFFFF"
+        android:textSize="18sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/day"
         app:layout_constraintStart_toStartOf="@+id/day"
-        app:layout_constraintTop_toBottomOf="@+id/maxTemp"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/divider2"
+        app:layout_constraintVertical_bias="0.0"
+        tools:text="8" />
 </androidx.constraintlayout.widget.ConstraintLayout>

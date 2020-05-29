@@ -7,10 +7,11 @@ import kotlinx.android.parcel.Parcelize
 data class CurrentUI(
     val city: String,
     val temp: String = "",
+    val time: Float = 0f,
     var maxTemp: String = "",
     var minTemp: String = "",
-    var sunrise: Long = 0,
-    var sunset: Long = 0,
+    var sunrise: Float = 0f,
+    var sunset: Float = 0f,
     val feelsLike: String = "",
     val humidity: String = "null",
     val windSpeed: String = "",
