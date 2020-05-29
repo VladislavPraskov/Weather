@@ -27,9 +27,9 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
             description.isEnabled = false
             extraBottomOffset = 8f
             setTouchEnabled(false)
-            extraLeftOffset = 25f
-            extraRightOffset = 25f
-            extraTopOffset = 35f
+            extraLeftOffset = 5f
+            extraRightOffset = 5f
+            extraTopOffset = 5f
         }
 //        chart.animateXY(500, 500)
         val sunXPosition = (time - sunrise) / (sunset - sunrise) * 2
@@ -37,7 +37,7 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         val sun =
             Entry(sunXPosition, sunYPosition, f.requireContext().getDrawable(R.drawable.sun_icon))
         var sum = 0f
-        val xPoints = FloatArray(31) { i -> sum += 2 / 31f; sum }.toMutableList()
+        val xPoints = FloatArray(61) { i -> sum += 2 / 61f; sum }.toMutableList()
         xPoints.removeAt(xPoints.lastIndex)
         val yPoints = xPoints.map { x -> sqrt(2f * x - x * x) * 2 }
         val values = xPoints.mapIndexed { index, x ->
@@ -73,7 +73,7 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
                     return formatXAxis(value, current)
                 }
             }
-            setLabelCount(30, true)
+            setLabelCount(60, true)
             axisMinimum = 0f
             axisMaximum = 2.001f
         }
@@ -95,10 +95,10 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
     ): LineData {
         val sun = values.getOrNull(indexSun)
 
-        val listBefore = if (indexSun > 0) values.subList(0, indexSun + 1) else listOf()
+        val listBefore = if (indexSun - 1 > 0) values.subList(0, indexSun - 1) else listOf()
         val listAfter: List<Entry> = when {
-            indexSun + 1 < values.lastIndex -> values.subList(indexSun + 1, values.lastIndex + 1)
-            indexSun + 1 == values.lastIndex -> listOf(values[values.lastIndex])
+            indexSun + 3 < values.lastIndex -> values.subList(indexSun + 3, values.lastIndex + 1)
+            indexSun + 3 == values.lastIndex -> listOf(values[values.lastIndex])
             else -> listOf()
         }
         //график до иконки
@@ -110,13 +110,24 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         val set3 = LineDataSet(listOf(sun), "DataSet 2").apply {
             setDrawHorizontalHighlightIndicator(false) //отключает горизонтальную линию highlight
             setDrawVerticalHighlightIndicator(false) //отключает вертикальную линию highlight
-//            setDrawCircles(true)
-            setDrawCircleHole(true)
-            circleHoleColor = f.getColor(R.color.white)
-            circleHoleRadius = 15f
-//            circleRadius = 7f
-            setCircleColor(f.getColor(R.color.white_30))
+            setDrawCircles(false)
+            setDrawCircleHole(false)
+////            circleHoleColor = f.getColor(R.color.white)
+//            circleHoleRadius = 20f
+////            circleRadius = 7f
+//            setCircleColor(f.getColor(R.color.white))
+//            setDrawFilled(false)
+        }
+
+        val set4 = LineDataSet(mutableListOf(), "horizont").apply {
+            lineWidth = 1.5f
+            mode = LineDataSet.Mode.LINEAR
+            color = Color.WHITE
+            setDrawCircles(false)
             setDrawFilled(false)
+            clear()
+            addEntry(Entry(-0.5f, values[0].y))
+            addEntry(Entry(2.5f, values[0].y))
         }
 //         create marker to display box when values are selected
 
@@ -128,6 +139,7 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         data.addDataSet(set1)
         data.addDataSet(set2)
         data.addDataSet(set3)
+        data.addDataSet(set4)
 
         data.apply {
             setValueTextSize(12f)
