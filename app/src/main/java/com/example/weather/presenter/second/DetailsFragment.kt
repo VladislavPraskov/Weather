@@ -1,8 +1,10 @@
 package com.example.weather.presenter.second
 
 import android.os.Bundle
+import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.core.view.postDelayed
 import com.devpraskov.android_ext.children
 import com.devpraskov.android_ext.gone
 import com.devpraskov.android_ext.show
@@ -24,9 +26,29 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
     }
 
+    lateinit var runnable: Runnable
+    lateinit var handler: Handler
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
+        handler = Handler()
+        runnable = object : Runnable {
+            var i: Int = 0
+            override fun run() {
+                SunChartCreator(this@DetailsFragment, chart).initChart(
+                    0f,
+                    100f,
+                    i.toFloat()
+                )
+                i += 1
+                if (i == 98) { //todo
+                    handler.removeCallbacks(this)
+                    return
+                }
+                handler.postDelayed(this, 50)
+            }
+        }
+        handler.postDelayed(runnable, 300)
     }
 
     private fun initViews() {
@@ -44,11 +66,7 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
 //            weather?.current?.sunset ?: 0f,
 //            weather?.current?.time ?: 0f
 //        )
-        SunChartCreator(this@DetailsFragment, chart).initChart(
-            0f,
-            8f,
-            6f
-        )
+
         weather?.days?.let { dayUI ->
             daysContainer?.children?.forEachIndexed { index, dayView ->
                 dayView as DayForecastView

@@ -11,6 +11,7 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
+import com.devpraskov.android_ext.newText
 import com.devpraskov.android_ext.onClick
 import com.devpraskov.android_ext.statusBarColor
 import com.example.weather.R
@@ -78,16 +79,17 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         viewModel.firsAction = MainAction.LoadCurrentCity
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             swipeRefreshLayout?.isRefreshing = state.isLoading
-            date?.text = state.time
-            val data = state.data.getIfNotBeenHandled()
+            val data = state.data.getAnyway()
             data ?: return@Observer
-            city?.text = data.current.city
+            city?.newText = data.current.city
+            date?.newText = state.time
             data.current.iconId.let { iconState?.setImageResource(it) }
-            currentState?.text = data.current.condition
-            currentTemperature?.text = data.current.temp
-            maxTemperature?.text = data.current.maxTemp
-            minTemperature?.text = data.current.minTemp
-            ForecastChartCreator(this, chart).initHourlyForecastChart(data.hours)
+            currentState?.newText = data.current.condition
+            currentTemperature?.newText = data.current.temp
+            maxTemperature?.newText = data.current.maxTemp
+            minTemperature?.newText = data.current.minTemp
+            if (!state.data.hasBeenHandled || chart.data == null || chart.data.dataSetCount == 0)
+                ForecastChartCreator(this, chart).initHourlyForecastChart(data.hours)
         })
     }
 

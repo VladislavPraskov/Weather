@@ -12,6 +12,7 @@ import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
+import com.github.mikephil.charting.utils.MPPointF
 import org.koin.android.ext.android.get
 import kotlin.math.absoluteValue
 import kotlin.math.sqrt
@@ -45,6 +46,12 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         }.toMutableList()
         values.add(sun)
         values.sortBy { it.x }
+        values.removeAt(0)
+        values.removeAt(0)
+        if (sun != values[values.lastIndex] && sun != values[values.lastIndex - 1]) {
+            values.removeAt(values.lastIndex)
+            values.removeAt(values.lastIndex)
+        }
         initXAxis()
         initYAxis()
         chart.data = getData(values, values.indexOf(sun))
@@ -73,7 +80,7 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
                     return formatXAxis(value, current)
                 }
             }
-            setLabelCount(60, true)
+//            setLabelCount(60, true)
             axisMinimum = 0f
             axisMaximum = 2.001f
         }
@@ -93,6 +100,7 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         values: List<Entry>,
         indexSun: Int
     ): LineData {
+
         val sun = values.getOrNull(indexSun)
 
         val listBefore = if (indexSun - 1 > 0) values.subList(0, indexSun - 1) else listOf()
@@ -105,29 +113,52 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         val set1 = getSet(listBefore, false)
         val set2 = getSet(listAfter)
 
-        //Подсветка первой точки
+        //Иконка солнца
         chart.highlightValues(arrayOf(Highlight(sun?.x ?: -100f, sun?.y ?: -100f, 1)))
-        val set3 = LineDataSet(listOf(sun), "DataSet 2").apply {
+        val sunList = if (sun == null || sun.y < 0.78f) listOf() else listOf(sun)
+        val set3 = LineDataSet(sunList, "DataSet 2").apply {
             setDrawHorizontalHighlightIndicator(false) //отключает горизонтальную линию highlight
             setDrawVerticalHighlightIndicator(false) //отключает вертикальную линию highlight
             setDrawCircles(false)
             setDrawCircleHole(false)
-////            circleHoleColor = f.getColor(R.color.white)
-//            circleHoleRadius = 20f
-////            circleRadius = 7f
-//            setCircleColor(f.getColor(R.color.white))
-//            setDrawFilled(false)
+        }
+        //Иконка солнца
+        chart.highlightValues(
+            arrayOf(
+                Highlight(
+                    values[0].x,
+                    values[0].y,
+                    5
+                )
+            )
+        )
+        val yLine = 0.55f
+        val sunrise =
+            Entry(0.1f, yLine + 0.072f, f.requireContext().getDrawable(R.drawable.sunrise_icon))
+        val sunset =
+            if (sun != null &&(sun.y < 0.94f && sun.y > 0.78f))
+                Entry(1.9f, yLine + 0.072f)
+            else
+                Entry(1.9f, yLine + 0.072f, f.requireContext().getDrawable(R.drawable.sunset_icon))
+
+        val set5 = LineDataSet(listOf(sunrise, sunset), "DataSet 2").apply {
+            setDrawHorizontalHighlightIndicator(false) //отключает горизонтальную линию highlight
+            setDrawVerticalHighlightIndicator(false) //отключает вертикальную линию highlight
+            setDrawCircles(false)
+            setDrawCircleHole(false)
+            enableDashedLine(0f, 1f, 0f)
+//            iconsOffset = MPPointF(0f, -1f)
         }
 
         val set4 = LineDataSet(mutableListOf(), "horizont").apply {
-            lineWidth = 1.5f
+            lineWidth = 1.3f
             mode = LineDataSet.Mode.LINEAR
             color = Color.WHITE
             setDrawCircles(false)
             setDrawFilled(false)
             clear()
-            addEntry(Entry(-0.5f, values[0].y))
-            addEntry(Entry(2.5f, values[0].y))
+            addEntry(Entry(-0.5f, yLine))
+            addEntry(Entry(2.5f, yLine))
         }
 //         create marker to display box when values are selected
 
@@ -138,8 +169,9 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         val data = LineData()
         data.addDataSet(set1)
         data.addDataSet(set2)
-        data.addDataSet(set3)
+        if (set3.values.size == 1) data.addDataSet(set3)
         data.addDataSet(set4)
+        data.addDataSet(set5)
 
         data.apply {
             setValueTextSize(12f)
