@@ -1,2 +1,3 @@
 rootProject.name='Weather'
 include ':app', ':android-ext'
+project(':android-ext').projectDir = new File('C:\\Users\\Tom\\AndroidStudioProjects\\AndroidExt\\android-ext')
