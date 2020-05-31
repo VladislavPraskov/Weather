@@ -12,7 +12,12 @@ abstract class NetworkBoundResource<NetworkObj, CacheObj, ResultAction>(private 
         // ****** STEP 1: VIEW CACHE ******
 
         //не лезим в базу, если не надо
-        emit(mapToResultAction(if (isCacheNeeded) safeCacheCall({ retrieveCache() }) else null))
+        emit(
+            mapToResultAction(
+                cache = if (isCacheNeeded) safeCacheCall({ retrieveCache() }) else null,
+                isFirst = true
+            )
+        )
 
         // ****** STEP 2: MAKE NETWORK CALL, SAVE RESULT TO CACHE ******
         when (val apiResult = safeApiCall { networkRequest() }) {
@@ -27,7 +32,12 @@ abstract class NetworkBoundResource<NetworkObj, CacheObj, ResultAction>(private 
                         cacheCall = { saveCache(apiResult.value) },
                         onSuccess = {
                             //не лезим в базу, если не надо
-                            emit(mapToResultAction(if (isCacheNeeded) safeCacheCall({ retrieveCache() }) else null))
+                            emit(
+                                mapToResultAction(
+                                    cache = if (isCacheNeeded) safeCacheCall({ retrieveCache() }) else null,
+                                    isFirst = false
+                                )
+                            )
                         }
                     )
                 }
@@ -42,7 +52,7 @@ abstract class NetworkBoundResource<NetworkObj, CacheObj, ResultAction>(private 
     abstract suspend fun networkRequest(): NetworkObj?
     abstract suspend fun retrieveCache(): CacheObj?
     abstract suspend fun saveCache(networkObject: NetworkObj)
-    abstract fun mapToResultAction(cache: CacheObj?): ResultAction
+    abstract fun mapToResultAction(cache: CacheObj?, isFirst: Boolean): ResultAction //isFirst - до или после запроса в сеть
     abstract fun mapErrorToResultAction(error: ApiResult.NetworkError?): ResultAction
 
 }

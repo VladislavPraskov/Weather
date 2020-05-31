@@ -16,7 +16,4 @@ interface ApiService {
         @Query("exclude ") type: String? = "hourly,daily",
         @Query("units") unit: String? = "metric"
     ): HourlyWeather
-//
-//    @GET("forecast/hourly")
-//    suspend fun getWeatherCityById(@Query("q") city: String = "Таганрог"): HourlyWeatherForecast
 }

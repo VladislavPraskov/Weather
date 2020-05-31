@@ -26,32 +26,25 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
     }
 
-    lateinit var runnable: Runnable
-    lateinit var handler: Handler
+    lateinit var runnable: Runnable//todo убрать
+    lateinit var handler: Handler//todo убрать
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
-        handler = Handler()
-        runnable = object : Runnable {
-            var i: Int = 0
-            override fun run() {
-                SunChartCreator(this@DetailsFragment, chart).initChart(
-                    0f,
-                    100f,
-                    i.toFloat()
-                )
-                i += 1
-                if (i == 98) { //todo
-                    handler.removeCallbacks(this)
-                    return
-                }
-                handler.postDelayed(this, 50)
-            }
-        }
-        handler.postDelayed(runnable, 300)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        handler.removeCallbacks(runnable)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        handler.postDelayed(runnable, 100)
     }
 
     private fun initViews() {
+        chart.setNoDataText("")
         val weather = arguments?.getParcelable<WeatherUI>(WEATHER_TAG)
         weather?.current?.apply {
             detailsTemp.dataText = feelsLike
@@ -60,13 +53,22 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             detailsPressure.dataText = pressure
             detailsVisibility.dataText = visibility
             detailsDewPoint.dataText = dewPoint
+            sunDayTime.text = sunDayH
+            sunrise_time.text = sunriseH
+            sunsetTime.text = sunsetH
         }
+        val sunrise = weather?.current?.sunrise ?: 0f
+        val sunset = weather?.current?.sunset ?: 0f
+        val time = weather?.current?.time ?: 0f
+        launchSunAnimation(sunrise, sunset, time)
+
 //        SunChartCreator(this@DetailsFragment, chart).initChart(
 //            weather?.current?.sunrise ?: 0f,
 //            weather?.current?.sunset ?: 0f,
 //            weather?.current?.time ?: 0f
 //        )
 
+        //инициализации нижнего блока
         weather?.days?.let { dayUI ->
             daysContainer?.children?.forEachIndexed { index, dayView ->
                 dayView as DayForecastView
@@ -80,6 +82,24 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
             }
         }
 
+    }
+
+    private fun launchSunAnimation(sunrise: Float, sunset: Float, time: Float) {
+        handler = Handler()
+        runnable = object : Runnable {
+            var i = sunrise
+            override fun run() {
+                chart?.let {
+                    SunChartCreator(this@DetailsFragment, it).initChart(sunrise, sunset, i)
+                }
+                i += 400f
+                if (i > time) { //остановка анимации
+                    handler.removeCallbacks(this)
+                    return
+                } else handler.postDelayed(this, 20) //продолжаем
+            }
+        }
+        handler.postDelayed(runnable, 100)
     }
 
 

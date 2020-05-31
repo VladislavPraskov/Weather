@@ -46,8 +46,6 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         }.toMutableList()
         values.add(sun)
         values.sortBy { it.x }
-        values.removeAt(0)
-        values.removeAt(0)
         if (sun != values[values.lastIndex] && sun != values[values.lastIndex - 1]) {
             values.removeAt(values.lastIndex)
             values.removeAt(values.lastIndex)
@@ -73,14 +71,12 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
             setDrawLabels(false)
             axisLineColor = f.getColor(R.color.lineColor)
             setDrawAxisLine(false) //граница графика сверху
-            setDrawAxisLine(false)
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     val current = 0f
                     return formatXAxis(value, current)
                 }
             }
-//            setLabelCount(60, true)
             axisMinimum = 0f
             axisMaximum = 2.001f
         }
@@ -103,11 +99,17 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
 
         val sun = values.getOrNull(indexSun)
 
-        val listBefore = if (indexSun - 1 > 0) values.subList(0, indexSun - 1) else listOf()
-        val listAfter: List<Entry> = when {
-            indexSun + 3 < values.lastIndex -> values.subList(indexSun + 3, values.lastIndex + 1)
-            indexSun + 3 == values.lastIndex -> listOf(values[values.lastIndex])
-            else -> listOf()
+        val listBefore = if (indexSun - 2 > 0) values.subList(
+            0,
+            indexSun - 2
+        ).filter { it.y > 0.8f }.toMutableList() else mutableListOf()
+        val listAfter: MutableList<Entry> = when {
+            indexSun + 3 < values.lastIndex -> values.subList(
+                indexSun + 3,
+                values.lastIndex + 1
+            ).filter { it.y > 0.8f }.toMutableList()
+            indexSun + 3 == values.lastIndex -> mutableListOf(values[values.lastIndex])
+            else -> mutableListOf()
         }
         //график до иконки
         val set1 = getSet(listBefore, false)
@@ -134,9 +136,13 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         )
         val yLine = 0.55f
         val sunrise =
-            Entry(0.1f, yLine + 0.072f, f.requireContext().getDrawable(R.drawable.sunrise_icon))
+            if (sun != null && (sun.y < 0.94f && sun.y > 0.78f && sun.x < 1))
+                Entry(0.1f, yLine + 0.072f)
+            else
+                Entry(0.1f, yLine + 0.072f, f.requireContext().getDrawable(R.drawable.sunrise_icon))
+
         val sunset =
-            if (sun != null &&(sun.y < 0.94f && sun.y > 0.78f))
+            if (sun != null && (sun.y < 0.94f && sun.y > 0.78f && sun.x > 1))
                 Entry(1.9f, yLine + 0.072f)
             else
                 Entry(1.9f, yLine + 0.072f, f.requireContext().getDrawable(R.drawable.sunset_icon))
@@ -147,7 +153,6 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
             setDrawCircles(false)
             setDrawCircleHole(false)
             enableDashedLine(0f, 1f, 0f)
-//            iconsOffset = MPPointF(0f, -1f)
         }
 
         val set4 = LineDataSet(mutableListOf(), "horizont").apply {
@@ -172,18 +177,8 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         if (set3.values.size == 1) data.addDataSet(set3)
         data.addDataSet(set4)
         data.addDataSet(set5)
+        data.setDrawValues(false)
 
-        data.apply {
-            setValueTextSize(12f)
-            setDrawValues(false)
-            setValueTextColor(f.getColor(R.color.white))
-            setValueFormatter(object : ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    return "%.0f".format(value) + f.getString(R.string.celsius)
-                }
-            })
-            setDrawValues(false)
-        }
         return data
     }
 

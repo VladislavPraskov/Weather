@@ -10,6 +10,7 @@ import com.example.weather.models.main.HourUI
 import com.example.weather.models.main.HourlyWeather.*
 import com.example.weather.models.main.getIconRes
 import java.util.*
+import kotlin.math.pow
 import kotlin.math.roundToInt
 
 fun mapToHourEntity(hourWeather: Hourly?, city: String?): HourEntity? {
@@ -52,28 +53,30 @@ fun mapToCurrentEntity(
             maxTemp = tempList.maxBy { it } ?: 0f
             minTemp = tempList.minBy { it } ?: 0f
         }
-    return CurrentWeatherEntity(
-        city = city ?: "-",
-        temp = current.temp?.toFloat() ?: 0f,
-        minTemp = minTemp,
-        maxTemp = maxTemp,
-        feelsLike = current.feelsLike?.toFloat() ?: 0f,
-        humidity = current.humidity,
-        windSpeed = current.windSpeed,
-        pressure = current.pressure,
-        dewPoint = current.dewPoint,
-        condition = current.weather?.getOrNull(0)?.main,
-        iconId = getIconRes(current.weather?.getOrNull(0)?.icon),
-        sunrise = current.sunrise ?: 0,
-        sunset = current.sunset ?: 0,
-        visibility = current.visibility
-    )
+    current.apply {
+        return CurrentWeatherEntity(
+            city = city ?: "-",
+            temp = temp?.toFloat() ?: 0f,
+            minTemp = minTemp,
+            maxTemp = maxTemp,
+            feelsLike = feelsLike?.toFloat() ?: 0f,
+            humidity = humidity,
+            windSpeed = windSpeed,
+            pressure = pressure,
+            dewPoint = dewPoint,
+            condition = weather?.getOrNull(0)?.main,
+            iconId = getIconRes(weather?.getOrNull(0)?.icon),
+            sunrise = sunrise ?: 0,
+            sunset = sunset ?: 0,
+            visibility = visibility
+        )
+    }
 }
 
 fun mapToDayUI(day: DayEntity): DayUI {
     return DayUI(
-        maxTemp = day.maxTemp.roundToInt().toString(),
-        minTemp = day.minTemp.roundToInt().toString(),
+        maxTemp = day.maxTemp.roundToInt().toString() + "°",
+        minTemp = day.minTemp.roundToInt().toString() + "°",
         dayOfWeek = day.dayOfWeek,
         iconId = day.iconId
     )
@@ -88,21 +91,39 @@ fun mapToHourUI(hour: HourEntity): HourUI {
 }
 
 fun mapToCurrentUI(current: CurrentWeatherEntity): CurrentUI {
-    return CurrentUI(
-        city = current.city,
-        temp = current.temp.roundToInt().toString(),
-        maxTemp = current.maxTemp.roundToInt().toString() + "°" + "C",
-        minTemp = current.minTemp.roundToInt().toString() + "°" + "C",
-        sunrise = current.sunrise.toFloat(),
-        sunset = current.sunset.toFloat(),
-        time = (System.currentTimeMillis() / 1000).toFloat(),
-        feelsLike = current.feelsLike?.roundToInt().toString() + "°",
-        humidity = current.humidity?.toString() + "%" ?: "",
-        windSpeed = current.windSpeed?.toString() ?: "",
-        pressure = current.pressure?.toString() ?: "",
-        visibility = current.visibility?.toString() ?: "",
-        condition = current.condition,
-        iconId = current.iconId,
-        dewPoint = current.dewPoint?.toString() ?: ""
-    )
+    fun getHourAndMinute(minutes: Long): String {
+        val hour = minutes / 60
+        val minute = minutes % 60
+        return "$hour ч $minute м"
+    }
+
+    fun getVisibility(visibility: Long): String {
+        return if (visibility > 1000) "%.0f".format(visibility / 1000.0) + " km"
+        else visibility.toString()
+    }
+
+    current.apply {
+        return CurrentUI(
+            city = city,
+            temp = temp.roundToInt().toString(),
+            maxTemp = maxTemp.roundToInt().toString() + "°" + "C",
+            minTemp = minTemp.roundToInt().toString() + "°" + "C",
+            sunrise = sunrise.toFloat(),
+            sunset = sunset.toFloat(),
+            sunDayH = getHourAndMinute((sunset - sunrise) / 60),
+            sunsetH = time(Date(sunset * 1000)),
+            sunriseH = time(Date(sunrise * 1000)),
+            time = currentTimeSec.toFloat(),
+            feelsLike = feelsLike?.roundToInt().toString() + "°",
+            humidity = humidity?.toString() + "%",
+            windSpeed = windSpeed?.toString() + " m/s",
+            pressure = "${((pressure ?: 0) * 0.75).roundToInt()} mm",
+            visibility = getVisibility(visibility ?: 0),
+            condition = condition,
+            iconId = iconId,
+            dewPoint = dewPoint?.roundToInt()?.toString() + "°"
+        )
+    }
+
+
 }

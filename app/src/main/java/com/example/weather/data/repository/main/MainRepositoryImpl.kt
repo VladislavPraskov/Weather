@@ -9,9 +9,6 @@ import com.example.weather.data.service.Locator
 import com.example.weather.models.WeatherUI
 import com.example.weather.models.main.HourlyWeather
 import com.example.weather.presenter.main.mvi.MainResultAction
-import com.example.weather.utils.mapToCurrentEntity
-import com.example.weather.utils.mapToDayEntity
-import com.example.weather.utils.mapToHourEntity
 import com.example.weather.utils.network.ApiResult
 import com.example.weather.utils.network.NetworkBoundResource
 import com.example.weather.utils.network.safeCacheCall
@@ -52,8 +49,8 @@ class MainRepositoryImpl(
                 db.sharedDao.saveWeather(networkObject)
             }
 
-            override fun mapToResultAction(weahter: WeatherUI?): MainResultAction {
-                return MainResultAction.getSuccessOrEmpty(weahter)
+            override fun mapToResultAction(cache: WeatherUI?, isFirst: Boolean): MainResultAction {
+                return MainResultAction.getSuccessOrEmpty(cache, isFirst)
             }
 
             override fun mapErrorToResultAction(error: ApiResult.NetworkError?): MainResultAction {
@@ -80,7 +77,7 @@ class MainRepositoryImpl(
             override suspend fun saveCache(networkObject: HourlyWeather) {
             }
 
-            override fun mapToResultAction(cache: Any?): MainResultAction {
+            override fun mapToResultAction(cache: Any?, isFirst: Boolean): MainResultAction {
                 return MainResultAction.Nothing
             }
 

@@ -5,7 +5,6 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
 @Entity(tableName = "current_weather_entity")
 data class CurrentWeatherEntity(
     @PrimaryKey
@@ -24,4 +23,4 @@ data class CurrentWeatherEntity(
     val condition: String? = null,
     val iconId: Int,
     val dewPoint: Double? = null
-) : Parcelable
+)

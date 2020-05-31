@@ -12,9 +12,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="34dp"
-        android:layout_marginTop="180dp"
+        android:layout_marginTop="200dp"
         android:fontFamily="sans-serif"
-        android:text="NEXT 7 DAYS"
+        android:text="@string/next_7_days_title_text"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,7 +41,7 @@
         android:layout_marginStart="34dp"
         android:layout_marginTop="32dp"
         android:fontFamily="sans-serif"
-        android:text="DETAILS"
+        android:text="@string/sun_day_titel_text"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -155,7 +155,7 @@
         android:layout_marginStart="34dp"
         android:layout_marginTop="32dp"
         android:fontFamily="sans-serif"
-        android:text="DETAILS"
+        android:text="@string/details_title_text"
         android:textColor="@color/white"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -191,10 +191,10 @@
             android:layout_height="0dp"
             android:layout_marginTop="8dp"
             app:dayText="Fri"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/day_2"
             app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -277,7 +277,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         app:layout_constraintBottom_toTopOf="@+id/detailsTitle3"
         app:layout_constraintDimensionRatio="2:1"
         app:layout_constraintEnd_toEndOf="@+id/divider_details2"
@@ -285,6 +285,81 @@
         app:layout_constraintStart_toStartOf="@+id/detailsTitle2"
         app:layout_constraintTop_toBottomOf="@+id/detailsTitle2"
         app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/sunrise"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="46dp"
+        android:layout_marginBottom="36dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/sunrise_text"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/detailsTitle3"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/sunDay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/sun_day_text"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/chart" />
+
+    <TextView
+        android:id="@+id/sunDayTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sunDay"
+        tools:text="16:38" />
+
+    <TextView
+        android:id="@+id/sunrise_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/sunrise"
+        app:layout_constraintStart_toStartOf="@+id/sunrise"
+        app:layout_constraintTop_toBottomOf="@+id/sunrise"
+        tools:text="6:35" />
+
+    <TextView
+        android:id="@+id/sunset"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="54dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/sunset_text"
+        android:textColor="@color/white"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/sunrise"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/sunrise" />
+
+    <TextView
+        android:id="@+id/sunsetTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/white"
+        android:textSize="14sp"
+        app:layout_constraintEnd_toEndOf="@+id/sunset"
+        app:layout_constraintStart_toStartOf="@+id/sunset"
+        app:layout_constraintTop_toBottomOf="@+id/sunset"
+        tools:text="21:42" />
 
 
     <!--    <androidx.recyclerview.widget.RecyclerView-->

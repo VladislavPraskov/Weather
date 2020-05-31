@@ -2,7 +2,8 @@ package com.example.weather.presenter.main
 
 import android.app.Application
 import androidx.lifecycle.liveData
-import com.devpraskov.android_ext.currentDayAndDate
+import com.devpraskov.android_ext.currentTimeSec
+import com.devpraskov.android_ext.dayAndTime
 import com.example.weather.domain.main.MainInteractor
 import com.example.weather.presenter.main.mvi.MainAction
 import com.example.weather.presenter.main.mvi.MainResultAction
@@ -39,20 +40,20 @@ class MainViewModel(app: Application, private val interactor: MainInteractor) :
     ): MainViewState {
         return when (result) {
             is MainResultAction.Loading -> currentViewState.copy(isLoading = true)
-            is MainResultAction.SuccessEmpty -> currentViewState.copy(isLoading = false)
+            is MainResultAction.SuccessEmpty -> currentViewState.copy(isLoading = result.isLoading)
             is MainResultAction.Nothing -> currentViewState
             is MainResultAction.Error -> currentViewState.copy(
                 isLoading = false,
                 error = ErrorMVI.create(context, error = result.networkError)
             )
             is MainResultAction.Success -> currentViewState.copy(
-                isLoading = false,
+                isLoading = result.isLoading,
                 data = result.data.toEvent(),
-                time = currentDayAndDate()
+                time = dayAndTime()
             )
             is MainResultAction.UpdateTime -> currentViewState.copy(
                 isLoading = false,
-                time = currentDayAndDate()
+                time = dayAndTime()
             )
 
         }

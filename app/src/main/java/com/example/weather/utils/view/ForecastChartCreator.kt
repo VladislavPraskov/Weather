@@ -6,6 +6,9 @@ import com.devpraskov.android_ext.getColor
 import com.example.weather.R
 import com.example.weather.models.main.HourUI
 import com.example.weather.utils.ChartDataView
+import com.github.mikephil.charting.animation.Easing
+import com.github.mikephil.charting.animation.Easing.EaseOutCirc
+import com.github.mikephil.charting.animation.Easing.EasingFunction
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -14,6 +17,7 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import kotlin.math.absoluteValue
+import kotlin.math.sqrt
 
 class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
 
@@ -33,14 +37,15 @@ class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
             extraRightOffset = 25f
             extraTopOffset = 35f
         }
-//        chart.animateXY(500, 500)
         val values = hours.mapIndexed { index, h ->
             Entry(index.toFloat(), h.temp, h.iconId)
         }
         initXAxis(hours)
         initYAxis(values)
+        val isDataEmpty = (chart.data?.dataSetCount ?: 0 == 0)
         chart.data = getData(values)
-        chart.invalidate()
+        if (isDataEmpty) chart.animateX(700)
+        else chart.invalidate()
     }
 
     private fun initYAxis(values: List<Entry>?) {
@@ -59,6 +64,7 @@ class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
             setDrawGridLines(false)
             axisLineColor = f.getColor(R.color.lineColor)
             setDrawAxisLine(false) //граница графика сверху
+
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
                     val current = hours.getOrNull(value.toInt())?.time ?: 0f
@@ -132,17 +138,7 @@ class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
             data.addDataSet(set)
         }
         chart.highlightValues(highlightList.toTypedArray())
-        data.apply {
-            setValueTextSize(12f)
-            setDrawValues(false)
-            setValueTextColor(f.getColor(R.color.white))
-            setValueFormatter(object : ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    return "%.0f".format(value) + f.getString(R.string.celsius)
-                }
-            })
-            setDrawValues(false)
-        }
+        data.setDrawValues(false)
         return data
     }
 }
