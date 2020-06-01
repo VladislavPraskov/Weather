@@ -14,10 +14,7 @@ import com.example.weather.utils.mvi.BaseViewModel
 
 
 class MainViewModel(app: Application, private val interactor: MainInteractor) :
-    BaseViewModel<MainAction, MainViewState, MainResultAction>(
-        app,
-        MainViewState()
-    ) {
+    BaseViewModel<MainAction, MainViewState, MainResultAction>(app, MainViewState()) {
 
     override fun handleNewAction(action: MainAction) = liveData<MainResultAction> {
         when (action) {

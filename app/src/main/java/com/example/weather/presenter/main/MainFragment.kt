@@ -5,7 +5,6 @@ import android.app.Activity.RESULT_OK
 import android.content.Intent
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Color
-import android.location.Geocoder
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -13,8 +12,12 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.devpraskov.android_ext.*
+import com.devpraskov.android_ext.newText
+import com.devpraskov.android_ext.onClick
+import com.devpraskov.android_ext.snack
+import com.devpraskov.android_ext.statusBarColor
 import com.example.weather.R
+import com.example.weather.presenter.city.CityFragment
 import com.example.weather.presenter.main.AddCityDialog.Companion.ADD_CITY_REQUEST_CODE
 import com.example.weather.presenter.main.AddCityDialog.Companion.CITY_EXTRA_KEY
 import com.example.weather.presenter.main.mvi.MainAction
@@ -22,12 +25,12 @@ import com.example.weather.presenter.second.DetailsFragment
 import com.example.weather.utils.view.ForecastChartCreator
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_main.*
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 import org.koin.androidx.viewmodel.ext.android.viewModel
-import java.lang.Runnable
 import java.util.*
 import java.util.Calendar.SECOND
-import kotlin.coroutines.coroutineContext
 
 
 class MainFragment : Fragment(R.layout.fragment_main) {
@@ -56,20 +59,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         statusBarColor(Color.parseColor("#BC8DB8"))
         updateTimeEveryMinutes()
         chart.setNoDataText("")
-        runBlocking {
-            withContext(Dispatchers.IO) {
-                val list = ArrayList<String>()
-
-                val locales = Locale.getISOCountries()
-
-                Locale.getISOCountries()
-                for (countryCode in locales) {
-                    val obj = Locale("", countryCode)
-                    Log.d("Country Name = ",  obj.displayCountry)
-                    list.add(obj.displayCountry)
-                }
-            }
-        }
     }
 
     override fun onStop() {
@@ -115,9 +104,19 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun initListeners() {
         addCity?.onClick {
-            val dialog = AddCityDialog()
-            dialog.setTargetFragment(this, ADD_CITY_REQUEST_CODE)
-            dialog.show(parentFragmentManager, "Dialog")
+            //            val dialog = AddCityDialog()
+//            dialog.setTargetFragment(this, ADD_CITY_REQUEST_CODE)
+//            dialog.show(parentFragmentManager, "Dialog")
+            parentFragmentManager.beginTransaction()
+                .setCustomAnimations(
+                    R.anim.enter_from_right,
+                    R.anim.exit_to_left,
+                    R.anim.enter_from_left,
+                    R.anim.exit_to_right
+                )
+                .replace(R.id.fragment_container, CityFragment())
+                .addToBackStack(DetailsFragment.TAG)
+                .commit()
         }
         swipeRefreshLayout?.setOnRefreshListener { viewModel.setNextAction(MainAction.LoadCurrentCity) }
         menu?.onClick {
