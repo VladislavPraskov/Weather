@@ -9,7 +9,7 @@ import kotlinx.coroutines.Dispatchers
 
 abstract class NetworkResourse<NetworkObj, ResultAction>(
     private val apiCall: suspend () -> NetworkObj,
-    private val onSuccess: suspend (ApiResult.Success<NetworkObj?>) -> ResultAction,
+    private val onSuccess: (ApiResult.Success<NetworkObj?>) -> ResultAction,
     private val onError: suspend (ApiResult.NetworkError) -> ResultAction
 ) {
     val result = liveData(Dispatchers.IO) {
@@ -26,7 +26,7 @@ abstract class NetworkResourse<NetworkObj, ResultAction>(
     companion object {
         fun <NetworkObj, ResultAction> create(
             apiCall: suspend () -> NetworkObj,
-            onSuccess: suspend (ApiResult.Success<NetworkObj?>) -> ResultAction,
+            onSuccess: (ApiResult.Success<NetworkObj?>) -> ResultAction,
             onError: suspend (ApiResult.NetworkError) -> ResultAction
         ): NetworkResourse<NetworkObj, ResultAction> {
             return object :

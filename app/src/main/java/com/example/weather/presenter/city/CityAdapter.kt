@@ -17,11 +17,11 @@ class CityAdapter(private val click: (CityUI) -> Unit) :
     private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CityUI>() {
 
         override fun areItemsTheSame(oldItem: CityUI, newItem: CityUI): Boolean {
-            TODO("not implemented")
+            return oldItem.geonameId == newItem.geonameId
         }
 
         override fun areContentsTheSame(oldItem: CityUI, newItem: CityUI): Boolean {
-            TODO("not implemented")
+            return oldItem == newItem
         }
 
     }
