@@ -32,8 +32,8 @@ class MainRepositoryImpl(
                     )
 
                 val location = locator.blockingGetLocation()
-                if (location.securityError) return null
-                if (location.locationIsNotAvailableNow) return null
+                if (location.securityError) return null //todo
+                if (location.locationIsNotAvailableNow) return null //todo
                 safeCacheCall({ location.city?.let { db.cityDao.saveCurrentCity(cityEntity = it) } })
                 return api.getWeatherCityByLocationHourlyForecast(
                     location.city?.lat,
@@ -59,34 +59,4 @@ class MainRepositoryImpl(
 
         }.result.asLiveData(Dispatchers.IO)
     }
-
-    override fun getCityByName(city: String): LiveData<MainResultAction> {
-        return object : NetworkBoundResource<HourlyWeather, Any, MainResultAction>() {
-
-            override suspend fun networkRequest(): HourlyWeather? {
-                val response = api.getWeatherCity(city) // лишний запрос чтобы достать данные city
-                val cityEntity = CityEntity.create(response.city)
-                db.cityDao.saveCity(cityEntity)
-                return api.getWeatherCityByLocationHourlyForecast(cityEntity.lon, cityEntity.lat)
-            }
-
-            override suspend fun retrieveCache(): Any? {
-                return Any()
-            }
-
-            override suspend fun saveCache(networkObject: HourlyWeather) {
-            }
-
-            override fun mapToResultAction(cache: Any?, isFirst: Boolean): MainResultAction {
-                return MainResultAction.Nothing
-            }
-
-            override fun mapErrorToResultAction(error: ApiResult.NetworkError?): MainResultAction {
-                return MainResultAction.Nothing
-            }
-
-        }.result.asLiveData(Dispatchers.IO)
-    }
-
-
 }

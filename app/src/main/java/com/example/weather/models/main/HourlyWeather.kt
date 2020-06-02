@@ -28,7 +28,7 @@ data class HourlyWeather(
         val clouds: Long? = null,
         val visibility: Long? = null,
         @SerializedName("wind_speed")
-        val windSpeed: Int? = null,
+        val windSpeed: Double? = null,
         @SerializedName("wind_deg")
         val windDeg: Long? = null,
         val weather: List<Weather?>? = null,

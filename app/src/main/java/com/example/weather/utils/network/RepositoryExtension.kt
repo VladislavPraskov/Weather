@@ -37,7 +37,7 @@ suspend fun <T> safeApiCall(
 
                 NetworkError(code = code, errorStr = errorResponse, errorRes = resId)
             }
-            else -> {
+            else -> { //todo добавить возможность кастомных ошибок и извлечения текста из них
                 NetworkError(code = null, errorRes = R.string.unknown_error)
             }
         }
@@ -65,7 +65,7 @@ suspend fun <T> safeCacheCall(
         onSuccess?.invoke(result)
         result
     } catch (t: Throwable) {
-        if (t is IllegalStateException && t.message?.contains("Room cannot verify the data integrity") == true)
+        if (t is IllegalStateException && (t.message?.contains("data integrity") == true || t.message?.contains("main thread") == true))
             throw t
         else {
             onError?.invoke() //todo crashlytics

@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object RetrofitService {
     const val BASE_WEATHER_URL = "https://api.openweathermap.org/data/2.5/"
-    const val BASE_CITY_URL = "http://api.geonames.org/"
+    const val BASE_CITY_URL = "https://api.opencagedata.com/geocode/v1/"
 }
 
 private fun getLoggingInterceptor() = HttpLoggingInterceptor().apply {

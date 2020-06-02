@@ -40,7 +40,7 @@
         app:layout_constraintEnd_toEndOf="@+id/day"
         app:layout_constraintStart_toStartOf="@+id/day"
         app:layout_constraintTop_toBottomOf="@+id/icon"
-        tools:text="22" />
+        tools:text="22°" />
 
     <View
         android:id="@+id/divider2"
@@ -48,7 +48,6 @@
         android:layout_height="1dp"
         android:layout_marginTop="2dp"
         android:background="#99FFFFFF"
-        app:layout_constraintEnd_toEndOf="@+id/maxTemp"
         app:layout_constraintStart_toStartOf="@+id/maxTemp"
         app:layout_constraintTop_toBottomOf="@+id/maxTemp" />
 
@@ -61,9 +60,9 @@
         android:textColor="#99FFFFFF"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/day"
-        app:layout_constraintStart_toStartOf="@+id/day"
+        app:layout_constraintEnd_toEndOf="@+id/maxTemp"
+        app:layout_constraintStart_toStartOf="@+id/maxTemp"
         app:layout_constraintTop_toBottomOf="@+id/divider2"
         app:layout_constraintVertical_bias="0.0"
-        tools:text="8" />
+        tools:text="8°" />
 </androidx.constraintlayout.widget.ConstraintLayout>

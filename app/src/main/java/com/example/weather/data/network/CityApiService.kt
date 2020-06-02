@@ -1,16 +1,15 @@
 package com.example.weather.data.network
 
-import com.example.weather.models.CityResponseModel
+import com.example.weather.models.CityResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
-import java.util.*
 
 interface CityApiService {
 
-    @GET("searchJSON")
+    @GET("json")
     suspend fun getCityByQuery(
-        @Query("name") name: String?,
-        @Query("style") style: String? = "SHORT",
-        @Query("searchlang") lang: String? = Locale.getDefault().language
-    ): CityResponseModel
+        @Query("q") name: String?,
+//        @Query("searchlang") lang: String? = Locale.getDefault().language,
+        @Query("limit") limit: Int? = 30
+    ): CityResponse
 }

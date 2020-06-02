@@ -17,7 +17,7 @@ data class CurrentWeatherEntity(
     var sunset: Long = 0,
     val feelsLike: Float? = null,
     val humidity: Long? = null,
-    val windSpeed: Int? = null,
+    val windSpeed: Double? = null,
     val pressure: Long? = null,
     val visibility: Long? = null,
     val condition: String? = null,

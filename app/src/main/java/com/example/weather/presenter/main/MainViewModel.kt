@@ -18,9 +18,6 @@ class MainViewModel(app: Application, private val interactor: MainInteractor) :
 
     override fun handleNewAction(action: MainAction) = liveData<MainResultAction> {
         when (action) {
-            is MainAction.GetCityWeather -> {
-                emitSource(interactor.getCityByName(action.cityName))
-            }
             is MainAction.LoadCurrentCity -> {
                 emit(MainResultAction.Loading())
                 emitSource(interactor.getCurrentCity())

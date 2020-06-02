@@ -9,6 +9,7 @@ sealed class CityResultAction {
     object Nothing : CityResultAction()
     data class Error(val networkError: ApiResult.NetworkError?) : CityResultAction()
     data class Success(val data: List<CityUI>?) : CityResultAction()
+    data class CitySaved(val cachedCity: List<CityUI>?) : CityResultAction()
 
     companion object {
         fun getSuccessOrEmpty(cities: List<CityUI>?): CityResultAction {

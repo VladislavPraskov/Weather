@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -27,13 +27,30 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/edit_text_shape"
+            android:drawablePadding="8dp"
             android:hint="Название города"
-            android:paddingStart="18dp"
-            android:paddingEnd="18dp"
-            android:textSize="14sp" />
-    </LinearLayout>
+            android:paddingStart="24dp"
+            android:paddingEnd="16dp"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <ImageView
+            android:id="@+id/clearIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/clear_icon"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="@+id/editText"
+            app:layout_constraintEnd_toEndOf="@+id/editText"
+            app:layout_constraintTop_toTopOf="@+id/editText"
+            tools:visibility="visible" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <com.example.weather.utils.view.SwipeRefreshWithDelay
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -57,6 +74,13 @@
             app:layout_constraintTop_toBottomOf="@+id/header"
             tools:itemCount="8"
             tools:listitem="@layout/city_item" />
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </com.example.weather.utils.view.SwipeRefreshWithDelay>
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_begin="42dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
