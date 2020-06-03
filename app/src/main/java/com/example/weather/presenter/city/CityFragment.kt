@@ -1,14 +1,11 @@
 package com.example.weather.presenter.city
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
-import androidx.core.view.postDelayed
 import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.coroutineScope
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.devpraskov.android_ext.*
 import com.example.weather.R
 import com.example.weather.models.CityUI
@@ -56,13 +53,14 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             noResult.visibilityGone(state.isNotFound)
             recycler_view.visibilityGone(!state.isNotFound)
             val cityList = state.data.getIfNotBeenHandled() ?: return@Observer
-            adapter.submitList(cityList)
+            adapter.submitList(cityList, state.isCache)
         })
     }
 
     private fun onClick(city: CityUI) {
         viewModel.setNextAction(CityAction.SaveCity(city))
-        (targetFragment as? MainFragment)?.isUpdateCityNeeded = true            /***/
+        (targetFragment as? MainFragment)?.isUpdateCityNeeded = true
+        /***/
     }
 
     private fun initListeners() {
@@ -74,17 +72,14 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             else clearIcon.hideAnimateAlpha()
         }
         editText?.debounceAfterTextChanged(coroutineScope = lifecycle.coroutineScope) { q ->
-            if (q.isNotEmpty())
-                viewModel.setNextAction(CityAction.LoadByQuery(q.trim()))
-            else
-                viewModel.setNextAction(CityAction.LoadCityFromDB)
+            if (q.isNotEmpty()) viewModel.setNextAction(CityAction.LoadByQuery(q.trim()))
+            else viewModel.setNextAction(CityAction.LoadCityFromDB)
         }
 
         clearIcon?.onClick {
             editText?.setText("")
             editText?.clearFocus()
             hideSoftKeyboard()
-            clearIcon.hideAnimateAlpha()
         }
 
     }

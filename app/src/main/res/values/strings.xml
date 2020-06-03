@@ -9,10 +9,10 @@
     <string name="unknown_error">Неизвестная ошибка</string>
 
 
-    <string name="sunset_text">Закат</string>
-    <string name="sunrise_text">Восход</string>
-    <string name="sun_day_text">Световой день</string>
-    <string name="sun_day_titel_text">SUN DAY</string>
+    <string name="sunset_text">Sunset</string>
+    <string name="sunrise_text">Sunrise</string>
+    <string name="sun_day_text">Daylight hours </string>
+    <string name="sun_day_title_text">DAYLIGHT</string>
     <string name="details_title_text">DETAILS</string>
     <string name="next_7_days_title_text">NEXT 7 DAYS</string>
     <string name="location_permission">Location permission required</string>
@@ -23,6 +23,7 @@
     <string name="default_condition_text">Condition</string>
     <string name="default_min_temp_text">min °С</string>
     <string name="no_results_found">No results</string>
+    <string name="city_name_search">City name</string>
 
 
 </resources>

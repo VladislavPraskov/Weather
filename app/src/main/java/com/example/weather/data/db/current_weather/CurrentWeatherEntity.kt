@@ -11,6 +11,7 @@ data class CurrentWeatherEntity(
     var id: Int = 0,
     val city: String,
     val temp: Float = 0f,
+    val timeOffset: Int = 0,
     var maxTemp: Float = 0f,
     var minTemp: Float = 0f,
     var sunrise: Long = 0,

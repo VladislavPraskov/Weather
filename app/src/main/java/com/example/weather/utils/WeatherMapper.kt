@@ -14,26 +14,36 @@ import kotlin.math.min
 import kotlin.math.max
 import kotlin.math.roundToInt
 
-fun mapToHourEntity(hourWeather: Hourly?, city: String?): HourEntity? {
+fun mapToHourEntity(
+    hourWeather: Hourly?,
+    city: String?,
+    timezoneOffset: Long?
+): HourEntity? {
     hourWeather ?: return null
     return HourEntity(
         city = city ?: "-",
         temp = hourWeather.temp?.toFloat() ?: 0f,
         iconId = getIconRes(hourWeather.weather?.getOrNull(0)?.icon),
         time = hourWeather.dt ?: 0,
+        timeOffset = timezoneOffset?.toInt() ?: 0,
         timeDebug = currentDateAndTime(Date((hourWeather.dt ?: 0) * 1000))
     )
 }
 
-fun mapToDayEntity(daily: Daily?, city: String?): DayEntity? {
+fun mapToDayEntity(
+    daily: Daily?,
+    city: String?,
+    timezoneOffset: Long?
+): DayEntity? {
     daily ?: return null
     return DayEntity(
         city = city ?: "-",
-        dayOfWeek = dayOfWeek(Date((daily.dt ?: 0) * 1000)),
+        dayOfWeek = dayOfWeek(Date((daily.dt ?: 0) * 1000), timezoneOffset?.toInt() ?: 0),
         minTemp = daily.temp?.min?.toFloat() ?: 0f,
         maxTemp = daily.temp?.max?.toFloat() ?: 0f,
         iconId = getIconRes(daily.weather?.getOrNull(0)?.icon),
         time = daily.dt ?: 0,
+        timeOffset = timezoneOffset?.toInt() ?: 0,
         timeDebug = currentDateAndTime(Date((daily.dt ?: 0) * 1000))
     )
 }
@@ -42,6 +52,7 @@ fun mapToCurrentEntity(
     current: Current?,
     hours: List<Hourly?>?,
     day: Daily?,
+    timezoneOffset: Long?,
     city: String?
 ): CurrentWeatherEntity? {
     current ?: return null
@@ -59,6 +70,7 @@ fun mapToCurrentEntity(
         return CurrentWeatherEntity(
             city = city ?: "-",
             temp = temp?.toFloat() ?: 0f,
+            timeOffset = timezoneOffset?.toInt() ?: 0,
             minTemp = min(minTemp, day?.temp?.min?.toFloat() ?: 100f),
             maxTemp = max(maxTemp, day?.temp?.max?.toFloat() ?: -100f),
             feelsLike = feelsLike?.toFloat() ?: 0f,
@@ -86,7 +98,7 @@ fun mapToDayUI(day: DayEntity): DayUI {
 
 fun mapToHourUI(hour: HourEntity): HourUI {
     return HourUI(
-        time = getHour(Date(hour.time * 1000)).toFloat(),
+        time = getHour(Date(hour.time * 1000), hour.timeOffset).toFloat(),
         temp = hour.temp,
         iconId = hour.iconId
     )
@@ -113,9 +125,10 @@ fun mapToCurrentUI(current: CurrentWeatherEntity): CurrentUI {
             sunrise = sunrise.toFloat(),
             sunset = sunset.toFloat(),
             sunDayH = getHourAndMinute((sunset - sunrise) / 60),
-            sunsetH = time(Date(sunset * 1000)),
-            sunriseH = time(Date(sunrise * 1000)),
+            sunsetH = time(Date(sunset * 1000), timeOffset),
+            sunriseH = time(Date(sunrise * 1000), timeOffset),
             time = currentTimeSec.toFloat(),
+            timeOffset = timeOffset,
             feelsLike = feelsLike?.roundToInt().toString() + "°",
             humidity = humidity?.toString() + "%",
             windSpeed = windSpeed?.toString() + " m/s",

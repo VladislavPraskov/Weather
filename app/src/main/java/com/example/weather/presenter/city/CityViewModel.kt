@@ -31,28 +31,30 @@ class CityViewModel(app: Application, private val interactor: CityInteractor) :
     }
 
     override fun reduceNewViewState(
-        currentViewState: CityViewState,
+        currentState: CityViewState,
         result: CityResultAction
     ): CityViewState {
         return when (result) {
             is CityResultAction.Loading -> {
-                currentViewState.copy(isLoading = true)
+                currentState.copy(isLoading = true)
             }
-            CityResultAction.Nothing -> currentViewState.copy(isLoading = false)
-            is CityResultAction.Error -> currentViewState.copy(
+            CityResultAction.Nothing -> currentState.copy(isLoading = false)
+            is CityResultAction.Error -> currentState.copy(
                 isLoading = false,
                 error = ErrorMVI.create(context, error = result.networkError)
             )
-            is CityResultAction.Success -> currentViewState.copy(
+            is CityResultAction.Success -> currentState.copy(
                 isLoading = false,
                 isNotFound = result.data.isNullOrEmpty(),
+                isCache = result.isCache,
                 data = result.data.toEvent()
             )
-            is CityResultAction.CitySaved -> currentViewState.copy(
+            is CityResultAction.CitySaved -> currentState.copy(
                 isLoading = false,
+                isCache = true,
                 data = result.cachedCity.toEvent()
             )
-            is CityResultAction.SuccessEmpty -> currentViewState.copy(
+            is CityResultAction.SuccessEmpty -> currentState.copy(
                 isLoading = false,
                 isNotFound = true
             ) //todo

@@ -14,7 +14,16 @@ class CityItemTouchHelper(delete: (Int) -> Unit) : ItemTouchHelper(
             return false
         }
 
+        override fun getSwipeDirs(recyclerView: RecyclerView, viewHolder: ViewHolder): Int {
+            if (viewHolder.itemView.tag == DISABLE_SWIPE_TAG) return 0
+            return super.getSwipeDirs(recyclerView, viewHolder)
+        }
+
         override fun onSwiped(viewHolder: ViewHolder, direction: Int) {
             delete.invoke(viewHolder.adapterPosition)
         }
-    })
+    }) {
+    companion object {
+        const val DISABLE_SWIPE_TAG = "disable_swipe_tag"
+    }
+}

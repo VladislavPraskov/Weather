@@ -8,5 +8,6 @@ data class MainViewState(
     val isLoading: Boolean = false,
     val error: ErrorMVI? = null,
     val time: String? = null,
+    val timeOffset: Int = 0,
     val data: Event<WeatherUI?> = Event()
 )

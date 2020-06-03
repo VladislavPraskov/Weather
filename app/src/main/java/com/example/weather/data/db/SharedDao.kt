@@ -1,7 +1,6 @@
 package com.example.weather.data.db
 
 import androidx.room.*
-import com.devpraskov.android_ext.beginOfDay
 import com.devpraskov.android_ext.beginOfHour
 import com.devpraskov.android_ext.endOfDay
 import com.example.weather.data.db.current_weather.CurrentWeatherEntity
@@ -55,9 +54,14 @@ abstract class SharedDao(val db: WeatherDataBase) {
         val cityName = db.cityDao.getCurrentCityName()
 
         networkObject.apply {
-            hourly?.mapNotNull { mapToHourEntity(it, cityName) }?.let { saveHourlyWeather(it) }
-            daily?.mapNotNull { mapToDayEntity(it, cityName) }?.let { saveDailyWeather(it) }
-            mapToCurrentEntity(current, hourly,daily?.getOrNull(0), cityName)?.let { saveCurrentWeather(it) }
+            hourly?.mapNotNull { mapToHourEntity(it, cityName, timezoneOffset) }
+                ?.let { saveHourlyWeather(it) }
+
+            daily?.mapNotNull { mapToDayEntity(it, cityName, timezoneOffset) }
+                ?.let { saveDailyWeather(it) }
+
+            mapToCurrentEntity(current, hourly, daily?.getOrNull(0), timezoneOffset, cityName)
+                ?.let { saveCurrentWeather(it) }
         }
 
     }

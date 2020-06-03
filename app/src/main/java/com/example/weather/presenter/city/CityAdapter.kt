@@ -14,10 +14,12 @@ import com.devpraskov.android_ext.onClick
 import com.devpraskov.android_ext.show
 import com.example.weather.R
 import com.example.weather.models.CityUI
+import com.example.weather.presenter.city.CityItemTouchHelper.Companion.DISABLE_SWIPE_TAG
 import kotlinx.android.synthetic.main.city_item.view.*
 
 class CityAdapter(private val click: (CityUI) -> Unit) :
     ListAdapter<CityUI, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
+    var isSwiped: Boolean = true
 
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CityUI>() {
@@ -44,6 +46,7 @@ class CityAdapter(private val click: (CityUI) -> Unit) :
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
             is CityHolder -> {
+                holder.itemView.apply { if (!isSwiped) tag = DISABLE_SWIPE_TAG }
                 holder.bind(currentList[position])
             }
         }
@@ -53,8 +56,9 @@ class CityAdapter(private val click: (CityUI) -> Unit) :
         return currentList.size
     }
 
-    override fun submitList(list: List<CityUI>?) {
+    fun submitList(list: List<CityUI>?, isSwiped: Boolean) {
         list ?: return
+        this.isSwiped = isSwiped
         super.submitList(list)
     }
 
@@ -90,3 +94,5 @@ class CityAdapter(private val click: (CityUI) -> Unit) :
         return deletedItem
     }
 }
+
+enum class State(val state: String) { Swipe("Swipe"), NoSwipe("NoSwipe") }

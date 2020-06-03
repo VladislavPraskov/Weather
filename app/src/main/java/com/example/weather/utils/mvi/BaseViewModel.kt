@@ -67,7 +67,7 @@ abstract class BaseViewModel<Action, ViewState, ResultAction>(
      * Выставляет новое значение internalViewState в зависимости от результата handleNewAction
      */
     protected abstract fun reduceNewViewState(
-        currentViewState: ViewState,
+        currentState: ViewState,
         result: ResultAction
     ): ViewState
 }

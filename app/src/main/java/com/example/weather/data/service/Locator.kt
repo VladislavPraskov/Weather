@@ -66,7 +66,8 @@ class Locator(context: Context) {
                     utc = getUtcOffsetStr(),
                     offsetSec = getUtcOffsetSec(),
                     isCurrentSelected = true,
-                    countryAndPostCode = addresses.getOrNull(0)?.let { it.countryCode + it.postalCode } ?: ""
+                    countryAndPostCode = addresses.getOrNull(0)?.let { it.countryCode + it.postalCode }
+                        ?: ""
                 )
             )
         }

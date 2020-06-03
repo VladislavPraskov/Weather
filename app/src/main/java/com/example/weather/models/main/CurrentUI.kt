@@ -8,6 +8,7 @@ data class CurrentUI(
     val city: String,
     val temp: String = "",
     val time: Float = 0f,
+    val timeOffset: Int = 0,
     var maxTemp: String = "",
     var minTemp: String = "",
     var sunrise: Float = 0f,

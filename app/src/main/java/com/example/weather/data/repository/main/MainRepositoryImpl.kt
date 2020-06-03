@@ -2,7 +2,6 @@ package com.example.weather.data.repository.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
-import com.example.weather.data.db.city.CityEntity
 import com.example.weather.data.db.WeatherDataBase
 import com.example.weather.data.network.ApiService
 import com.example.weather.data.service.Locator
@@ -49,8 +48,8 @@ class MainRepositoryImpl(
                 db.sharedDao.saveWeather(networkObject)
             }
 
-            override fun mapToResultAction(cache: WeatherUI?, isFirst: Boolean): MainResultAction {
-                return MainResultAction.getSuccessOrEmpty(cache, isFirst)
+            override fun mapToResultAction(cache: WeatherUI?, isCache: Boolean): MainResultAction {
+                return MainResultAction.getSuccessOrEmpty(cache, isCache)
             }
 
             override fun mapErrorToResultAction(error: ApiResult.NetworkError?): MainResultAction {

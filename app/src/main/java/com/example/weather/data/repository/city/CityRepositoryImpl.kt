@@ -17,7 +17,9 @@ class CityRepositoryImpl(val db: WeatherDataBase, private val api: CityApiServic
     override fun loadByQuery(q: String): LiveData<CityResultAction> {
         return NetworkResourse.create(
             apiCall = { api.getCityByQuery(q) },
-            onSuccess = { success -> CityResultAction.getSuccessOrEmpty(mapToCityUI(success.value)) },
+            onSuccess = { success ->
+                CityResultAction.getSuccessOrEmpty(mapToCityUI(success.value), false)
+            },
             onError = { CityResultAction.Error(it) }
         ).result
     }
@@ -34,7 +36,7 @@ class CityRepositoryImpl(val db: WeatherDataBase, private val api: CityApiServic
 
     override suspend fun loadCityFromCache(): CityResultAction {
         val cities = safeCacheCall(cacheCall = { db.cityDao.loadCities() })
-        return CityResultAction.getSuccessOrEmpty(cities?.map { mapToCityUI(it) })
+        return CityResultAction.getSuccessOrEmpty(cities?.map { mapToCityUI(it) }, true)
     }
 
 }

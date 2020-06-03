@@ -11,6 +11,7 @@ import com.example.weather.presenter.main.mvi.MainViewState
 import com.example.weather.utils.error.ErrorMVI
 import com.example.weather.utils.models.toEvent
 import com.example.weather.utils.mvi.BaseViewModel
+import java.util.*
 
 
 class MainViewModel(app: Application, private val interactor: MainInteractor) :
@@ -29,25 +30,26 @@ class MainViewModel(app: Application, private val interactor: MainInteractor) :
     }
 
     override fun reduceNewViewState(
-        currentViewState: MainViewState,
+        currentState: MainViewState,
         result: MainResultAction
     ): MainViewState {
         return when (result) {
-            is MainResultAction.Loading -> currentViewState.copy(isLoading = true)
-            is MainResultAction.SuccessEmpty -> currentViewState.copy(isLoading = result.isLoading)
-            is MainResultAction.Nothing -> currentViewState
-            is MainResultAction.Error -> currentViewState.copy(
+            is MainResultAction.Loading -> currentState.copy(isLoading = true)
+            is MainResultAction.SuccessEmpty -> currentState.copy(isLoading = result.isLoading)
+            is MainResultAction.Nothing -> currentState
+            is MainResultAction.Error -> currentState.copy(
                 isLoading = false,
                 error = ErrorMVI.create(context, error = result.networkError)
             )
-            is MainResultAction.Success -> currentViewState.copy(
+            is MainResultAction.Success -> currentState.copy(
                 isLoading = result.isLoading,
                 data = result.data.toEvent(),
-                time = dayAndTime()
+                timeOffset = result.data?.current?.timeOffset ?: 0,
+                time = dayAndTime(offsetSec = result.data?.current?.timeOffset ?: 0)
             )
-            is MainResultAction.UpdateTime -> currentViewState.copy(
+            is MainResultAction.UpdateTime -> currentState.copy(
                 isLoading = false,
-                time = dayAndTime()
+                time = dayAndTime(offsetSec = currentState.timeOffset)
             )
 
         }

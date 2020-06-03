@@ -15,7 +15,7 @@ abstract class NetworkBoundResource<NetworkObj, CacheObj, ResultAction>(private 
         emit(
             mapToResultAction(
                 cache = if (isCacheNeeded) safeCacheCall({ retrieveCache() }) else null,
-                isFirst = true
+                isCache = true
             )
         )
 
@@ -35,7 +35,7 @@ abstract class NetworkBoundResource<NetworkObj, CacheObj, ResultAction>(private 
                             emit(
                                 mapToResultAction(
                                     cache = if (isCacheNeeded) safeCacheCall({ retrieveCache() }) else null,
-                                    isFirst = false
+                                    isCache = false
                                 )
                             )
                         }
@@ -52,7 +52,7 @@ abstract class NetworkBoundResource<NetworkObj, CacheObj, ResultAction>(private 
     abstract suspend fun networkRequest(): NetworkObj?
     abstract suspend fun retrieveCache(): CacheObj?
     abstract suspend fun saveCache(networkObject: NetworkObj)
-    abstract fun mapToResultAction(cache: CacheObj?, isFirst: Boolean): ResultAction //isFirst - до или после запроса в сеть
+    abstract fun mapToResultAction(cache: CacheObj?, isCache: Boolean): ResultAction //isFirst - до или после запроса в сеть
     abstract fun mapErrorToResultAction(error: ApiResult.NetworkError?): ResultAction
 
 }
