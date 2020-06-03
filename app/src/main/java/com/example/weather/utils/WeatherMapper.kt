@@ -10,7 +10,8 @@ import com.example.weather.models.main.HourUI
 import com.example.weather.models.main.HourlyWeather.*
 import com.example.weather.models.main.getIconRes
 import java.util.*
-import kotlin.math.pow
+import kotlin.math.min
+import kotlin.math.max
 import kotlin.math.roundToInt
 
 fun mapToHourEntity(hourWeather: Hourly?, city: String?): HourEntity? {
@@ -40,6 +41,7 @@ fun mapToDayEntity(daily: Daily?, city: String?): DayEntity? {
 fun mapToCurrentEntity(
     current: Current?,
     hours: List<Hourly?>?,
+    day: Daily?,
     city: String?
 ): CurrentWeatherEntity? {
     current ?: return null
@@ -57,8 +59,8 @@ fun mapToCurrentEntity(
         return CurrentWeatherEntity(
             city = city ?: "-",
             temp = temp?.toFloat() ?: 0f,
-            minTemp = minTemp,
-            maxTemp = maxTemp,
+            minTemp = min(minTemp, day?.temp?.min?.toFloat() ?: 100f),
+            maxTemp = max(maxTemp, day?.temp?.max?.toFloat() ?: -100f),
             feelsLike = feelsLike?.toFloat() ?: 0f,
             humidity = humidity,
             windSpeed = windSpeed,

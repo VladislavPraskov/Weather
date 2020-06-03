@@ -7,6 +7,6 @@ data class CityUI(
     val offsetSec: Long,
     val lg: Double,
     val lt: Double,
-    val isCurrentSelected: Boolean = false,
+    var isCurrentSelected: Boolean = false,
     val countryAndPostCode: String
 )

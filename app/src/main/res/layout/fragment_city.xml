@@ -54,27 +54,45 @@
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:background="@drawable/dark_shape"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/header">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycler_view"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:background="@drawable/dark_shape"
-            android:clipToPadding="false"
-            android:overScrollMode="never"
-            android:paddingBottom="8dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/header"
-            tools:itemCount="8"
-            tools:listitem="@layout/city_item" />
+            android:layout_height="match_parent">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:paddingBottom="8dp"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/header"
+                tools:itemCount="8"
+                tools:listitem="@layout/city_item" />
+
+            <TextView
+                android:id="@+id/noResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center|top"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/no_results_found"
+                android:layout_marginTop="160dp"
+                android:textColor="@color/white"
+                android:visibility="gone"
+                android:textSize="24sp" />
+        </FrameLayout>
     </com.example.weather.utils.view.SwipeRefreshWithDelay>
+
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"

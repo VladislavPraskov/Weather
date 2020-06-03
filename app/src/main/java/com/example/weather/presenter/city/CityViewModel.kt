@@ -22,7 +22,6 @@ class CityViewModel(app: Application, private val interactor: CityInteractor) :
                 emit(interactor.saveCity(action.city))
             }
             is CityAction.LoadCityFromDB -> {
-                emit(CityResultAction.Loading)
                 emit(interactor.loadCityFromCache())
             }
             is CityAction.DeleteCity -> {
@@ -46,13 +45,17 @@ class CityViewModel(app: Application, private val interactor: CityInteractor) :
             )
             is CityResultAction.Success -> currentViewState.copy(
                 isLoading = false,
+                isNotFound = result.data.isNullOrEmpty(),
                 data = result.data.toEvent()
             )
             is CityResultAction.CitySaved -> currentViewState.copy(
                 isLoading = false,
                 data = result.cachedCity.toEvent()
             )
-            is CityResultAction.SuccessEmpty -> currentViewState.copy(isLoading = false) //todo
+            is CityResultAction.SuccessEmpty -> currentViewState.copy(
+                isLoading = false,
+                isNotFound = true
+            ) //todo
         }
     }
 }

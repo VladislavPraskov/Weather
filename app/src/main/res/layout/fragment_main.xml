@@ -128,30 +128,40 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"
             android:padding="8dp"
-            app:layout_constraintBottom_toBottomOf="@+id/menu"
+            app:layout_constraintBottom_toBottomOf="@+id/details"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/menu"
+            app:layout_constraintTop_toTopOf="@+id/details"
             app:srcCompat="@drawable/add_city" />
 
-        <TextView
-            android:id="@+id/cityName"
-            style="@style/main_text_style"
+        <HorizontalScrollView
+            android:id="@+id/scroll"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="7dp"
             android:layout_marginEnd="16dp"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center"
-            android:paddingLeft="8dp"
-            android:text="@string/default_city_text"
-            android:textSize="34sp"
+            android:fillViewport="true"
+            android:overScrollMode="never"
+            android:scrollbarThumbHorizontal="@android:color/transparent"
             app:layout_constraintEnd_toStartOf="@+id/addCity"
-            app:layout_constraintStart_toEndOf="@+id/menu"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/details"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/cityName"
+                style="@style/main_text_style"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
+                android:gravity="center"
+                android:maxLines="1"
+                android:paddingLeft="8dp"
+                android:text="@string/default_city_text"
+                android:textSize="34sp" />
+        </HorizontalScrollView>
 
         <ImageView
-            android:id="@+id/menu"
+            android:id="@+id/details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -168,12 +178,12 @@
             android:fontFamily="sans-serif-light"
             android:paddingLeft="8dp"
             android:text="@string/default_time_text"
-            tools:text="Mon, 6:44 AM"
             android:textColor="@color/white"
             android:textSize="19sp"
-            app:layout_constraintEnd_toEndOf="@+id/cityName"
-            app:layout_constraintStart_toStartOf="@+id/cityName"
-            app:layout_constraintTop_toBottomOf="@+id/cityName" />
+            app:layout_constraintEnd_toEndOf="@+id/scroll"
+            app:layout_constraintStart_toStartOf="@+id/scroll"
+            app:layout_constraintTop_toBottomOf="@+id/scroll"
+            tools:text="Mon, 6:44 AM" />
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline"

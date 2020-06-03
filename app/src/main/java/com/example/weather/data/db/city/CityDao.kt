@@ -17,7 +17,7 @@ interface CityDao {
     @Query("DELETE FROM city_entity WHERE countryAndPostCode = :countryAndPostCode")
     fun deleteCity(countryAndPostCode: String)
 
-    @Query("SELECT * FROM city_entity")
+    @Query("SELECT * FROM city_entity ORDER BY cityName ASC")
     fun loadCities(): List<CityEntity>
 
     @Query("UPDATE city_entity SET isCurrentSelected = 1 WHERE countryAndPostCode = :countryAndPostCode")

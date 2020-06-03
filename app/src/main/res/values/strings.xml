@@ -22,6 +22,7 @@
     <string name="default_city_text">City</string>
     <string name="default_condition_text">Condition</string>
     <string name="default_min_temp_text">min °С</string>
+    <string name="no_results_found">No results</string>
 
 
 </resources>
