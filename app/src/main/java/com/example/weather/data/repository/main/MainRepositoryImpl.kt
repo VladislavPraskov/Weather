@@ -12,6 +12,10 @@ import com.example.weather.utils.network.ApiResult
 import com.example.weather.utils.network.NetworkBoundResource
 import com.example.weather.utils.network.safeCacheCall
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
+import kotlin.coroutines.CoroutineContext
+import kotlin.coroutines.coroutineContext
 
 class MainRepositoryImpl(
     val api: ApiService,
@@ -19,7 +23,10 @@ class MainRepositoryImpl(
     val locator: Locator
 ) : MainRepository {
 
-    override fun getCurrentCity(): LiveData<MainResultAction> {
+    var job = Job()
+    override suspend fun getCurrentCity(): LiveData<MainResultAction> {
+        job.cancel()
+        job = Job()
         return object :
             NetworkBoundResource<HourlyWeather, WeatherUI?, MainResultAction>() {
             override suspend fun networkRequest(): HourlyWeather? {
@@ -56,6 +63,6 @@ class MainRepositoryImpl(
                 return MainResultAction.Error(error)
             }
 
-        }.result.asLiveData(Dispatchers.IO)
+        }.result.asLiveData(job + coroutineContext)
     }
 }

@@ -13,5 +13,5 @@ data class HourEntity(
     val timeOffset: Int,
     val temp: Float = 0f,
     val timeDebug: String,
-    val iconId: Int
+    var iconId: Int
 )

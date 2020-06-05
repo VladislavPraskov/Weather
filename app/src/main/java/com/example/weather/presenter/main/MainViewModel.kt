@@ -2,7 +2,7 @@ package com.example.weather.presenter.main
 
 import android.app.Application
 import androidx.lifecycle.liveData
-import com.devpraskov.android_ext.currentTimeSec
+import androidx.lifecycle.viewModelScope
 import com.devpraskov.android_ext.dayAndTime
 import com.example.weather.domain.main.MainInteractor
 import com.example.weather.presenter.main.mvi.MainAction
@@ -11,23 +11,24 @@ import com.example.weather.presenter.main.mvi.MainViewState
 import com.example.weather.utils.error.ErrorMVI
 import com.example.weather.utils.models.toEvent
 import com.example.weather.utils.mvi.BaseViewModel
-import java.util.*
+import kotlinx.coroutines.Dispatchers
 
 
 class MainViewModel(app: Application, private val interactor: MainInteractor) :
     BaseViewModel<MainAction, MainViewState, MainResultAction>(app, MainViewState()) {
 
-    override fun handleNewAction(action: MainAction) = liveData<MainResultAction> {
-        when (action) {
-            is MainAction.LoadCurrentCity -> {
-                emit(MainResultAction.Loading())
-                emitSource(interactor.getCurrentCity())
-            }
-            is MainAction.UpdateTime -> {
-                emit(MainResultAction.UpdateTime)
+    override fun handleNewAction(action: MainAction) =
+        liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
+            when (action) {
+                is MainAction.LoadCurrentCity -> {
+                    emit(MainResultAction.Loading())
+                    emitSource(interactor.getCurrentCity())
+                }
+                is MainAction.UpdateTime -> {
+                    emit(MainResultAction.UpdateTime)
+                }
             }
         }
-    }
 
     override fun reduceNewViewState(
         currentState: MainViewState,

@@ -66,11 +66,18 @@ class Locator(context: Context) {
                     utc = getUtcOffsetStr(),
                     offsetSec = getUtcOffsetSec(),
                     isCurrentSelected = true,
-                    countryAndPostCode = addresses.getOrNull(0)?.let { it.countryCode + it.postalCode }
-                        ?: ""
+                    idString = getId(addresses, currentLocation)
                 )
             )
         }
+    }
+
+
+    private fun getId(address: List<Address>, currentLocation: Location?): String {
+        val code = address.getOrNull(0)?.countryCode?.toLowerCase()
+        val lngLt =
+            "%.4f".format(currentLocation?.longitude) + "%.4f".format(currentLocation?.latitude)
+        return code + lngLt
     }
 
     data class ResultLocation(

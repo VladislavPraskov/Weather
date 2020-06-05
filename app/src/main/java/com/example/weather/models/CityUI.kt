@@ -5,8 +5,9 @@ data class CityUI(
     val utc: String,
     val country: String,
     val offsetSec: Long,
+    var isCache: Boolean = false,
     val lg: Double,
     val lt: Double,
     var isCurrentSelected: Boolean = false,
-    val countryAndPostCode: String
+    val idString: String
 )

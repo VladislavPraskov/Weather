@@ -7,7 +7,7 @@ import com.example.weather.presenter.city.CityResultAction
 
 class CityInteractorImpl(private val repository: CityRepository) : CityInteractor {
 
-    override fun loadByQuery(q: String): LiveData<CityResultAction> {
+    override suspend fun loadByQuery(q: String): LiveData<CityResultAction> {
         return repository.loadByQuery(q)
     }
 
@@ -15,8 +15,8 @@ class CityInteractorImpl(private val repository: CityRepository) : CityInteracto
         return repository.saveCity(city)
     }
 
-    override suspend fun deleteCity(countryAndPostCode: String) {
-        repository.deleteCity(countryAndPostCode)
+    override suspend fun deleteCity(idString: String) {
+        repository.deleteCity(idString)
     }
 
     override suspend fun loadCityFromCache(): CityResultAction {

@@ -6,9 +6,9 @@ import androidx.room.PrimaryKey
 import com.example.weather.models.main.WeatherForecast
 import kotlin.random.Random
 
-@Entity(tableName = "city_entity", primaryKeys = ["countryAndPostCode"])
+@Entity(tableName = "city_entity", primaryKeys = ["idString"])
 data class CityEntity(
-    val countryAndPostCode: String = "",
+    val idString: String = "",
     val lat: Double = 0.0,
     val lon: Double = 0.0,
     val cityName: String = "",

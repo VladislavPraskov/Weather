@@ -5,8 +5,8 @@ import com.example.weather.models.CityUI
 import com.example.weather.presenter.city.CityResultAction
 
 interface CityRepository {
-    fun loadByQuery(q: String): LiveData<CityResultAction>
+    suspend fun loadByQuery(q: String): LiveData<CityResultAction>
     suspend fun saveCity(city: CityUI): CityResultAction
     suspend fun loadCityFromCache(): CityResultAction
-    suspend fun deleteCity(countryAndPostCode: String)
+    suspend fun deleteCity(idString: String)
 }

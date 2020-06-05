@@ -1,6 +1,7 @@
 package com.example.weather.utils.network
 
 import com.example.weather.R
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
 
@@ -8,7 +9,7 @@ import kotlinx.coroutines.flow.flow
  * отображаем, потом из сети,
  * сохраняем в кэш и снова отображаем*/
 abstract class NetworkBoundResource<NetworkObj, CacheObj, ResultAction>(private val isCacheNeeded: Boolean = true) {
-    val result = flow {
+    val result = flow() {
         // ****** STEP 1: VIEW CACHE ******
 
         //не лезим в базу, если не надо

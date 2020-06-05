@@ -10,11 +10,22 @@
     android:background="@drawable/city_view_shape"
     android:elevation="4dp">
 
+    <View
+        android:id="@+id/cacheIndicator"
+        android:layout_width="5dp"
+        android:layout_height="5dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/circle"
+        android:backgroundTint="#5E5E90"
+        app:layout_constraintBottom_toBottomOf="@+id/cityName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cityName" />
+
     <TextView
         android:id="@+id/cityName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
         android:layout_marginEnd="8dp"
         android:ellipsize="end"
         android:fontFamily="sans-serif-light"
@@ -26,10 +37,11 @@
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/barrier"
+        app:layout_constraintHorizontal_bias="0.01"
         app:layout_constraintHorizontal_chainStyle="packed"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/cacheIndicator"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constrainedWidth="true"
+        app:layout_constraintWidth_default="wrap"
         tools:text="Москва" />
 
     <TextView

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.devpraskov.android_ext.onClick
 import com.devpraskov.android_ext.show
+import com.devpraskov.android_ext.visibility
 import com.example.weather.R
 import com.example.weather.models.CityUI
 import com.example.weather.presenter.city.CityItemTouchHelper.Companion.DISABLE_SWIPE_TAG
@@ -24,7 +25,7 @@ class CityAdapter(private val click: (CityUI) -> Unit) :
     companion object {
         private val DIFF_CALLBACK = object : DiffUtil.ItemCallback<CityUI>() {
             override fun areItemsTheSame(oldItem: CityUI, newItem: CityUI): Boolean {
-                return oldItem.countryAndPostCode == newItem.countryAndPostCode
+                return oldItem.idString == newItem.idString
             }
 
             override fun areContentsTheSame(oldItem: CityUI, newItem: CityUI): Boolean {
@@ -67,6 +68,7 @@ class CityAdapter(private val click: (CityUI) -> Unit) :
             cityName?.text = item.cityName
             gmt.text = item.utc
             locality.text = item.country
+            cacheIndicator.visibility(item.isCache)
             if (item.isCurrentSelected) {
                 checked.show()
                 animateChecked(checked?.drawable)

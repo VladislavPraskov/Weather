@@ -52,6 +52,9 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             swipeRefreshLayout?.isRefreshing = state.isLoading
             noResult.visibilityGone(state.isNotFound)
             recycler_view.visibilityGone(!state.isNotFound)
+            if (state.error?.code == 400) {
+
+            }
             val cityList = state.data.getIfNotBeenHandled() ?: return@Observer
             adapter.submitList(cityList, state.isCache)
         })
@@ -72,8 +75,8 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             else clearIcon.hideAnimateAlpha()
         }
         editText?.debounceAfterTextChanged(coroutineScope = lifecycle.coroutineScope) { q ->
-            if (q.isNotEmpty()) viewModel.setNextAction(CityAction.LoadByQuery(q.trim()))
-            else viewModel.setNextAction(CityAction.LoadCityFromDB)
+            if (q.length > 1) viewModel.setNextAction(CityAction.LoadByQuery(q.trim()))
+            else if (q.isEmpty()) viewModel.setNextAction(CityAction.LoadCityFromDB)
         }
 
         clearIcon?.onClick {

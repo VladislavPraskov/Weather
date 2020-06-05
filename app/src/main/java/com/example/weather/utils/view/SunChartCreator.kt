@@ -20,7 +20,38 @@ import kotlin.math.sqrt
 
 class SunChartCreator(val f: Fragment, private val chart: LineChart) {
 
+    companion object {
+        private var sum = 0f
+        private val xRaw = FloatArray(61) { i -> sum += 2 / 61f; sum }.toMutableList()
+            .apply { removeAt(lastIndex) }
+        private val yPoints = xRaw.map { x -> sqrt(2f * x - x * x) * 2 }
+    }
+
     fun initChart(sunrise: Float, sunset: Float, time: Float) {
+        val sunXPosition = (time - sunrise) / (sunset - sunrise) * 2
+        val sunYPosition = sqrt(2f * sunXPosition - sunXPosition * sunXPosition) * 2
+        val values = xRaw.mapIndexed { index, x -> Entry(x, yPoints[index]) }
+            .toMutableList()
+        val sun =
+            Entry(sunXPosition, sunYPosition, f.requireContext().getDrawable(R.drawable.sun))
+        values.add(sun)
+        values.sortBy { it.x }
+        if (sun != values[values.lastIndex] && sun != values[values.lastIndex - 1]) {
+            values.removeAt(values.lastIndex)
+            values.removeAt(values.lastIndex)
+        }
+
+        if (chart.data == null || chart.data.dataSetCount == 0) {
+            initChartView()
+            initXAxis()
+            initYAxis()
+        }
+
+        chart.data = getData(values, values.indexOf(sun))
+        chart.invalidate()
+    }
+
+    private fun initChartView() {
         chart.apply {
             axisLeft.isEnabled = false
             axisRight.isEnabled = false
@@ -32,28 +63,6 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
             extraRightOffset = 5f
             extraTopOffset = 5f
         }
-//        chart.animateXY(500, 500)
-        val sunXPosition = (time - sunrise) / (sunset - sunrise) * 2
-        val sunYPosition = sqrt(2f * sunXPosition - sunXPosition * sunXPosition) * 2
-        val sun =
-            Entry(sunXPosition, sunYPosition, f.requireContext().getDrawable(R.drawable.sun_icon))
-        var sum = 0f
-        val xPoints = FloatArray(61) { i -> sum += 2 / 61f; sum }.toMutableList()
-        xPoints.removeAt(xPoints.lastIndex)
-        val yPoints = xPoints.map { x -> sqrt(2f * x - x * x) * 2 }
-        val values = xPoints.mapIndexed { index, x ->
-            Entry(x, yPoints[index])
-        }.toMutableList()
-        values.add(sun)
-        values.sortBy { it.x }
-        if (sun != values[values.lastIndex] && sun != values[values.lastIndex - 1]) {
-            values.removeAt(values.lastIndex)
-            values.removeAt(values.lastIndex)
-        }
-        initXAxis()
-        initYAxis()
-        chart.data = getData(values, values.indexOf(sun))
-        chart.invalidate()
     }
 
     private fun initYAxis() {
@@ -71,26 +80,10 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
             setDrawLabels(false)
             axisLineColor = f.getColor(R.color.lineColor)
             setDrawAxisLine(false) //граница графика сверху
-            valueFormatter = object : ValueFormatter() {
-                override fun getFormattedValue(value: Float): String {
-                    val current = 0f
-                    return formatXAxis(value, current)
-                }
-            }
             axisMinimum = 0f
             axisMaximum = 2.001f
         }
-
     }
-
-    fun formatXAxis(value: Float, current: Float): String {
-        if (value == 0f) return "NOW"
-        var h = current - 12
-        val postfix = if (h < 0) "am" else "pm"
-        h = if (h <= 0 && h != -12f) h + 12 else h
-        return "%.0f".format(h.absoluteValue) + postfix
-    }
-
 
     private fun getData(
         values: List<Entry>,
@@ -98,7 +91,6 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
     ): LineData {
 
         val sun = values.getOrNull(indexSun)
-
         val listBefore = if (indexSun - 2 > 0) values.subList(
             0,
             indexSun - 2
@@ -113,6 +105,7 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         }
         //график до иконки
         val set1 = getSet(listBefore, false)
+        //график до после
         val set2 = getSet(listAfter)
 
         //Иконка солнца
@@ -165,11 +158,6 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
             addEntry(Entry(-0.5f, yLine))
             addEntry(Entry(2.5f, yLine))
         }
-//         create marker to display box when values are selected
-
-//        val mv = ChartDataView(f.requireContext(), R.layout.chart_data_text_view)
-//        mv.chartView = chart
-//        chart.marker = mv
 
         val data = LineData()
         data.addDataSet(set1)
@@ -178,7 +166,6 @@ class SunChartCreator(val f: Fragment, private val chart: LineChart) {
         data.addDataSet(set4)
         data.addDataSet(set5)
         data.setDrawValues(false)
-
         return data
     }
 
