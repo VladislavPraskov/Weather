@@ -67,13 +67,10 @@ fun mapToCurrentEntity(
             maxTemp = tempList.maxBy { it } ?: 0f
             minTemp = tempList.minBy { it } ?: 0f
         }
-    val currentT =
-        hours?.find { abs((it?.dt ?: 0) - beginOfHour()) < 3600 }?.temp?.toFloat()
-            ?: current.temp?.toFloat() ?: 0f
     current.apply {
         return CurrentWeatherEntity(
             city = city ?: "-",
-            temp = currentT,
+            temp = current.temp?.toFloat() ?: 0f,
             timeOffset = timezoneOffset?.toInt() ?: 0,
             minTemp = min(minTemp, day?.temp?.min?.toFloat() ?: 100f),
             maxTemp = max(maxTemp, day?.temp?.max?.toFloat() ?: -100f),
@@ -108,7 +105,10 @@ fun mapToHourUI(hour: HourEntity): HourUI {
     )
 }
 
-fun mapToCurrentUI(current: CurrentWeatherEntity): CurrentUI {
+fun mapToCurrentUI(
+    current: CurrentWeatherEntity,
+    hourUi: HourUI?
+): CurrentUI {
     fun getHourAndMinute(minutes: Long): String {
         val hour = minutes / 60
         val minute = minutes % 60
@@ -123,7 +123,7 @@ fun mapToCurrentUI(current: CurrentWeatherEntity): CurrentUI {
     current.apply {
         return CurrentUI(
             city = city,
-            temp = temp.roundToInt().toString(),
+            temp = (hourUi?.temp ?: temp).roundToInt().toString(),
             maxTemp = maxTemp.roundToInt().toString() + "°" + "C",
             minTemp = minTemp.roundToInt().toString() + "°" + "C",
             sunrise = sunrise.toFloat(),
@@ -139,7 +139,7 @@ fun mapToCurrentUI(current: CurrentWeatherEntity): CurrentUI {
             pressure = "${((pressure ?: 0) * 0.75).roundToInt()} mm",
             visibility = getVisibility(visibility ?: 0),
             condition = condition,
-            iconId = iconId,
+            iconId = hourUi?.iconId ?: iconId,
             dewPoint = dewPoint?.roundToInt()?.toString() + "°"
         )
     }

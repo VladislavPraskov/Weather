@@ -42,8 +42,8 @@ abstract class SharedDao(val db: WeatherDataBase) {
     @Transaction
     open fun getWeather(): WeatherUI? {
         val city = db.cityDao.getCurrentCity()?.cityName ?: return null
-        val current = mapToCurrentUI(getCurrentWeather(city))
         val hours = getHourlyWeatherForecast(city).map { entity -> mapToHourUI(entity) }
+        val current = mapToCurrentUI(getCurrentWeather(city), hours.getOrNull(0))
         val days = getDailyWeatherForecast(city).map { mapToDayUI(it) }
         return WeatherUI(current = current, hours = hours, days = days)
     }
