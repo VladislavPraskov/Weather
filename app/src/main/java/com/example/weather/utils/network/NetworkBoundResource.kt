@@ -43,17 +43,14 @@ abstract class NetworkBoundResource<NetworkObj, CacheObj, ResultAction>(private 
                     )
                 }
             }
-            is ApiResult.NetworkError -> {
-                if (apiResult.code == NETWORK_ERROR_CODE) return@flow
-                else emit(mapErrorToResultAction(apiResult))
-            }
+            is ApiResult.NetworkError -> emit(mapErrorToResultAction(apiResult))
         }
     }
 
     abstract suspend fun networkRequest(): NetworkObj?
     abstract suspend fun retrieveCache(): CacheObj?
     abstract suspend fun saveCache(networkObject: NetworkObj)
-    abstract fun mapToResultAction(cache: CacheObj?, isCache: Boolean): ResultAction //isFirst - до или после запроса в сеть
+    abstract fun mapToResultAction(cache: CacheObj?, isCache: Boolean): ResultAction
     abstract fun mapErrorToResultAction(error: ApiResult.NetworkError?): ResultAction
 
 }

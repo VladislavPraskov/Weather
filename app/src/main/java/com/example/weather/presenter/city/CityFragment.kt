@@ -10,6 +10,10 @@ import com.devpraskov.android_ext.*
 import com.example.weather.R
 import com.example.weather.models.CityUI
 import com.example.weather.presenter.main.MainFragment
+import com.example.weather.utils.error.ErrorMVI
+import com.example.weather.utils.network.NETWORK_ERROR_CODE
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import kotlinx.android.synthetic.main.fragment_city.*
 import org.koin.androidx.viewmodel.ext.android.viewModel
 
@@ -52,12 +56,16 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             swipeRefreshLayout?.isRefreshing = state.isLoading
             noResult.visibilityGone(state.isNotFound)
             recycler_view.visibilityGone(!state.isNotFound)
-            if (state.error?.code == 400) {
-
-            }
+            showError(state.error.getIfNotBeenHandled())
             val cityList = state.data.getIfNotBeenHandled() ?: return@Observer
             adapter.submitList(cityList, state.isCache)
         })
+    }
+
+    private fun showError(error: ErrorMVI?) {
+        error ?: return
+        error.message ?: return
+        Snackbar.make(root, error.message, LENGTH_LONG).show()
     }
 
     private fun onClick(city: CityUI) {

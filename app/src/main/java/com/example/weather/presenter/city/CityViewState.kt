@@ -8,6 +8,6 @@ data class CityViewState(
     val isLoading: Boolean = false,
     val isCache: Boolean = false,
     val isNotFound: Boolean = false,
-    val error: ErrorMVI? = null,
+    val error: Event<ErrorMVI?> = Event(),
     val data: Event<List<CityUI>?> = Event()
 )

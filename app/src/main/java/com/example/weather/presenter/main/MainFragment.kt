@@ -17,9 +17,12 @@ import com.example.weather.R
 import com.example.weather.presenter.city.CityFragment
 import com.example.weather.presenter.main.mvi.MainAction
 import com.example.weather.presenter.second.DetailsFragment
+import com.example.weather.utils.error.ErrorMVI
 import com.example.weather.utils.view.ForecastChartCreator
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.fragment_city.*
 import kotlinx.android.synthetic.main.fragment_main.*
+import kotlinx.android.synthetic.main.fragment_main.swipeRefreshLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
 import java.util.*
 import java.util.Calendar.SECOND
@@ -99,6 +102,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
             with(data.current) {
                 cityName?.newText = city
                 date?.newText = state.time
+                showError(state.error.getIfNotBeenHandled())
                 iconId.let { iconState?.setImageResource(it) }
                 currentState?.newText = condition
                 currentTemperature?.newText = temp
@@ -109,6 +113,13 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                         .initHourlyForecastChart(data.hours)
             }
         })
+    }
+
+
+    private fun showError(error: ErrorMVI?) {
+        error ?: return
+        error.message ?: return
+        Snackbar.make(main, error.message, Snackbar.LENGTH_LONG).show()
     }
 
     private fun initListeners() {

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.example.weather.data.db.WeatherDataBase
 import com.example.weather.data.network.CityApiService
-import com.example.weather.data.network.NetworkResourse
+import com.example.weather.data.network.NetworkResource
 import com.example.weather.models.CityUI
 import com.example.weather.presenter.city.CityResultAction
 import com.example.weather.utils.mapToCityUI
@@ -21,7 +21,7 @@ class CityRepositoryImpl(val db: WeatherDataBase, private val api: CityApiServic
     override suspend fun loadByQuery(q: String): LiveData<CityResultAction> {
         loadByQueryJob.cancel()
         loadByQueryJob = Job()
-        return NetworkResourse.create(
+        return NetworkResource.create(
             apiCall = { api.getCityByQuery(q) },
             onSuccess = { success -> //здесь мёржим лист с апи и из кэша, из кэша берём то что встречается в api response
                 val cache = safeCacheCall(cacheCall = { db.cityDao.loadCities() })

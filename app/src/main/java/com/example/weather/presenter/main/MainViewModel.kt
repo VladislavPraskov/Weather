@@ -35,12 +35,16 @@ class MainViewModel(app: Application, private val interactor: MainInteractor) :
         result: MainResultAction
     ): MainViewState {
         return when (result) {
-            is MainResultAction.Loading -> currentState.copy(isLoading = true)
-            is MainResultAction.SuccessEmpty -> currentState.copy(isLoading = result.isLoading)
+            is MainResultAction.Loading -> currentState.copy(
+                isLoading = true
+            )
+            is MainResultAction.SuccessEmpty -> currentState.copy(
+                isLoading = result.isLoading
+            )
             is MainResultAction.Nothing -> currentState
             is MainResultAction.Error -> currentState.copy(
                 isLoading = false,
-                error = ErrorMVI.create(context, error = result.networkError)
+                error = ErrorMVI.create(context, error = result.networkError).toEvent()
             )
             is MainResultAction.Success -> currentState.copy(
                 isLoading = result.isLoading,
@@ -52,7 +56,6 @@ class MainViewModel(app: Application, private val interactor: MainInteractor) :
                 isLoading = false,
                 time = dayAndTime(offsetSec = currentState.timeOffset)
             )
-
         }
     }
 }

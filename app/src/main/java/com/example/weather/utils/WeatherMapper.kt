@@ -10,6 +10,7 @@ import com.example.weather.models.main.HourUI
 import com.example.weather.models.main.HourlyWeather.*
 import com.example.weather.models.main.getIconRes
 import java.util.*
+import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -66,10 +67,13 @@ fun mapToCurrentEntity(
             maxTemp = tempList.maxBy { it } ?: 0f
             minTemp = tempList.minBy { it } ?: 0f
         }
+    val currentT =
+        hours?.find { abs((it?.dt ?: 0) - beginOfHour()) < 3600 }?.temp?.toFloat()
+            ?: current.temp?.toFloat() ?: 0f
     current.apply {
         return CurrentWeatherEntity(
             city = city ?: "-",
-            temp = temp?.toFloat() ?: 0f,
+            temp = currentT,
             timeOffset = timezoneOffset?.toInt() ?: 0,
             minTemp = min(minTemp, day?.temp?.min?.toFloat() ?: 100f),
             maxTemp = max(maxTemp, day?.temp?.max?.toFloat() ?: -100f),

@@ -40,10 +40,12 @@ class CityViewModel(app: Application, private val interactor: CityInteractor) :
             is CityResultAction.Loading -> {
                 currentState.copy(isLoading = true)
             }
-            CityResultAction.Nothing -> currentState.copy(isLoading = false)
+            CityResultAction.Nothing -> currentState.copy(
+                isLoading = false
+            )
             is CityResultAction.Error -> currentState.copy(
                 isLoading = false,
-                error = ErrorMVI.create(context, error = result.networkError)
+                error = ErrorMVI.create(context, error = result.networkError).toEvent()
             )
             is CityResultAction.Success -> currentState.copy(
                 isLoading = false,
@@ -59,7 +61,7 @@ class CityViewModel(app: Application, private val interactor: CityInteractor) :
             is CityResultAction.SuccessEmpty -> currentState.copy(
                 isLoading = false,
                 isNotFound = true
-            ) //todo
+            )
         }
     }
 }

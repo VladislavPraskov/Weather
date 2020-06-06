@@ -2,12 +2,11 @@ package com.example.weather.data.network
 
 
 import com.example.weather.utils.network.ApiResult
-import com.example.weather.utils.network.NETWORK_ERROR_CODE
 import com.example.weather.utils.network.safeApiCall
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
-abstract class NetworkResourse<NetworkObj, ResultAction>(
+abstract class NetworkResource<NetworkObj, ResultAction>(
     private val apiCall: suspend () -> NetworkObj,
     private val onSuccess:suspend (ApiResult.Success<NetworkObj?>) -> ResultAction,
     private val onError: suspend (ApiResult.NetworkError) -> ResultAction
@@ -17,10 +16,7 @@ abstract class NetworkResourse<NetworkObj, ResultAction>(
         delay(1)
         when (apiResult) {
             is ApiResult.Success -> emit(onSuccess.invoke(apiResult))
-            is ApiResult.NetworkError -> {
-                if (apiResult.code == NETWORK_ERROR_CODE) return@flow
-                else emit(onError.invoke(apiResult))
-            }
+            is ApiResult.NetworkError -> emit(onError.invoke(apiResult))
         }
     }
 
@@ -29,9 +25,9 @@ abstract class NetworkResourse<NetworkObj, ResultAction>(
             apiCall: suspend () -> NetworkObj,
             onSuccess: suspend (ApiResult.Success<NetworkObj?>) -> ResultAction,
             onError: suspend (ApiResult.NetworkError) -> ResultAction
-        ): NetworkResourse<NetworkObj, ResultAction> {
+        ): NetworkResource<NetworkObj, ResultAction> {
             return object :
-                NetworkResourse<NetworkObj, ResultAction>(apiCall, onSuccess, onError) {}
+                NetworkResource<NetworkObj, ResultAction>(apiCall, onSuccess, onError) {}
         }
     }
 }

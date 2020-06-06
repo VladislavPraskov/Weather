@@ -6,7 +6,7 @@ import com.example.weather.utils.models.Event
 
 data class MainViewState(
     val isLoading: Boolean = false,
-    val error: ErrorMVI? = null,
+    val error: Event<ErrorMVI?> = Event(),
     val time: String? = null,
     val timeOffset: Int = 0,
     val data: Event<WeatherUI?> = Event()
