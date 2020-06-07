@@ -25,7 +25,7 @@ abstract class SharedDao(val db: WeatherDataBase) {
     @Query("SELECT * FROM current_weather_entity WHERE city =:cityName LIMIT 1")
     abstract fun getCurrentWeather(
         cityName: String
-    ): CurrentWeatherEntity
+    ): CurrentWeatherEntity?
 
     @Query("SELECT * FROM hour_entity WHERE city = :cityName AND time > :dateFrom LIMIT 6")
     abstract fun getHourlyWeatherForecast(
@@ -45,6 +45,7 @@ abstract class SharedDao(val db: WeatherDataBase) {
         val hours = getHourlyWeatherForecast(city).map { entity -> mapToHourUI(entity) }
         val current = mapToCurrentUI(getCurrentWeather(city), hours.getOrNull(0))
         val days = getDailyWeatherForecast(city).map { mapToDayUI(it) }
+        current ?: return null
         return WeatherUI(current = current, hours = hours, days = days)
     }
 

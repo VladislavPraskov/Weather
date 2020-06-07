@@ -1,16 +1,17 @@
 package com.example.weather.models.main
 
 import android.os.Parcelable
+import com.example.weather.R
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class CurrentUI(
-    val city: String,
-    val temp: String = "",
+    val city: String = "City",
+    val temp: String = "0",
     val time: Float = 0f,
     val timeOffset: Int = 0,
-    var maxTemp: String = "",
-    var minTemp: String = "",
+    var maxTemp: String = "min",
+    var minTemp: String = "max",
     var sunrise: Float = 0f,
     var sunset: Float = 0f,
     var sunriseH: String = "",
@@ -22,6 +23,8 @@ data class CurrentUI(
     val pressure: String = "",
     val visibility: String = "",
     val condition: String? = null,
-    val iconId: Int,
+    val iconId: Int = R.drawable.cloud_icon,
+    val colorStartId: Int = 0x6200EE,
+    val colorEndId: Int = 0x6200EE,
     val dewPoint: String = ""
 ) : Parcelable

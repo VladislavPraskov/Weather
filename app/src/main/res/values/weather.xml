@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <color name="thunderNight_0_0">#1e2a59</color>
+    <color name="thunderNight_0_1">#7a638d</color>
+    <color name="thunderNight_1_0">#6D7F99</color>
+    <color name="thunderNight_1_1">#0E1019</color>
+
+    <color name="thunderDay_0_0">#7EA2BC</color>
+    <color name="thunderDay_0_1">#4E505D</color>
+    <color name="thunderDay_1_0">#C0B3C8</color>
+    <color name="thunderDay_1_1">#020414</color>
+
+    <color name="drizzleDay_0_0">#6D6C64</color>
+    <color name="drizzleDay_0_1">#162D3D</color>
+    <color name="drizzleDay_1_0">#A2B4B4</color>
+    <color name="drizzleDay_1_1">#223840</color>
+    <color name="drizzleDay_2_0">#82796A</color>
+    <color name="drizzleDay_2_1">#080F19</color>
+
+    <color name="drizzleNight_0_0">#1C304F</color>
+    <color name="drizzleNight_0_1">#15213A</color>
+    <color name="drizzleNight_1_0">#545969</color>
+    <color name="drizzleNight_1_1">#141420</color>
+
+    <!--    todo-->
+    <color name="rainSun_0_0">#DFC6A7</color>
+    <color name="rainSun_0_1">#141420</color>
+    <color name="rainSun_1_0">#988A7D</color>
+    <color name="rainSun_1_1">#838391</color>
+    <color name="rainSun_2_0">#CDB2A1</color>
+    <color name="rainSun_2_1">#868388</color>
+    <color name="rainSun_3_0">#FBE3A3</color>
+    <color name="rainSun_3_1">#81715F</color>
+
+    <color name="rainSnow_0_0">#C7D7E7</color>
+    <color name="rainSnow_0_1">#3E5C7C</color>
+
+    <color name="snow_0_0">#DDEFFF</color>
+    <color name="snow_0_1">#B3C6F1</color>
+    <color name="snow_1_0">#F8E7ED</color>
+    <color name="snow_1_1">#B7C1DB</color>
+    <color name="snow_2_0">#FFE9F9</color>
+    <color name="snow_2_1">#ABA4C4</color>
+    <color name="snow_3_0">#FFDBD5</color>
+    <color name="snow_3_1">#DDE8F4</color>
+
+    <color name="fog_0_0">#E4E7F6</color>
+    <color name="fog_0_1">#A2A2A2</color>
+    <color name="fog_1_0">#CCCBAF</color>
+    <color name="fog_1_1">#899187</color>
+    <color name="fog_2_0">#E7E4DD</color>
+    <color name="fog_2_1">#96918B</color>
+
+    <color name="sandstorm_0_0">#B17239</color>
+    <color name="sandstorm_0_1">#DBA660</color>
+    <color name="sandstorm_1_0">#AB5E32</color>
+    <color name="sandstorm_1_1">#E4CAB6</color>
+
+    <color name="tornado_0_0">#DBA660</color>
+    <color name="tornado_0_1">#B3957F</color>
+    <color name="tornado_1_0">#3E495B</color>
+    <color name="tornado_1_1">#928D91</color>
+
+    <color name="clearDay_0_0">#006EC3</color>
+    <color name="clearDay_0_1">#ACE1FF</color>
+    <color name="clearDay_1_0">#2C8EBB</color>
+    <color name="clearDay_1_1">#9BBECD</color>
+
+    <color name="clearNight_0_0">#093557</color>
+    <color name="clearNight_0_1">#1C5886</color>
+    <color name="clearNight_1_0">#152450</color>
+    <color name="clearNight_1_1">#6C6679</color>
+
+    <color name="cloudsLight_0_0">#BCB6B4</color>
+    <color name="cloudsLight_0_1">#EEE1C8</color>
+    <color name="cloudsLight_1_0">#DFDDDD</color>
+    <color name="cloudsLight_1_1">#EBE7F3</color>
+
+    <color name="cloudsHeavy_0_0">#414755</color>
+    <color name="cloudsHeavy_0_1">#959AA1</color>
+    <color name="cloudsHeavy_1_0">#73737B</color>
+    <color name="cloudsHeavy_1_1">#8E959F</color>
+</resources>

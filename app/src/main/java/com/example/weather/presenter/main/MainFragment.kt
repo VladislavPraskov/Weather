@@ -3,16 +3,15 @@ package com.example.weather.presenter.main
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.Color
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
-import com.devpraskov.android_ext.newText
-import com.devpraskov.android_ext.onClick
-import com.devpraskov.android_ext.snack
-import com.devpraskov.android_ext.statusBarColor
+import com.devpraskov.android_ext.*
 import com.example.weather.R
 import com.example.weather.presenter.city.CityFragment
 import com.example.weather.presenter.main.mvi.MainAction
@@ -50,6 +49,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     lateinit var handler: Handler
     private lateinit var runnable: Runnable
     var isUpdateCityNeeded = true
+    var currentColor = Pair(16507811, 8483167)
     private val currentSeconds: Long
         get() = Calendar.getInstance().get(SECOND).toLong()
     private val remainingSecondsInMinute: Long
@@ -64,7 +64,6 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun initViews() {
-        statusBarColor(Color.parseColor("#BC8DB8"))
         updateTimeEveryMinutes()
         chart.setNoDataText("")
     }
@@ -103,6 +102,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 cityName?.newText = city
                 date?.newText = state.time
                 showError(state.error.getIfNotBeenHandled())
+                currentColor = Pair(getColor(colorStartId), getColor(colorEndId))
+                setGradient(currentColor.first, currentColor.second)
                 iconId.let { iconState?.setImageResource(it) }
                 currentState?.newText = condition
                 currentTemperature?.newText = temp
@@ -115,6 +116,12 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         })
     }
 
+    private fun setGradient(colorStart: Int, colorEnd: Int) {
+        val gradient = GradientDrawable(TOP_BOTTOM, intArrayOf(colorStart, colorEnd))
+        main?.background = gradient
+        statusBarColor(colorStart)
+    }
+
 
     private fun showError(error: ErrorMVI?) {
         error ?: return
@@ -124,9 +131,8 @@ class MainFragment : Fragment(R.layout.fragment_main) {
 
     private fun initListeners() {
         addCity?.onClick {
-            val fragment = CityFragment()
+            val fragment = CityFragment.create(currentColor)
             fragment.setTargetFragment(this, 42)
-            /***/
             startFragment(fragment)
         }
         swipeRefreshLayout?.setOnRefreshListener { viewModel.setNextAction(MainAction.LoadCurrentCity) }

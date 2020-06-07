@@ -4,13 +4,13 @@ import com.devpraskov.android_ext.*
 import com.example.weather.data.db.current_weather.CurrentWeatherEntity
 import com.example.weather.data.db.day.DayEntity
 import com.example.weather.data.db.hour.HourEntity
+import com.example.weather.models.WeatherState
 import com.example.weather.models.main.CurrentUI
 import com.example.weather.models.main.DayUI
 import com.example.weather.models.main.HourUI
 import com.example.weather.models.main.HourlyWeather.*
 import com.example.weather.models.main.getIconRes
 import java.util.*
-import kotlin.math.abs
 import kotlin.math.min
 import kotlin.math.max
 import kotlin.math.roundToInt
@@ -67,7 +67,14 @@ fun mapToCurrentEntity(
             maxTemp = tempList.maxBy { it } ?: 0f
             minTemp = tempList.minBy { it } ?: 0f
         }
+
     current.apply {
+        val weatherState = WeatherState.create(
+            weatherId = weather?.getOrNull(0)?.id ?: 0,
+            sunrise = sunrise ?: 0,
+            sunset = sunset ?: 0,
+            iconId = weather?.getOrNull(0)?.icon ?: "d"
+        )
         return CurrentWeatherEntity(
             city = city ?: "-",
             temp = current.temp?.toFloat() ?: 0f,
@@ -80,9 +87,11 @@ fun mapToCurrentEntity(
             pressure = pressure,
             dewPoint = dewPoint,
             condition = weather?.getOrNull(0)?.main,
-            iconId = getIconRes(weather?.getOrNull(0)?.icon),
+            iconId = weatherState.iconId,
             sunrise = sunrise ?: 0,
             sunset = sunset ?: 0,
+            colorStartId = weatherState.colorStartId,
+            colorEndId = weatherState.colorEndId,
             visibility = visibility
         )
     }
@@ -106,9 +115,11 @@ fun mapToHourUI(hour: HourEntity): HourUI {
 }
 
 fun mapToCurrentUI(
-    current: CurrentWeatherEntity,
+    current: CurrentWeatherEntity?,
     hourUi: HourUI?
-): CurrentUI {
+): CurrentUI? {
+
+    current ?: return null
     fun getHourAndMinute(minutes: Long): String {
         val hour = minutes / 60
         val minute = minutes % 60
@@ -140,9 +151,9 @@ fun mapToCurrentUI(
             visibility = getVisibility(visibility ?: 0),
             condition = condition,
             iconId = hourUi?.iconId ?: iconId,
-            dewPoint = dewPoint?.roundToInt()?.toString() + "°"
+            dewPoint = dewPoint?.roundToInt()?.toString() + "°",
+            colorStartId = colorStartId,
+            colorEndId = colorEndId
         )
     }
-
-
 }

@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/dark_shape">
+    android:id="@+id/main"
+    tools:background="@drawable/dark_shape">
 
 
     <TextView
@@ -360,19 +361,5 @@
         app:layout_constraintStart_toStartOf="@+id/sunset"
         app:layout_constraintTop_toBottomOf="@+id/sunset"
         tools:text="21:42" />
-
-
-    <!--    <androidx.recyclerview.widget.RecyclerView-->
-    <!--        android:layout_width="0dp"-->
-    <!--        android:layout_height="0dp"-->
-    <!--        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"-->
-    <!--        android:orientation="horizontal"-->
-    <!--        tools:listitem="@layout/day_forecast_view"-->
-    <!--        app:layout_constraintBottom_toTopOf="@+id/detailsTitle3"-->
-    <!--        app:layout_constraintEnd_toEndOf="parent"-->
-    <!--        app:layout_constraintHorizontal_bias="0.0"-->
-    <!--        app:layout_constraintStart_toStartOf="@+id/detailsTitle2"-->
-    <!--        app:layout_constraintTop_toBottomOf="@+id/detailsTitle2" />-->
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

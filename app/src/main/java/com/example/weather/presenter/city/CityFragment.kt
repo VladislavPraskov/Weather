@@ -1,5 +1,6 @@
 package com.example.weather.presenter.city
 
+import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
 import androidx.core.widget.doAfterTextChanged
@@ -11,7 +12,6 @@ import com.example.weather.R
 import com.example.weather.models.CityUI
 import com.example.weather.presenter.main.MainFragment
 import com.example.weather.utils.error.ErrorMVI
-import com.example.weather.utils.network.NETWORK_ERROR_CODE
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.snackbar.Snackbar.LENGTH_LONG
 import kotlinx.android.synthetic.main.fragment_city.*
@@ -20,7 +20,18 @@ import org.koin.androidx.viewmodel.ext.android.viewModel
 
 class CityFragment : Fragment(R.layout.fragment_city) {
 
+    companion object {
+        const val COLOR_KEY = "color_key"
+        fun create(color: Pair<Int, Int>): CityFragment {
+            return CityFragment().apply {
+                arguments = Bundle().apply {
+                    putSerializable(COLOR_KEY, color)
+                }
+            }
+        }
+    }
 
+    lateinit var currentColor: Pair<Int, Int>
     private val viewModel: CityViewModel by viewModel()
     private val adapter = CityAdapter(::onClick)
 
@@ -32,6 +43,7 @@ class CityFragment : Fragment(R.layout.fragment_city) {
     }
 
     private fun initViews() {
+        currentColor = arguments?.get(COLOR_KEY) as? Pair<Int, Int> ?: Pair(16507811, 8483167)
         with(swipeRefreshLayout) {
             isRefreshing = false
             isEnabled = false
@@ -43,6 +55,11 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             val itemTouchHelper = CityItemTouchHelper(::delete)
             itemTouchHelper.attachToRecyclerView(this)
         }
+        header?.setBackgroundColor(currentColor.first)
+        swipeRefreshLayout?.background = GradientDrawable(
+            GradientDrawable.Orientation.TOP_BOTTOM,
+            intArrayOf(currentColor.first, currentColor.second)
+        )
     }
 
     private fun delete(pos: Int) {
