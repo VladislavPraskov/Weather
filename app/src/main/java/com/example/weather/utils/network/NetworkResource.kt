@@ -1,14 +1,12 @@
-package com.example.weather.data.network
+package com.example.weather.utils.network
 
 
-import com.example.weather.utils.network.ApiResult
-import com.example.weather.utils.network.safeApiCall
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
 abstract class NetworkResource<NetworkObj, ResultAction>(
     private val apiCall: suspend () -> NetworkObj,
-    private val onSuccess:suspend (ApiResult.Success<NetworkObj?>) -> ResultAction,
+    private val onSuccess: suspend (ApiResult.Success<NetworkObj?>) -> ResultAction,
     private val onError: suspend (ApiResult.NetworkError) -> ResultAction
 ) {
     val result = flow {

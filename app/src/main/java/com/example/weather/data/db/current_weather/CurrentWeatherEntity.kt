@@ -25,5 +25,6 @@ data class CurrentWeatherEntity(
     var iconId: Int,
     var colorStartId: Int,
     var colorEndId: Int,
-    val dewPoint: Double? = null
+    val dewPoint: Double? = null,
+    val time: Long? = null
 )

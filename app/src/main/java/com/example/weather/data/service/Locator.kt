@@ -20,23 +20,11 @@ class Locator(context: Context) {
     private val fusedLocationProviderClient =
         LocationServices.getFusedLocationProviderClient(context)
 
-    val gsd = Geocoder(context, Locale.getDefault())
-
-    private var locationRequest = LocationRequest().apply {
-        interval = TimeUnit.SECONDS.toMillis(60)
-        fastestInterval = TimeUnit.SECONDS.toMillis(60)
-        maxWaitTime = TimeUnit.MINUTES.toMillis(2)
-        priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-    }
-
-    private lateinit var locationCallback: LocationCallback
-
+    private val gsd = Geocoder(context, Locale.getDefault())
     private var currentLocation: Location? = null
 
-    var lm = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager?
-
     fun blockingGetLocation(): ResultLocation {
-        val count = CountDownLatch(1)
+        val count = CountDownLatch(1) //делаем callback синхронным
         try {
             fusedLocationProviderClient.lastLocation.addOnSuccessListener {
                 count.countDown()
@@ -47,29 +35,24 @@ class Locator(context: Context) {
         }
         count.await()
 
-        return if (currentLocation?.latitude == null || currentLocation?.longitude == null) {
-            ResultLocation(locationIsNotAvailableNow = true)
-        } else {
-            val addresses: List<Address> =
-                gsd.getFromLocation(
-                    currentLocation?.latitude ?: 0.0,
-                    currentLocation?.longitude ?: 0.0,
-                    1
+        currentLocation?.apply {
+            return run {
+                val addresses = gsd.getFromLocation(latitude, longitude, 1)
+                ResultLocation(
+                    city = CityEntity(
+                        lat = latitude,
+                        lon = longitude,
+                        country = addresses.getOrNull(0)?.countryName ?: "",
+                        cityName = addresses.getOrNull(0)?.locality ?: "",
+                        utc = getUtcOffsetStr(),
+                        offsetSec = getUtcOffsetSec(),
+                        isCurrentSelected = true,
+                        idString = getId(addresses, currentLocation)
+                    )
                 )
-            if (addresses.isNotEmpty()) println(addresses[0].locality)
-            ResultLocation(
-                city = CityEntity(
-                    lat = currentLocation?.latitude ?: 0.0,
-                    lon = currentLocation?.longitude ?: 0.0,
-                    country = addresses.getOrNull(0)?.countryName ?: "",
-                    cityName = addresses.getOrNull(0)?.locality ?: "",
-                    utc = getUtcOffsetStr(),
-                    offsetSec = getUtcOffsetSec(),
-                    isCurrentSelected = true,
-                    idString = getId(addresses, currentLocation)
-                )
-            )
+            }
         }
+        return ResultLocation(locationIsNotAvailableNow = true)
     }
 
 
@@ -82,7 +65,7 @@ class Locator(context: Context) {
 
     data class ResultLocation(
         val securityError: Boolean = false,
-        val locationIsNotAvailableNow: Boolean = false, //привязать к снекбару
+        val locationIsNotAvailableNow: Boolean = false,
         val city: CityEntity? = null
     )
 }

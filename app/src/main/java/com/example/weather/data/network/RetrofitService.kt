@@ -1,6 +1,8 @@
 package com.example.weather.data.network
 
 import com.example.weather.BuildConfig
+import com.example.weather.data.network.api.ApiService
+import com.example.weather.data.network.api.CityApiService
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

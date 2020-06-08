@@ -6,9 +6,6 @@ import com.devpraskov.android_ext.getColor
 import com.example.weather.R
 import com.example.weather.models.main.HourUI
 import com.example.weather.utils.ChartDataView
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.animation.Easing.EaseOutCirc
-import com.github.mikephil.charting.animation.Easing.EasingFunction
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -17,7 +14,6 @@ import com.github.mikephil.charting.data.LineDataSet
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import kotlin.math.absoluteValue
-import kotlin.math.sqrt
 
 class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
 
@@ -67,7 +63,7 @@ class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
 
             valueFormatter = object : ValueFormatter() {
                 override fun getFormattedValue(value: Float): String {
-                    val current = hours.getOrNull(value.toInt())?.time ?: 0f
+                    val current = hours.getOrNull(value.toInt())?.timeH ?: 0f
                     return formatXAxis(value, current)
                 }
             }

@@ -3,18 +3,18 @@ package com.example.weather.data.repository.main
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.example.weather.data.db.WeatherDataBase
-import com.example.weather.data.network.ApiService
+import com.example.weather.data.error.LocationNotAvailableException
+import com.example.weather.data.error.LocationSecurityException
+import com.example.weather.data.network.api.ApiService
 import com.example.weather.data.service.Locator
 import com.example.weather.models.WeatherUI
-import com.example.weather.models.main.HourlyWeather
+import com.example.weather.models.main.WeatherResponse
 import com.example.weather.presenter.main.mvi.MainResultAction
 import com.example.weather.utils.network.ApiResult
 import com.example.weather.utils.network.NetworkBoundResource
 import com.example.weather.utils.network.safeCacheCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.SupervisorJob
-import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.coroutineContext
 
 class MainRepositoryImpl(
@@ -22,36 +22,32 @@ class MainRepositoryImpl(
     val db: WeatherDataBase,
     val locator: Locator
 ) : MainRepository {
-
     var job = Job()
-    override suspend fun getCurrentCity(): LiveData<MainResultAction> {
+
+    override suspend fun getWeather(): LiveData<MainResultAction> {
         job.cancel()
         job = Job()
         return object :
-            NetworkBoundResource<HourlyWeather, WeatherUI?, MainResultAction>() {
-            override suspend fun networkRequest(): HourlyWeather? {
+            NetworkBoundResource<WeatherResponse, WeatherUI?, MainResultAction>() {
+            override suspend fun networkRequest(): WeatherResponse? {
                 val cityEntity = safeCacheCall({ db.cityDao.getCurrentCity() })
+
                 if (cityEntity != null)
-                    return api.getWeatherCityByLocationHourlyForecast(
-                        cityEntity.lat,
-                        cityEntity.lon
-                    )
+                    return api.getWeatherForecast(cityEntity.lat, cityEntity.lon)
 
                 val location = locator.blockingGetLocation()
-                if (location.securityError) return null //todo
-                if (location.locationIsNotAvailableNow) return null //todo
+                if (location.securityError) throw LocationSecurityException()
+                if (location.locationIsNotAvailableNow) throw LocationNotAvailableException()
                 safeCacheCall({ location.city?.let { db.cityDao.saveCurrentCity(cityEntity = it) } })
-                return api.getWeatherCityByLocationHourlyForecast(
-                    location.city?.lat,
-                    location.city?.lon
-                )
+
+                return api.getWeatherForecast(location.city?.lat, location.city?.lon)
             }
 
             override suspend fun retrieveCache(): WeatherUI? {
                 return db.sharedDao.getWeather()
             }
 
-            override suspend fun saveCache(networkObject: HourlyWeather) {
+            override suspend fun saveCache(networkObject: WeatherResponse) {
                 db.sharedDao.saveWeather(networkObject)
             }
 
@@ -63,6 +59,6 @@ class MainRepositoryImpl(
                 return MainResultAction.Error(error)
             }
 
-        }.result.asLiveData(job + coroutineContext)
+        }.result.asLiveData(job + Dispatchers.IO)
     }
 }

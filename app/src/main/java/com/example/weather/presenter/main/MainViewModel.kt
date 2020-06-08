@@ -20,9 +20,9 @@ class MainViewModel(app: Application, private val interactor: MainInteractor) :
     override fun handleNewAction(action: MainAction) =
         liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {
             when (action) {
-                is MainAction.LoadCurrentCity -> {
+                is MainAction.LoadWeather -> {
                     emit(MainResultAction.Loading())
-                    emitSource(interactor.getCurrentCity())
+                    emitSource(interactor.getWeather())
                 }
                 is MainAction.UpdateTime -> {
                     emit(MainResultAction.UpdateTime)

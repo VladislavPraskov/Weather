@@ -3,7 +3,7 @@ package com.example.weather.models.main
 
 import com.google.gson.annotations.SerializedName
 
-data class HourlyWeather(
+data class WeatherResponse(
     val lat: Double? = null,
     val lon: Double? = null,
     val timezone: String? = null,
@@ -24,15 +24,10 @@ data class HourlyWeather(
         val humidity: Long? = null,
         @SerializedName("dew_point")
         val dewPoint: Double? = null,
-        val uvi: Double? = null,
-        val clouds: Long? = null,
         val visibility: Long? = null,
         @SerializedName("wind_speed")
         val windSpeed: Double? = null,
-        @SerializedName("wind_deg")
-        val windDeg: Long? = null,
-        val weather: List<Weather?>? = null,
-        val rain: Rain? = null
+        val weather: List<Weather?>? = null
     )
 
     data class Hourly(
@@ -44,13 +39,9 @@ data class HourlyWeather(
         val humidity: Long? = null,
         @SerializedName("dew_poLong")
         val dewPoLong: Double? = null,
-        val clouds: Long? = null,
         @SerializedName("wind_speed")
         val windSpeed: Double? = null,
-        @SerializedName("wind_deg")
-        val windDeg: Long? = null,
-        val weather: List<Weather?>? = null,
-        val rain: Rain? = null
+        val weather: List<Weather?>? = null
     )
 
     data class Daily(

@@ -1,10 +1,6 @@
 package com.example.weather.data.db.city
 
 import androidx.room.Entity
-import androidx.room.Index
-import androidx.room.PrimaryKey
-import com.example.weather.models.main.WeatherForecast
-import kotlin.random.Random
 
 @Entity(tableName = "city_entity", primaryKeys = ["idString"])
 data class CityEntity(

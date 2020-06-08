@@ -3,8 +3,8 @@ package com.example.weather.data.repository.city
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.asLiveData
 import com.example.weather.data.db.WeatherDataBase
-import com.example.weather.data.network.CityApiService
-import com.example.weather.data.network.NetworkResource
+import com.example.weather.data.network.api.CityApiService
+import com.example.weather.utils.network.NetworkResource
 import com.example.weather.models.CityUI
 import com.example.weather.presenter.city.CityResultAction
 import com.example.weather.utils.mapToCityUI
@@ -16,14 +16,14 @@ import kotlinx.coroutines.Job
 
 class CityRepositoryImpl(val db: WeatherDataBase, private val api: CityApiService) :
     CityRepository {
-
     var loadByQueryJob = Job()
+
     override suspend fun loadByQuery(q: String): LiveData<CityResultAction> {
         loadByQueryJob.cancel()
         loadByQueryJob = Job()
         return NetworkResource.create(
             apiCall = { api.getCityByQuery(q) },
-            onSuccess = { success -> //здесь мёржим лист с апи и из кэша, из кэша берём то что встречается в api response
+            onSuccess = { success -> //здесь мёржим лист с апи и из кэша, из кэша берём то, что встречается в api response
                 val cache = safeCacheCall(cacheCall = { db.cityDao.loadCities() })
                 val cityCache = cache?.map { mapToCityUI(it) }?.toMutableList()
                 val apiCity = mapToCityUI(success.value)

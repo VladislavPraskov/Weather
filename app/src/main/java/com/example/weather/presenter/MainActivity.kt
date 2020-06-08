@@ -6,6 +6,7 @@ import android.view.Window
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.devpraskov.android_ext.statusBarColor
 import com.example.weather.R
 import com.example.weather.presenter.main.MainFragment
 import com.example.weather.presenter.second.DetailsFragment
@@ -24,6 +25,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        statusBarColor(Color.parseColor("#BC8DB8"))
         supportFragmentManager.beginTransaction().add(R.id.fragment_container, MainFragment())
             .commit()
     }

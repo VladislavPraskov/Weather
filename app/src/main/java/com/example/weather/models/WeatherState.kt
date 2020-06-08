@@ -11,7 +11,13 @@ data class WeatherState(
     val iconId: Int
 ) {
     companion object {
-        fun create(weatherId: Int, sunrise: Long, sunset: Long, iconId: String): WeatherState {
+        fun create(
+            weatherId: Int,
+            sunrise: Long? = null,
+            sunset: Long? = null,
+            iconId: String
+        ): WeatherState {
+
             val isDay = iconId.contains("d")
             return when (weatherId) {
                 in 200..232 -> {
@@ -56,7 +62,7 @@ data class WeatherState(
                 }
                 800 -> {
                     val color = if (isDay) clearDay.random() else clearNight.random()
-                    val icon = if (isDay) R.drawable.sun_icon else R.drawable.moon
+                    val icon = if (isDay) R.drawable.sun_icon else R.drawable.moon_icon
                     WeatherState(color.first, color.second, icon)
                 }
                 801 -> {

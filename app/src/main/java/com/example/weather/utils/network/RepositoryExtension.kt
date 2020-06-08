@@ -38,12 +38,24 @@ suspend fun <T> safeApiCall(
 
                 NetworkError(code = code, errorStr = errorResponse, errorRes = resId)
             }
-            else -> { //todo добавить возможность кастомных ошибок и извлечения текста из них
+            is CustomException -> {
+                NetworkError(
+                    code = throwable.getCode(),
+                    errorRes = throwable.getErrorRes(),
+                    errorStr = throwable.getErrorStr()
+                )
+            }
+            else -> {
                 NetworkError(code = null, errorRes = R.string.unknown_error)
             }
         }
     }
+}
 
+abstract class CustomException : Exception() {
+    open fun getErrorStr(): String?= null
+    open fun getCode(): Int? = null
+    open fun getErrorRes(): Int? = null
 }
 
 
@@ -66,8 +78,7 @@ suspend fun <T> safeCacheCall(
         onSuccess?.invoke(result)
         result
     } catch (t: Throwable) {
-        if (BuildConfig.DEBUG)
-            throw t
+        if (BuildConfig.DEBUG) throw t
         else {
             onError?.invoke() //todo crashlytics
             null

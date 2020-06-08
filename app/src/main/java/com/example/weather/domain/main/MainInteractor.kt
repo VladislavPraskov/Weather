@@ -4,5 +4,5 @@ import androidx.lifecycle.LiveData
 import com.example.weather.presenter.main.mvi.MainResultAction
 
 interface MainInteractor {
-    suspend fun getCurrentCity(): LiveData<MainResultAction>
+    suspend fun getWeather(): LiveData<MainResultAction>
 }

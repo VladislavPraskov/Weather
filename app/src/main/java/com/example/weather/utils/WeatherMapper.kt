@@ -8,8 +8,7 @@ import com.example.weather.models.WeatherState
 import com.example.weather.models.main.CurrentUI
 import com.example.weather.models.main.DayUI
 import com.example.weather.models.main.HourUI
-import com.example.weather.models.main.HourlyWeather.*
-import com.example.weather.models.main.getIconRes
+import com.example.weather.models.main.WeatherResponse.*
 import java.util.*
 import kotlin.math.min
 import kotlin.math.max
@@ -21,14 +20,21 @@ fun mapToHourEntity(
     timezoneOffset: Long?
 ): HourEntity? {
     hourWeather ?: return null
-    return HourEntity(
-        city = city ?: "-",
-        temp = hourWeather.temp?.toFloat() ?: 0f,
-        iconId = getIconRes(hourWeather.weather?.getOrNull(0)?.icon),
-        time = hourWeather.dt ?: 0,
-        timeOffset = timezoneOffset?.toInt() ?: 0,
-        timeDebug = currentDateAndTime(Date((hourWeather.dt ?: 0) * 1000))
-    )
+
+    hourWeather.apply {
+        val weatherState = WeatherState.create(
+            weatherId = weather?.getOrNull(0)?.id ?: 0,
+            iconId = weather?.getOrNull(0)?.icon ?: "d"
+        )
+        return HourEntity(
+            city = city ?: "-",
+            temp = temp?.toFloat() ?: 0f,
+            iconId = weatherState.iconId,
+            time = dt ?: 0,
+            timeOffset = timezoneOffset?.toInt() ?: 0,
+            timeDebug = currentDateAndTime(Date((dt ?: 0) * 1000))
+        )
+    }
 }
 
 fun mapToDayEntity(
@@ -37,16 +43,23 @@ fun mapToDayEntity(
     timezoneOffset: Long?
 ): DayEntity? {
     daily ?: return null
-    return DayEntity(
-        city = city ?: "-",
-        dayOfWeek = dayOfWeek(Date((daily.dt ?: 0) * 1000), timezoneOffset?.toInt() ?: 0),
-        minTemp = daily.temp?.min?.toFloat() ?: 0f,
-        maxTemp = daily.temp?.max?.toFloat() ?: 0f,
-        iconId = getIconRes(daily.weather?.getOrNull(0)?.icon),
-        time = daily.dt ?: 0,
-        timeOffset = timezoneOffset?.toInt() ?: 0,
-        timeDebug = currentDateAndTime(Date((daily.dt ?: 0) * 1000))
-    )
+
+    daily.apply {
+        val weatherState = WeatherState.create(
+            weatherId = weather?.getOrNull(0)?.id ?: 0,
+            iconId = weather?.getOrNull(0)?.icon ?: "d"
+        )
+        return DayEntity(
+            city = city ?: "-",
+            dayOfWeek = dayOfWeek(Date((dt ?: 0) * 1000), timezoneOffset?.toInt() ?: 0),
+            minTemp = temp?.min?.toFloat() ?: 0f,
+            maxTemp = temp?.max?.toFloat() ?: 0f,
+            iconId = weatherState.iconId,
+            time = dt ?: 0,
+            timeOffset = timezoneOffset?.toInt() ?: 0,
+            timeDebug = currentDateAndTime(Date((dt ?: 0) * 1000))
+        )
+    }
 }
 
 fun mapToCurrentEntity(
@@ -86,6 +99,7 @@ fun mapToCurrentEntity(
             windSpeed = windSpeed,
             pressure = pressure,
             dewPoint = dewPoint,
+            time = dt,
             condition = weather?.getOrNull(0)?.main,
             iconId = weatherState.iconId,
             sunrise = sunrise ?: 0,
@@ -108,7 +122,8 @@ fun mapToDayUI(day: DayEntity): DayUI {
 
 fun mapToHourUI(hour: HourEntity): HourUI {
     return HourUI(
-        time = getHour(Date(hour.time * 1000), hour.timeOffset).toFloat(),
+        timeH = getHour(Date(hour.time * 1000), hour.timeOffset).toFloat(),
+        timeS = hour.time,
         temp = hour.temp,
         iconId = hour.iconId
     )
@@ -131,6 +146,7 @@ fun mapToCurrentUI(
         else visibility.toString()
     }
 
+    val icon = if (hourUi?.timeS ?: 0L > current.time ?: 0L) hourUi?.iconId else current.iconId
     current.apply {
         return CurrentUI(
             city = city,
@@ -150,7 +166,7 @@ fun mapToCurrentUI(
             pressure = "${((pressure ?: 0) * 0.75).roundToInt()} mm",
             visibility = getVisibility(visibility ?: 0),
             condition = condition,
-            iconId = hourUi?.iconId ?: iconId,
+            iconId = icon ?: iconId,
             dewPoint = dewPoint?.roundToInt()?.toString() + "°",
             colorStartId = colorStartId,
             colorEndId = colorEndId

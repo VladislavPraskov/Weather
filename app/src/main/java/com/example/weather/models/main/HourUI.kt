@@ -5,7 +5,8 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class HourUI(
-    val time: Float,
+    val timeH: Float,
+    val timeS: Long,
     val temp: Float = 0f,
     val iconId: Int
 ): Parcelable

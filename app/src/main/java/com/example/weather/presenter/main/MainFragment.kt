@@ -2,7 +2,6 @@ package com.example.weather.presenter.main
 
 import android.Manifest.permission.ACCESS_COARSE_LOCATION
 import android.content.pm.PackageManager.PERMISSION_GRANTED
-import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.GradientDrawable.Orientation.TOP_BOTTOM
 import android.os.Bundle
@@ -13,13 +12,14 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.devpraskov.android_ext.*
 import com.example.weather.R
+import com.example.weather.data.error.LocationNotAvailableException.Companion.LOCATION_NOT_AVAILABLE_CODE
+import com.example.weather.data.error.LocationSecurityException.Companion.LOCATION_SECURITY_CODE
 import com.example.weather.presenter.city.CityFragment
 import com.example.weather.presenter.main.mvi.MainAction
 import com.example.weather.presenter.second.DetailsFragment
 import com.example.weather.utils.error.ErrorMVI
 import com.example.weather.utils.view.ForecastChartCreator
 import com.google.android.material.snackbar.Snackbar
-import kotlinx.android.synthetic.main.fragment_city.*
 import kotlinx.android.synthetic.main.fragment_main.*
 import kotlinx.android.synthetic.main.fragment_main.swipeRefreshLayout
 import org.koin.androidx.viewmodel.ext.android.viewModel
@@ -78,7 +78,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         handler.postDelayed(runnable, remainingSecondsInMinute)
         viewModel.setNextAction(MainAction.UpdateTime)
         if (isUpdateCityNeeded) {
-            viewModel.setNextAction(MainAction.LoadCurrentCity)
+            viewModel.setNextAction(MainAction.LoadWeather)
             isUpdateCityNeeded = false
         }
     }
@@ -94,7 +94,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     }
 
     private fun initObservers() {
-        viewModel.firsAction = MainAction.LoadCurrentCity
+        viewModel.firsAction = MainAction.LoadWeather
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             swipeRefreshLayout?.isRefreshing = state.isLoading
             val data = state.data.getAnyway() ?: return@Observer
@@ -102,8 +102,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
                 cityName?.newText = city
                 date?.newText = state.time
                 showError(state.error.getIfNotBeenHandled())
-                currentColor = Pair(getColor(colorStartId), getColor(colorEndId))
-                setGradient(currentColor.first, currentColor.second)
+                setGradient(Pair(getColor(colorStartId), getColor(colorEndId)))
                 iconId.let { iconState?.setImageResource(it) }
                 currentState?.newText = condition
                 currentTemperature?.newText = temp
@@ -116,30 +115,43 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         })
     }
 
-    private fun setGradient(colorStart: Int, colorEnd: Int) {
-        val gradient = GradientDrawable(TOP_BOTTOM, intArrayOf(colorStart, colorEnd))
+    private fun setGradient(color: Pair<Int, Int>) {
+        currentColor = color
+        val gradient =
+            GradientDrawable(TOP_BOTTOM, intArrayOf(currentColor.first, currentColor.second))
         main?.background = gradient
-        statusBarColor(colorStart)
+        statusBarColor(currentColor.first)
     }
 
 
     private fun showError(error: ErrorMVI?) {
         error ?: return
         error.message ?: return
-        Snackbar.make(main, error.message, Snackbar.LENGTH_LONG).show()
+        when (error.code) {
+            LOCATION_SECURITY_CODE -> showPermissionSnackBar()
+            LOCATION_NOT_AVAILABLE_CODE ->
+                main.snack(error.message, Snackbar.LENGTH_INDEFINITE) {
+                    setAction("Choose") { startCityFragment() }
+                    setActionTextColor(currentColor.first)
+                }
+
+            else -> Snackbar.make(main, error.message, Snackbar.LENGTH_LONG).show()
+        }
     }
 
     private fun initListeners() {
-        addCity?.onClick {
-            val fragment = CityFragment.create(currentColor)
-            fragment.setTargetFragment(this, 42)
-            startFragment(fragment)
-        }
-        swipeRefreshLayout?.setOnRefreshListener { viewModel.setNextAction(MainAction.LoadCurrentCity) }
+        addCity?.onClick { startCityFragment() }
+        swipeRefreshLayout?.setOnRefreshListener { viewModel.setNextAction(MainAction.LoadWeather) }
         details?.onClick {
             val weather = viewModel.viewState.value?.data?.getAnyway() ?: return@onClick
             startFragment(DetailsFragment.create(weather))
         }
+    }
+
+    fun startCityFragment() {
+        val fragment = CityFragment.create(currentColor)
+        fragment.setTargetFragment(this, 42)
+        startFragment(fragment)
     }
 
     private fun startFragment(f: Fragment) {
@@ -166,10 +178,14 @@ class MainFragment : Fragment(R.layout.fragment_main) {
     ) {
         if (requestCode != PERMISSION_REQUEST_CODE) return
         if ((grantResults.getOrNull(0) == PERMISSION_GRANTED)) initObservers()
-        else main.snack(R.string.location_permission, Snackbar.LENGTH_INDEFINITE)
+        else showPermissionSnackBar()
+    }
+
+    private fun showPermissionSnackBar() {
+        main.snack(R.string.location_permission, Snackbar.LENGTH_INDEFINITE)
         {
             setAction("Request") { requestPermission() }
-            setActionTextColor(Color.parseColor("#BC8DB8"))
+            setActionTextColor(currentColor.first)
         }
     }
 
