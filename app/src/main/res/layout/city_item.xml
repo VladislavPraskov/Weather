@@ -17,7 +17,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="2dp"
         android:background="@drawable/circle"
-        android:backgroundTint="#5E5E90"
+        tools:backgroundTint="#5E5E90"
         app:layout_constraintBottom_toBottomOf="@+id/cityName"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cityName" />
@@ -81,7 +81,7 @@
         android:id="@+id/checked"
         android:layout_width="14dp"
         android:layout_height="14dp"
-        android:tint="#5E5E90"
+        tools:tint="#5E5E90"
         app:layout_constraintBottom_toBottomOf="@+id/cityName"
         app:layout_constraintStart_toEndOf="@+id/cityName"
         app:layout_constraintTop_toTopOf="@+id/cityName"

@@ -1,16 +1,19 @@
 package com.example.weather.presenter.city
 
+import android.content.res.ColorStateList
 import android.graphics.drawable.AnimatedVectorDrawable
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.core.view.postDelayed
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import androidx.vectordrawable.graphics.drawable.AnimatedVectorDrawableCompat
 import com.devpraskov.android_ext.onClick
+import com.devpraskov.android_ext.setBackgroundColorTint
 import com.devpraskov.android_ext.show
 import com.devpraskov.android_ext.visibility
 import com.example.weather.R
@@ -18,7 +21,7 @@ import com.example.weather.models.CityUI
 import com.example.weather.presenter.city.CityItemTouchHelper.Companion.DISABLE_SWIPE_TAG
 import kotlinx.android.synthetic.main.city_item.view.*
 
-class CityAdapter(private val click: (CityUI) -> Unit) :
+class CityAdapter(private val click: (CityUI) -> Unit, var color: Int? = null) :
     ListAdapter<CityUI, RecyclerView.ViewHolder>(DIFF_CALLBACK) {
     var isSwiped: Boolean = true
 
@@ -69,6 +72,8 @@ class CityAdapter(private val click: (CityUI) -> Unit) :
             gmt.text = item.utc
             locality.text = item.country
             cacheIndicator.visibility(item.isCache)
+            cacheIndicator?.setBackgroundColorTint(color = color)
+            checked.imageTintList = ColorStateList.valueOf(color ?: 0xffffff)
             if (item.isCurrentSelected) {
                 checked.show()
                 animateChecked(checked?.drawable)

@@ -1,6 +1,6 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="512dp"
-    android:height="512dp"
+    android:width="24dp"
+    android:height="24dp"
     android:viewportWidth="512"
     android:viewportHeight="512">
   <path
@@ -31,3 +31,5 @@
       android:pathData="M493.084,27.113H127.369c-10.448,0 -18.916,8.468 -18.916,18.916c0,10.448 8.468,18.916 18.916,18.916h365.714c10.448,0 18.916,-8.468 18.916,-18.916C512,35.581 503.532,27.113 493.084,27.113z"
       android:fillColor="#FFFFFF"/>
 </vector>
+
+<!--https://www.flaticon.com/free-icon/tornado_709769?term=tornado&page=1&position=47-->

@@ -148,7 +148,7 @@ class MainFragment : Fragment(R.layout.fragment_main) {
         }
     }
 
-    fun startCityFragment() {
+    private fun startCityFragment() {
         val fragment = CityFragment.create(currentColor)
         fragment.setTargetFragment(this, 42)
         startFragment(fragment)

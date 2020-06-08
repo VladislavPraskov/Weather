@@ -48,7 +48,7 @@ class CityFragment : Fragment(R.layout.fragment_city) {
             isRefreshing = false
             isEnabled = false
         }
-
+        adapter.color = currentColor.second
         recycler_view?.apply {
             setHasFixedSize(true)
             adapter = this@CityFragment.adapter

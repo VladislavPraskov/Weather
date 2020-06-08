@@ -1,8 +1,5 @@
 package com.example.weather.models
 
-import android.content.Context
-import android.graphics.Color
-import com.devpraskov.android_ext.getColorCompat
 import com.example.weather.R
 
 data class WeatherState(
@@ -30,11 +27,9 @@ data class WeatherState(
                 }
                 in 500..504 -> {
                     val color = if (isDay) rainSun.random() else drizzleNight.random()
-                    WeatherState(
-                        color.first,
-                        color.second,
-                        R.drawable.cloud_sun_rain_icon
-                    ) //todo night
+                    val icon =
+                        if (isDay) R.drawable.cloud_sun_rain_icon else R.drawable.rain_cloud_moon_icon
+                    WeatherState(color.first, color.second, icon)
                 }
                 511 -> {
                     val color = rainSnow.random()
@@ -67,7 +62,8 @@ data class WeatherState(
                 }
                 801 -> {
                     val color = if (isDay) rainSun.random() else drizzleNight.random()
-                    val icon = R.drawable.cloud_sun_rain_icon //todo night
+                    val icon =
+                        if (isDay) R.drawable.cloud_sun_icon else R.drawable.rain_cloud_moon_icon
                     WeatherState(color.first, color.second, icon)
                 }
                 802 -> {
