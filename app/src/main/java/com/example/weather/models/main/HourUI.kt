@@ -8,5 +8,5 @@ data class HourUI(
     val timeH: Float,
     val timeS: Long,
     val temp: Float = 0f,
-    val iconId: Int
+    var iconId: Int
 ): Parcelable

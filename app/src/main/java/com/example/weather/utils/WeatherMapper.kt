@@ -5,6 +5,7 @@ import com.example.weather.data.db.current_weather.CurrentWeatherEntity
 import com.example.weather.data.db.day.DayEntity
 import com.example.weather.data.db.hour.HourEntity
 import com.example.weather.models.WeatherState
+import com.example.weather.models.WeatherUI
 import com.example.weather.models.main.CurrentUI
 import com.example.weather.models.main.DayUI
 import com.example.weather.models.main.HourUI
@@ -111,6 +112,20 @@ fun mapToCurrentEntity(
     }
 }
 
+fun getWeatherUI(
+    hours: List<HourEntity>,
+    days: List<DayEntity>,
+    current: CurrentWeatherEntity?
+): WeatherUI? {
+
+    val hoursUi = hours.map { mapToHourUI(it) }
+    val daysUi = days.map { mapToDayUI(it) }
+    val currentUi = mapToCurrentUI(current, hoursUi.getOrNull(0))
+    currentUi?.let { hoursUi.getOrNull(0)?.iconId = it.iconId }
+    currentUi ?: return null
+    return WeatherUI(hours = hoursUi, days = daysUi, current = currentUi)
+}
+
 fun mapToDayUI(day: DayEntity): DayUI {
     return DayUI(
         maxTemp = day.maxTemp.roundToInt().toString() + "°",
@@ -129,15 +144,12 @@ fun mapToHourUI(hour: HourEntity): HourUI {
     )
 }
 
-fun mapToCurrentUI(
-    current: CurrentWeatherEntity?,
-    hourUi: HourUI?
-): CurrentUI? {
+fun mapToCurrentUI(current: CurrentWeatherEntity?, hourUi: HourUI?): CurrentUI? {
 
     current ?: return null
     fun getHourAndMinute(minutes: Long): String {
         val hour = minutes / 60
-        val minute = minutes % 60
+        val minute: Long = minutes % 60
         return "$hour ч $minute м"
     }
 
@@ -147,10 +159,13 @@ fun mapToCurrentUI(
     }
 
     val icon = if (hourUi?.timeS ?: 0L > current.time ?: 0L) hourUi?.iconId else current.iconId
+    val t =
+        if ((hourUi?.timeS ?: 0L) > (current.time ?: 0L) && hourUi != null) hourUi.temp
+        else current.temp
     current.apply {
         return CurrentUI(
             city = city,
-            temp = (hourUi?.temp ?: temp).roundToInt().toString(),
+            temp = t.roundToInt().toString(),
             maxTemp = maxTemp.roundToInt().toString() + "°" + "C",
             minTemp = minTemp.roundToInt().toString() + "°" + "C",
             sunrise = sunrise.toFloat(),
