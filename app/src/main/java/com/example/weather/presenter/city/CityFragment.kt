@@ -7,6 +7,7 @@ import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.coroutineScope
+import androidx.recyclerview.widget.SimpleItemAnimator
 import com.devpraskov.android_ext.*
 import com.example.weather.R
 import com.example.weather.models.CityUI
@@ -24,9 +25,7 @@ class CityFragment : Fragment(R.layout.fragment_city) {
         const val COLOR_KEY = "color_key"
         fun create(color: Pair<Int, Int>): CityFragment {
             return CityFragment().apply {
-                arguments = Bundle().apply {
-                    putSerializable(COLOR_KEY, color)
-                }
+                arguments = Bundle().apply { putSerializable(COLOR_KEY, color) }
             }
         }
     }
@@ -50,6 +49,7 @@ class CityFragment : Fragment(R.layout.fragment_city) {
         }
         adapter.color = currentColor.second
         recycler_view?.apply {
+            (itemAnimator as SimpleItemAnimator).supportsChangeAnimations = false
             setHasFixedSize(true)
             adapter = this@CityFragment.adapter
             val itemTouchHelper = CityItemTouchHelper(::delete)
@@ -72,7 +72,6 @@ class CityFragment : Fragment(R.layout.fragment_city) {
         viewModel.viewState.observe(viewLifecycleOwner, Observer { state ->
             swipeRefreshLayout?.isRefreshing = state.isLoading
             noResult.visibilityGone(state.isNotFound)
-            recycler_view.visibilityGone(!state.isNotFound)
             showError(state.error.getIfNotBeenHandled())
             val cityList = state.data.getIfNotBeenHandled() ?: return@Observer
             adapter.submitList(cityList, state.isCache)

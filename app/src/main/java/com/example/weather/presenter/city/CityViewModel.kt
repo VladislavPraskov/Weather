@@ -5,6 +5,7 @@ import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.weather.domain.city.CityInteractor
 import com.example.weather.utils.error.ErrorMVI
+import com.example.weather.utils.models.Event
 import com.example.weather.utils.models.toEvent
 import com.example.weather.utils.mvi.BaseViewModel
 import kotlinx.coroutines.Dispatchers
@@ -60,7 +61,8 @@ class CityViewModel(app: Application, private val interactor: CityInteractor) :
             )
             is CityResultAction.SuccessEmpty -> currentState.copy(
                 isLoading = false,
-                isNotFound = true
+                isNotFound = true,
+                data = Event(listOf())
             )
         }
     }
