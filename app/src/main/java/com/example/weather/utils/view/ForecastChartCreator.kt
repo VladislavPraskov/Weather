@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import com.devpraskov.android_ext.getColor
 import com.example.weather.R
 import com.example.weather.models.main.HourUI
-import com.example.weather.utils.ChartDataView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
@@ -108,7 +107,10 @@ class ForecastChartCreator(val f: Fragment, val chart: LineChart) {
             setCircleColor(f.getColor(R.color.white_30))
         }
         // create marker to display box when values are selected
-        val mv = ChartDataView(f.requireContext(), R.layout.chart_data_text_view)
+        val mv = ChartDataView(
+            f.requireContext(),
+            R.layout.chart_data_text_view
+        )
         mv.chartView = chart
         chart.marker = mv
 

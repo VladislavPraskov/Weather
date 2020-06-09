@@ -1,4 +1,4 @@
-package com.example.weather.presenter.second
+package com.example.weather.presenter.details
 
 import android.content.Context
 import android.util.AttributeSet

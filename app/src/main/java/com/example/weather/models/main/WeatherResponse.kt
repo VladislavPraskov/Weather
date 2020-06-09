@@ -83,12 +83,6 @@ data class WeatherResponse(
 
     }
 }
-
-data class Rain(
-    @SerializedName("1h")
-    val h: Double? = null
-)
-
 data class Weather(
     val id: Int? = null,
     val main: String? = null,

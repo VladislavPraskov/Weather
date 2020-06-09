@@ -6,7 +6,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import com.example.weather.App
-
+//Доработал идею
+//https://medium.com/@thanh.bm/android-mvi-architecture-with-livedata-c72e9e1bd3e6
 abstract class BaseViewModel<Action, ViewState, ResultAction>(
     app: Application,
     initState: ViewState

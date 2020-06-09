@@ -5,7 +5,7 @@ import com.example.weather.data.repository.main.MainRepository
 import com.example.weather.presenter.main.mvi.MainResultAction
 
 class MainInteractorImpl(private val repository: MainRepository) : MainInteractor {
-    override suspend fun getWeather(): LiveData<MainResultAction> { //todo изменить имя метода
+    override suspend fun getWeather(): LiveData<MainResultAction> {
         return repository.getWeather()
     }
 }

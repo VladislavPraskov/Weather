@@ -4,6 +4,7 @@ package com.example.weather.utils.network
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flow
 
+/**абстракция для сетевого запроса*/
 abstract class NetworkResource<NetworkObj, ResultAction>(
     private val apiCall: suspend () -> NetworkObj,
     private val onSuccess: suspend (ApiResult.Success<NetworkObj?>) -> ResultAction,

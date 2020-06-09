@@ -16,7 +16,7 @@ import com.example.weather.data.error.LocationNotAvailableException.Companion.LO
 import com.example.weather.data.error.LocationSecurityException.Companion.LOCATION_SECURITY_CODE
 import com.example.weather.presenter.city.CityFragment
 import com.example.weather.presenter.main.mvi.MainAction
-import com.example.weather.presenter.second.DetailsFragment
+import com.example.weather.presenter.details.DetailsFragment
 import com.example.weather.utils.error.ErrorMVI
 import com.example.weather.utils.view.ForecastChartCreator
 import com.google.android.material.snackbar.Snackbar

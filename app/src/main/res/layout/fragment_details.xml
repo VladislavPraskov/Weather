@@ -60,7 +60,7 @@
         app:layout_constraintStart_toEndOf="@+id/detailsTitle2"
         app:layout_constraintTop_toTopOf="@+id/detailsTitle2" />
 
-    <com.example.weather.presenter.second.DetailsView
+    <com.example.weather.presenter.details.DetailsView
         android:id="@+id/detailsTemp"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -74,7 +74,7 @@
         app:layout_constraintTop_toBottomOf="@+id/detailsTitle"
         app:titleText="Feels like" />
 
-    <com.example.weather.presenter.second.DetailsView
+    <com.example.weather.presenter.details.DetailsView
         android:id="@+id/detailsWind"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -89,7 +89,7 @@
         app:layout_constraintTop_toTopOf="@+id/detailsTemp"
         app:titleText="Wind" />
 
-    <com.example.weather.presenter.second.DetailsView
+    <com.example.weather.presenter.details.DetailsView
         android:id="@+id/detailsHumidity"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -104,7 +104,7 @@
         app:layout_constraintTop_toTopOf="@+id/detailsTemp"
         app:titleText="Humidity" />
 
-    <com.example.weather.presenter.second.DetailsView
+    <com.example.weather.presenter.details.DetailsView
         android:id="@+id/detailsPressure"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -119,7 +119,7 @@
         app:layout_constraintTop_toBottomOf="@+id/detailsTemp"
         app:titleText="Pressure" />
 
-    <com.example.weather.presenter.second.DetailsView
+    <com.example.weather.presenter.details.DetailsView
         android:id="@+id/detailsVisibility"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -134,7 +134,7 @@
         app:layout_constraintTop_toTopOf="@+id/detailsPressure"
         app:titleText="Visibility" />
 
-    <com.example.weather.presenter.second.DetailsView
+    <com.example.weather.presenter.details.DetailsView
         android:id="@+id/detailsDewPoint"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -186,7 +186,7 @@
         app:layout_constraintTop_toBottomOf="@+id/detailsTitle3">
 
 
-        <com.example.weather.presenter.second.DayForecastView
+        <com.example.weather.presenter.details.DayForecastView
             android:id="@+id/day_1"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -200,7 +200,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
 
-        <com.example.weather.presenter.second.DayForecastView
+        <com.example.weather.presenter.details.DayForecastView
             android:id="@+id/day_2"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -212,7 +212,7 @@
             app:layout_constraintTop_toTopOf="@+id/day_1"
             app:layout_constraintVertical_bias="0.0" />
 
-        <com.example.weather.presenter.second.DayForecastView
+        <com.example.weather.presenter.details.DayForecastView
             android:id="@+id/day_3"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -225,7 +225,7 @@
 
             tools:layout_editor_absoluteY="558dp" />
 
-        <com.example.weather.presenter.second.DayForecastView
+        <com.example.weather.presenter.details.DayForecastView
             android:id="@+id/day_4"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -237,7 +237,7 @@
             app:layout_constraintTop_toTopOf="@+id/day_1"
             tools:layout_editor_absoluteY="558dp" />
 
-        <com.example.weather.presenter.second.DayForecastView
+        <com.example.weather.presenter.details.DayForecastView
             android:id="@+id/day_5"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -249,7 +249,7 @@
             app:layout_constraintTop_toTopOf="@+id/day_1"
             tools:layout_editor_absoluteY="558dp" />
 
-        <com.example.weather.presenter.second.DayForecastView
+        <com.example.weather.presenter.details.DayForecastView
             android:id="@+id/day_6"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
@@ -261,7 +261,7 @@
             app:layout_constraintTop_toTopOf="@+id/day_1"
             tools:layout_editor_absoluteY="558dp" />
 
-        <com.example.weather.presenter.second.DayForecastView
+        <com.example.weather.presenter.details.DayForecastView
             android:id="@+id/day_7"
             android:layout_width="wrap_content"
             android:layout_height="0dp"

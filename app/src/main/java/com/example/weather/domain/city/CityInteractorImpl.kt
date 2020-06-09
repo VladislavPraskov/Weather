@@ -2,8 +2,8 @@ package com.example.weather.domain.city
 
 import androidx.lifecycle.LiveData
 import com.example.weather.data.repository.city.CityRepository
-import com.example.weather.models.CityUI
-import com.example.weather.presenter.city.CityResultAction
+import com.example.weather.models.city.CityUI
+import com.example.weather.presenter.city.mvi.CityResultAction
 
 class CityInteractorImpl(private val repository: CityRepository) : CityInteractor {
 

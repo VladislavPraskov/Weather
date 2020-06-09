@@ -68,7 +68,7 @@ data class WeatherState(
                 }
                 802 -> {
                     val color = cloudsLight.random()
-                    val icon = R.drawable.cloud_icon //todo night
+                    val icon = R.drawable.cloud_icon
                     WeatherState(color.first, color.second, icon)
                 }
                 803, 804 -> {
@@ -78,7 +78,7 @@ data class WeatherState(
                 }
                 else -> {
                     val color = cloudsLight.random()
-                    val icon = R.drawable.cloud_icon //todo night
+                    val icon = R.drawable.cloud_icon
                     WeatherState(color.first, color.second, icon)
                 }
             }

@@ -1,8 +1,8 @@
-package com.example.weather.utils
+package com.example.weather.utils.mapper
 
 import com.example.weather.data.db.city.CityEntity
-import com.example.weather.models.CityResponse
-import com.example.weather.models.CityUI
+import com.example.weather.models.city.CityResponse
+import com.example.weather.models.city.CityUI
 import kotlin.math.absoluteValue
 
 fun mapToCityUI(city: CityResponse?): List<CityUI>? {

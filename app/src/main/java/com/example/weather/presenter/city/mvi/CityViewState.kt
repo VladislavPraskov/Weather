@@ -1,6 +1,6 @@
-package com.example.weather.presenter.city
+package com.example.weather.presenter.city.mvi
 
-import com.example.weather.models.CityUI
+import com.example.weather.models.city.CityUI
 import com.example.weather.utils.error.ErrorMVI
 import com.example.weather.utils.models.Event
 

@@ -4,17 +4,12 @@ import android.graphics.Color
 import androidx.fragment.app.Fragment
 import com.devpraskov.android_ext.getColor
 import com.example.weather.R
-import com.example.weather.utils.ChartDataView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
-import com.github.mikephil.charting.utils.MPPointF
-import org.koin.android.ext.android.get
-import kotlin.math.absoluteValue
 import kotlin.math.sqrt
 
 

@@ -4,6 +4,9 @@ import android.app.Application
 import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import com.example.weather.domain.city.CityInteractor
+import com.example.weather.presenter.city.mvi.CityAction
+import com.example.weather.presenter.city.mvi.CityResultAction
+import com.example.weather.presenter.city.mvi.CityViewState
 import com.example.weather.utils.error.ErrorMVI
 import com.example.weather.utils.models.Event
 import com.example.weather.utils.models.toEvent
@@ -12,7 +15,9 @@ import kotlinx.coroutines.Dispatchers
 
 
 class CityViewModel(app: Application, private val interactor: CityInteractor) :
-    BaseViewModel<CityAction, CityViewState, CityResultAction>(app, CityViewState()) {
+    BaseViewModel<CityAction, CityViewState, CityResultAction>(app,
+        CityViewState()
+    ) {
 
     override fun handleNewAction(action: CityAction) =
         liveData(context = viewModelScope.coroutineContext + Dispatchers.IO) {

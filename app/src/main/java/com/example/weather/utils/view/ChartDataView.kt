@@ -1,15 +1,13 @@
-package com.example.weather.utils
+package com.example.weather.utils.view
 
 import android.annotation.SuppressLint
 import android.content.Context
-import androidx.core.content.ContextCompat
 import com.example.weather.R
 import com.github.mikephil.charting.components.MarkerView
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.utils.MPPointF
 import kotlinx.android.synthetic.main.chart_data_text_view.view.*
-import kotlin.math.min
 
 
 @SuppressLint("ViewConstructor")

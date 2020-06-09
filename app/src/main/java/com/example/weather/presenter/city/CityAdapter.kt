@@ -16,7 +16,7 @@ import com.devpraskov.android_ext.setBackgroundColorTint
 import com.devpraskov.android_ext.show
 import com.devpraskov.android_ext.visibility
 import com.example.weather.R
-import com.example.weather.models.CityUI
+import com.example.weather.models.city.CityUI
 import com.example.weather.presenter.city.CityItemTouchHelper.Companion.DISABLE_SWIPE_TAG
 import kotlinx.android.synthetic.main.city_item.view.*
 

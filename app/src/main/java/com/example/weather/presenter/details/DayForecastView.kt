@@ -1,4 +1,4 @@
-package com.example.weather.presenter.second
+package com.example.weather.presenter.details
 
 import android.content.Context
 import android.util.AttributeSet
@@ -42,7 +42,6 @@ class DayForecastView @JvmOverloads constructor(
         dayText = a.getString(R.styleable.DayForecastView_dayText)
         min = a.getString(R.styleable.DayForecastView_minText)
         max = a.getString(R.styleable.DayForecastView_maxText)
-
         if (a.hasValue(R.styleable.DayForecastView_icon)) {
             val icon = a.getResourceId(R.styleable.DetailsView_icon, 0)
             iconRes = if (icon != 0) icon else null

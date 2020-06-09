@@ -1,11 +1,10 @@
-package com.example.weather.presenter.second
+package com.example.weather.presenter.details
 
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import androidx.fragment.app.Fragment
 import android.view.View
-import androidx.core.view.postDelayed
 import com.devpraskov.android_ext.*
 import com.example.weather.R
 import com.example.weather.models.WeatherUI
@@ -26,8 +25,8 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
     }
 
-    lateinit var runnable: Runnable//todo убрать
-    lateinit var handler: Handler//todo убрать
+    lateinit var runnable: Runnable
+    lateinit var handler: Handler
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViews()
@@ -101,6 +100,4 @@ class DetailsFragment : Fragment(R.layout.fragment_details) {
         }
         handler.postDelayed(runnable, 100)
     }
-
-
 }

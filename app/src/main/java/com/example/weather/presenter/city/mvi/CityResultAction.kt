@@ -1,6 +1,6 @@
-package com.example.weather.presenter.city
+package com.example.weather.presenter.city.mvi
 
-import com.example.weather.models.CityUI
+import com.example.weather.models.city.CityUI
 import com.example.weather.utils.network.ApiResult
 
 sealed class CityResultAction {
@@ -15,7 +15,10 @@ sealed class CityResultAction {
     companion object {
         fun getSuccessOrEmpty(cities: List<CityUI>?, isCache: Boolean): CityResultAction {
             return if (cities == null) SuccessEmpty
-            else Success(cities, isCache)
+            else Success(
+                cities,
+                isCache
+            )
         }
     }
 }

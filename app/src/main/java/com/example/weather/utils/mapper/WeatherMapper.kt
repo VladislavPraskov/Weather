@@ -1,4 +1,4 @@
-package com.example.weather.utils
+package com.example.weather.utils.mapper
 
 import com.devpraskov.android_ext.*
 import com.example.weather.data.db.current_weather.CurrentWeatherEntity
@@ -120,7 +120,10 @@ fun getWeatherUI(
 
     val hoursUi = hours.map { mapToHourUI(it) }
     val daysUi = days.map { mapToDayUI(it) }
-    val currentUi = mapToCurrentUI(current, hoursUi.getOrNull(0))
+    val currentUi = mapToCurrentUI(
+        current,
+        hoursUi.getOrNull(0)
+    )
     currentUi?.let { hoursUi.getOrNull(0)?.iconId = it.iconId }
     currentUi ?: return null
     return WeatherUI(hours = hoursUi, days = daysUi, current = currentUi)

@@ -8,7 +8,10 @@ import com.example.weather.data.db.day.DayEntity
 import com.example.weather.data.db.hour.HourEntity
 import com.example.weather.models.WeatherUI
 import com.example.weather.models.main.WeatherResponse
-import com.example.weather.utils.*
+import com.example.weather.utils.mapper.getWeatherUI
+import com.example.weather.utils.mapper.mapToCurrentEntity
+import com.example.weather.utils.mapper.mapToDayEntity
+import com.example.weather.utils.mapper.mapToHourEntity
 
 @Dao
 abstract class SharedDao(val db: WeatherDataBase) {
@@ -45,7 +48,11 @@ abstract class SharedDao(val db: WeatherDataBase) {
         val hours = getHourlyWeatherForecast(city)
         val current = getCurrentWeather(city)
         val days = getDailyWeatherForecast(city)
-        return getWeatherUI(hours, days, current)
+        return getWeatherUI(
+            hours,
+            days,
+            current
+        )
     }
 
     @Transaction
@@ -53,13 +60,31 @@ abstract class SharedDao(val db: WeatherDataBase) {
         val cityName = db.cityDao.getCurrentCityName()
 
         networkObject.apply {
-            hourly?.mapNotNull { mapToHourEntity(it, cityName, timezoneOffset) }
+            hourly?.mapNotNull {
+                mapToHourEntity(
+                    it,
+                    cityName,
+                    timezoneOffset
+                )
+            }
                 ?.let { saveHourlyWeather(it) }
 
-            daily?.mapNotNull { mapToDayEntity(it, cityName, timezoneOffset) }
+            daily?.mapNotNull {
+                mapToDayEntity(
+                    it,
+                    cityName,
+                    timezoneOffset
+                )
+            }
                 ?.let { saveDailyWeather(it) }
 
-            mapToCurrentEntity(current, hourly, daily?.getOrNull(0), timezoneOffset, cityName)
+            mapToCurrentEntity(
+                current,
+                hourly,
+                daily?.getOrNull(0),
+                timezoneOffset,
+                cityName
+            )
                 ?.let { saveCurrentWeather(it) }
         }
 

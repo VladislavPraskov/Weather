@@ -5,10 +5,10 @@ import androidx.lifecycle.asLiveData
 import com.example.weather.data.db.WeatherDataBase
 import com.example.weather.data.network.api.CityApiService
 import com.example.weather.utils.network.NetworkResource
-import com.example.weather.models.CityUI
-import com.example.weather.presenter.city.CityResultAction
-import com.example.weather.utils.mapToCityUI
-import com.example.weather.utils.mapToCityEntity
+import com.example.weather.models.city.CityUI
+import com.example.weather.presenter.city.mvi.CityResultAction
+import com.example.weather.utils.mapper.mapToCityUI
+import com.example.weather.utils.mapper.mapToCityEntity
 import com.example.weather.utils.network.safeCacheCall
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -25,8 +25,13 @@ class CityRepositoryImpl(val db: WeatherDataBase, private val api: CityApiServic
             apiCall = { api.getCityByQuery(q) },
             onSuccess = { success -> //здесь мёржим лист с апи и из кэша, из кэша берём то, что встречается в api response
                 val cache = safeCacheCall(cacheCall = { db.cityDao.loadCities() })
-                val cityCache = cache?.map { mapToCityUI(it) }?.toMutableList()
-                val apiCity = mapToCityUI(success.value)
+                val cityCache = cache?.map {
+                    mapToCityUI(
+                        it
+                    )
+                }?.toMutableList()
+                val apiCity =
+                    mapToCityUI(success.value)
                 val concatList = apiCity
                     ?.mapNotNull { aC -> cityCache?.find { cC -> aC.idString == cC.idString } }
                     ?.toMutableList()
@@ -39,9 +44,17 @@ class CityRepositoryImpl(val db: WeatherDataBase, private val api: CityApiServic
     }
 
     override suspend fun saveCity(city: CityUI): CityResultAction {
-        safeCacheCall(cacheCall = { db.cityDao.saveCurrentCity(mapToCityEntity(city)) })
+        safeCacheCall(cacheCall = { db.cityDao.saveCurrentCity(
+            mapToCityEntity(
+                city
+            )
+        ) })
         val listCities = safeCacheCall({ db.cityDao.loadCities() })
-        return CityResultAction.CitySaved(listCities?.map { mapToCityUI(it) })
+        return CityResultAction.CitySaved(listCities?.map {
+            mapToCityUI(
+                it
+            )
+        })
     }
 
     override suspend fun deleteCity(idString: String) {
@@ -50,7 +63,11 @@ class CityRepositoryImpl(val db: WeatherDataBase, private val api: CityApiServic
 
     override suspend fun loadCityFromCache(): CityResultAction {
         val cities = safeCacheCall(cacheCall = { db.cityDao.loadCities() })
-        return CityResultAction.getSuccessOrEmpty(cities?.map { mapToCityUI(it) }, true)
+        return CityResultAction.getSuccessOrEmpty(cities?.map {
+            mapToCityUI(
+                it
+            )
+        }, true)
     }
 
 }

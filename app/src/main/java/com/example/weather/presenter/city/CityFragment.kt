@@ -10,7 +10,8 @@ import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.SimpleItemAnimator
 import com.devpraskov.android_ext.*
 import com.example.weather.R
-import com.example.weather.models.CityUI
+import com.example.weather.models.city.CityUI
+import com.example.weather.presenter.city.mvi.CityAction
 import com.example.weather.presenter.main.MainFragment
 import com.example.weather.utils.error.ErrorMVI
 import com.google.android.material.snackbar.Snackbar

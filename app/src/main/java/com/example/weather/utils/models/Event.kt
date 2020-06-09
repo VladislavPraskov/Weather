@@ -1,5 +1,6 @@
 package com.example.weather.utils.models
 
+//https://github.com/mitchtabian/MVIExample/blob/33be93b487f23b650fa217c0250043d032fdd7e3/app/src/main/java/com/codingwithmitch/mviexample/util/Event.kt
 /**
  * Used as a wrapper for data that is exposed via a LiveData that represents an event.
  */

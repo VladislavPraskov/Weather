@@ -1,8 +1,8 @@
 package com.example.weather.domain.city
 
 import androidx.lifecycle.LiveData
-import com.example.weather.models.CityUI
-import com.example.weather.presenter.city.CityResultAction
+import com.example.weather.models.city.CityUI
+import com.example.weather.presenter.city.mvi.CityResultAction
 
 interface CityInteractor {
 

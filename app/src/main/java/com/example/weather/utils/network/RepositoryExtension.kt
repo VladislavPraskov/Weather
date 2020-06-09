@@ -61,7 +61,7 @@ abstract class CustomException : Exception() {
 
 private fun convertErrorBody(throwable: HttpException): String? {
     return try {
-        throwable.response()?.errorBody()?.string()
+        throwable.response()?.errorBody()?.string() //потестить
     } catch (exception: Exception) {
         null
     }
