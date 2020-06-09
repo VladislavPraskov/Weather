@@ -7,7 +7,7 @@ __Stack__
 MVI, LiveData, Coroutine, Retrofit, Koin  
 
 __APK__ 
-[apk](https://github.com/VladislavPraskov/Weather/weather.apk)
+[apk](https://github.com/VladislavPraskov/Weather/blob/master/weather.apk)
 
 __API__  
 [Weather](https://openweathermap.org/) and  [City](https://opencagedata.com/)
