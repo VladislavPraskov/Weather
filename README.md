@@ -6,7 +6,7 @@ _Inspired by_ [The Secret of Great Gradient](https://uxplanet.org/the-secret-of-
 __Stack__  
 MVI, LiveData, Coroutine, Retrofit, Koin  
 
-__APK__ 
+__APK__  
 [apk](https://github.com/VladislavPraskov/Weather/blob/master/weather.apk)
 
 __API__  
