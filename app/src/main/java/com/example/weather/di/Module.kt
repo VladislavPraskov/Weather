@@ -30,8 +30,8 @@ val mainModule = module {
     factory<MainRepository> { MainRepositoryImpl(get(), get(), get()) }
     factory<CityRepository> { CityRepositoryImpl(get(), get()) }
 
-    factory(named("weatherI")) { MainInterceptor("appid", KeysGitIgnore.WEATHER_KEY) }
-    factory(named("cityI")) { MainInterceptor("key", KeysGitIgnore.CITY_KEY) }
+    factory(named("weatherI")) { MainInterceptor("appid", Keys.WEATHER_KEY) }
+    factory(named("cityI")) { MainInterceptor("key", Keys.CITY_KEY) }
     factory(named("weatherC")) { getClient(get(named("weatherI"))) }
     factory(named("cityC")) { getClient(get(named("cityI"))) }
     factory(named("weatherR")) { getRetrofitBuilder(BASE_WEATHER_URL) }
