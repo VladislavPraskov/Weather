@@ -529,4 +529,56 @@ fun View?.setPressedOnTouch() {
         }
         false
     }
+    
+/**animate expand view height(gone -> visible). Parent view height should be wrap_content*/
+fun View.expand(interpolator: TimeInterpolator? = null, duration: Long = 300) {
+    this.apply {
+        measure(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
+        val targetHeight = measuredHeight
+        val initialHeight = 1
+        layoutParams.height = initialHeight
+        visibility = View.VISIBLE
+        val va = ValueAnimator.ofInt(initialHeight, targetHeight)
+        va.addUpdateListener { animation ->
+            layoutParams.height = (animation.animatedValue as Int)
+            requestLayout()
+        }
+        va.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationEnd(animation: Animator) {
+                layoutParams.height = ViewGroup.LayoutParams.WRAP_CONTENT
+            }
+
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        va.duration = duration
+        interpolator?.let { va.interpolator = interpolator }
+        va.start()
+    }
+}
+
+/**animate collapse view height(visible -> gone). Parent view height should be wrap_content*/
+fun View.collapse(interpolator: TimeInterpolator? = null, duration: Long = 300) {
+    this.apply {
+        val initialHeight = measuredHeight
+        val va = ValueAnimator.ofInt(initialHeight, 0)
+        va.addUpdateListener { animation ->
+            layoutParams.height = (animation.animatedValue as Int)
+            requestLayout()
+        }
+        va.addListener(object : Animator.AnimatorListener {
+            override fun onAnimationEnd(animation: Animator) {
+                visibility = View.GONE
+            }
+
+            override fun onAnimationStart(animation: Animator) {}
+            override fun onAnimationCancel(animation: Animator) {}
+            override fun onAnimationRepeat(animation: Animator) {}
+        })
+        interpolator?.let { va.interpolator = interpolator }
+        va.duration = duration
+        va.start()
+    }
+}
 }
